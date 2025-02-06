@@ -1,0 +1,25 @@
+# Usa la imagen base de OpenJDK 17
+FROM openjdk:17.0.2
+
+# Establece el directorio de trabajo
+WORKDIR /app
+
+# Copia los archivos necesarios para la instalación de dependencias
+COPY ./.mvn ./.mvn
+COPY ./pom.xml ./pom.xml
+COPY ./mvnw ./mvnw
+
+# Descarga las dependencias de Maven
+RUN ./mvnw dependency:go-offline -B
+
+# Copia el código fuente
+COPY ./src ./src
+
+# Compila el proyecto y empaqueta el JAR
+RUN ./mvnw clean package -DskipTests
+
+# Expone el puerto 8001
+EXPOSE 8001
+
+# Define el punto de entrada para ejecutar la aplicación
+ENTRYPOINT ["java", "-jar", "./target/SegurosServer-0.0.1-SNAPSHOT.jar"]

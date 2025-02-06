@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  app:
+    image: sha256:18488f6f9b553a8de8fa6242f29cdaa17b04685a31d32c016aca793fecdd2c30
+    container_name: pruebaXD
+    env_file:
+      - .env
+    ports:
+      - "8002:8002"
+    networks:
+      - distribuidas
+    restart: always
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql-seguros
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: seguros
+    ports:
+      - "3307:3306"
+    networks:
+      - distribuidas
+    restart: always
+
+networks:
+  distribuidas:
+    driver: bridge
