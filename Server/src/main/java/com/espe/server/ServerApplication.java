@@ -20,9 +20,10 @@ public class ServerApplication {
         SpringApplication.run(ServerApplication.class, args);
     }
 
-/*    @Bean
+   @Bean
     CommandLineRunner init(PermissionRepository permissionRepository, RoleRepository roleRepository, UserRepository userRepository) {
         return args -> {
+        	
             // Crear y guardar permisos
             PermissionEntity createPermission = new PermissionEntity("CREATE");
             PermissionEntity readPermission = new PermissionEntity("READ");
@@ -30,9 +31,10 @@ public class ServerApplication {
             PermissionEntity deletePermission = new PermissionEntity("DELETE");
             PermissionEntity refactorPermission = new PermissionEntity("REFACTOR");
 
+            /*
             // Guardar permisos en la base de datos
             permissionRepository.saveAll(List.of(createPermission, readPermission, updatePermission, deletePermission, refactorPermission));
-
+*/
             // Crear roles
             RoleEntity roleAdmin = new RoleEntity(RoleEnum.ADMIN, Set.of(createPermission, readPermission, updatePermission, deletePermission));
             RoleEntity roleUser = new RoleEntity(RoleEnum.USER, Set.of(createPermission, readPermission));
@@ -50,6 +52,7 @@ public class ServerApplication {
 
             // Guardar usuarios en la base de datos
             userRepository.saveAll(List.of(userSantiago, userDaniel, userAndrea, userAnyi));
-        };*/
+        };
     
-}
+   }
+   }
