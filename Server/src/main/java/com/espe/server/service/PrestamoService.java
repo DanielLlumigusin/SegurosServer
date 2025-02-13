@@ -27,7 +27,7 @@ public class PrestamoService {
 
     // Obtener todos los préstamos
     public List<Prestamo> findAllPrestamos() {
-        return prestamoRepository.findAll();
+        return (List<Prestamo>) prestamoRepository.findAll();
     }
 
     // Eliminar un préstamo por su ID
