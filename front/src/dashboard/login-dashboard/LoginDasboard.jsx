@@ -1,10 +1,18 @@
 
 import {useState} from 'react';
 import { sendCredential } from './LoginDashboard';
+import axios from 'axios';
+import { URLBASE } from '../../utils/tools';
 
 const LoginDashboard = () => {
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
+
+    const verifyCount = async() => {
+        await axios.get(`${URLBASE}/usuarios/verify`,)
+    }
+    
+
 
     return (
         <>

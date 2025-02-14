@@ -11,9 +11,12 @@ public class Rol {
     private Long rolId;
 
     @Column(nullable = false, unique = true)
-    private String nombreRol;
+    private TipoRol nombreRol;
 
-
+    public Rol() {
+    	
+    }
+    
     // Getters y Setters
     public Long getRolId() {
         return rolId;
@@ -23,11 +26,11 @@ public class Rol {
         this.rolId = rolId;
     }
 
-    public String getNombreRol() {
+    public TipoRol getNombreRol() {
         return nombreRol;
     }
 
-    public void setNombreRol(String nombreRol) {
+    public void setNombreRol(TipoRol nombreRol) {
         this.nombreRol = nombreRol;
     }
 }

@@ -28,7 +28,7 @@ public class Usuario {
     @Column(nullable = false)
     private String contrasenaHash;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "rolId", nullable = false)
     private Rol rol;
 
