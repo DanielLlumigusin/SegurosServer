@@ -8,6 +8,5 @@ import java.util.List;
 
 @Repository
 public interface IPagoRepository extends JpaRepository<Pago, Long> {
-    // Método personalizado para obtener pagos por ID de préstamo
-    List<Pago> findByPrestamoId(Long idPrestamo);
+	List<Pago> findByPrestamo_PrestamoId(Long id); 
 }

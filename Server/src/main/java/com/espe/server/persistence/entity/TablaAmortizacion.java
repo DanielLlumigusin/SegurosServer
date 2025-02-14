@@ -1,7 +1,9 @@
 package com.espe.server.persistence.entity;
 
 import jakarta.persistence.*;
-import java.sql.Date;
+import jakarta.validation.constraints.Positive;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "tablas_amortizacion")
@@ -12,7 +14,7 @@ public class TablaAmortizacion {
     @Column(name = "amortizacion_id")
     private Long amortizacionId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "prestamo_id", nullable = false)
     private Prestamo prestamo;
 
@@ -20,19 +22,23 @@ public class TablaAmortizacion {
     private int numeroPago;
 
     @Column(name = "monto_pago", nullable = false)
-    private double montoPago;
+    @Positive(message = "El monto del pago debe ser un valor positivo")
+    private BigDecimal montoPago;
 
     @Column(name = "fecha_pago", nullable = false)
-    private Date fechaPago;
+    private LocalDate fechaPago;
 
     @Column(name = "interes", nullable = false)
-    private double interes;
+    @Positive(message = "El interés debe ser un valor positivo")
+    private BigDecimal interes;
 
     @Column(name = "capital", nullable = false)
-    private double capital;
+    @Positive(message = "El capital debe ser un valor positivo")
+    private BigDecimal capital;
 
     @Column(name = "saldo_restante", nullable = false)
-    private double saldoRestante;
+    @Positive(message = "El saldo restante debe ser un valor positivo")
+    private BigDecimal saldoRestante;
 
     // Getters y Setters
     public Long getAmortizacionId() {
@@ -59,43 +65,43 @@ public class TablaAmortizacion {
         this.numeroPago = numeroPago;
     }
 
-    public double getMontoPago() {
+    public BigDecimal getMontoPago() {
         return montoPago;
     }
 
-    public void setMontoPago(double montoPago) {
+    public void setMontoPago(BigDecimal montoPago) {
         this.montoPago = montoPago;
     }
 
-    public Date getFechaPago() {
+    public LocalDate getFechaPago() {
         return fechaPago;
     }
 
-    public void setFechaPago(Date fechaPago) {
+    public void setFechaPago(LocalDate fechaPago) {
         this.fechaPago = fechaPago;
     }
 
-    public double getInteres() {
+    public BigDecimal getInteres() {
         return interes;
     }
 
-    public void setInteres(double interes) {
+    public void setInteres(BigDecimal interes) {
         this.interes = interes;
     }
 
-    public double getCapital() {
+    public BigDecimal getCapital() {
         return capital;
     }
 
-    public void setCapital(double capital) {
+    public void setCapital(BigDecimal capital) {
         this.capital = capital;
     }
 
-    public double getSaldoRestante() {
+    public BigDecimal getSaldoRestante() {
         return saldoRestante;
     }
 
-    public void setSaldoRestante(double saldoRestante) {
+    public void setSaldoRestante(BigDecimal saldoRestante) {
         this.saldoRestante = saldoRestante;
     }
 }

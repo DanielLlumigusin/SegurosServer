@@ -8,6 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ITablaAmortizacionRepository extends JpaRepository<TablaAmortizacion, Long> {
-    // Método personalizado para obtener entradas de la tabla de amortización por ID de préstamo
-    List<TablaAmortizacion> findByPrestamoId(Long idPrestamo);
+	List<TablaAmortizacion> findByPrestamo_PrestamoId(Long id);
 }

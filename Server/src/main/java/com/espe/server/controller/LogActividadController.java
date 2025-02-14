@@ -1,12 +1,11 @@
 package com.espe.server.controller;
 
+import com.espe.server.persistence.entity.LogActividad;
+import com.espe.server.service.LogActividadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.espe.server.persistence.entity.LogActividad;
-import com.espe.server.service.LogActividadService;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +17,6 @@ public class LogActividadController {
     @Autowired
     private LogActividadService logActividadService;
 
-    // Obtener todos los logs de actividad
     @GetMapping
     public ResponseEntity<?> findAllLogs() {
         try {
@@ -29,7 +27,6 @@ public class LogActividadController {
         }
     }
 
-    // Obtener un log de actividad por su ID
     @GetMapping("/{idLog}")
     public ResponseEntity<?> findLogById(@PathVariable("idLog") Long idLog) {
         try {
@@ -44,7 +41,6 @@ public class LogActividadController {
         }
     }
 
-    // Crear un nuevo log de actividad
     @PostMapping
     public ResponseEntity<?> createLog(@RequestBody LogActividad newLog) {
         try {
@@ -55,7 +51,6 @@ public class LogActividadController {
         }
     }
 
-    // Actualizar un log de actividad existente
     @PutMapping("/{idLog}")
     public ResponseEntity<?> updateLog(@PathVariable("idLog") Long idLog, @RequestBody LogActividad updatedLog) {
         try {
@@ -70,7 +65,6 @@ public class LogActividadController {
         }
     }
 
-    // Eliminar un log de actividad por su ID
     @DeleteMapping("/{idLog}")
     public ResponseEntity<?> deleteLog(@PathVariable("idLog") Long idLog) {
         try {
@@ -85,14 +79,5 @@ public class LogActividadController {
         }
     }
 
-    // Obtener todos los logs de actividad asociados a un usuario
-    @GetMapping("/usuario/{idUsuario}")
-    public ResponseEntity<?> findLogsByUsuarioId(@PathVariable("idUsuario") Long idUsuario) {
-        try {
-            List<LogActividad> logs = logActividadService.findLogsByUsuarioId(idUsuario);
-            return ResponseEntity.status(HttpStatus.OK).body(logs);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener los logs de actividad: " + e.getMessage());
-        }
-    }
+    
 }

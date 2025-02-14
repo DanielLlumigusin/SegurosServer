@@ -2,7 +2,8 @@ package com.espe.server.persistence.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import java.sql.Date;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "prestamos")
@@ -13,13 +14,13 @@ public class Prestamo {
     @Column(name = "prestamo_id")
     private Long prestamoId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
     @Column(name = "monto_solicitado", nullable = false)
     @Positive(message = "El monto solicitado debe ser un valor positivo")
-    private double montoSolicitado;
+    private BigDecimal montoSolicitado;
 
     @Column(name = "plazo_amortizacion", nullable = false)
     @Min(value = 1, message = "El plazo de amortización debe ser al menos 1 mes")
@@ -27,18 +28,18 @@ public class Prestamo {
 
     @Column(name = "tasa_interes", nullable = false)
     @PositiveOrZero(message = "La tasa de interés no puede ser negativa")
-    private double tasaInteres;
+    private BigDecimal tasaInteres;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "tipo_pago", nullable = false)
-    @NotBlank(message = "El tipo de pago no puede estar vacío")
-    private String tipoPago;
+    private TipoPago tipoPago;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "estado_prestamo", nullable = false)
-    @NotBlank(message = "El estado del préstamo no puede estar vacío")
-    private String estadoPrestamo;
+    private EstadoPrestamo estadoPrestamo;
 
     @Column(name = "fecha_solicitud", nullable = false)
-    private Date fechaSolicitud;
+    private LocalDate fechaSolicitud;
 
     // Getters y Setters
     public Long getPrestamoId() {
@@ -57,11 +58,11 @@ public class Prestamo {
         this.usuario = usuario;
     }
 
-    public double getMontoSolicitado() {
+    public BigDecimal getMontoSolicitado() {
         return montoSolicitado;
     }
 
-    public void setMontoSolicitado(double montoSolicitado) {
+    public void setMontoSolicitado(BigDecimal montoSolicitado) {
         this.montoSolicitado = montoSolicitado;
     }
 
@@ -73,35 +74,35 @@ public class Prestamo {
         this.plazoAmortizacion = plazoAmortizacion;
     }
 
-    public double getTasaInteres() {
+    public BigDecimal getTasaInteres() {
         return tasaInteres;
     }
 
-    public void setTasaInteres(double tasaInteres) {
+    public void setTasaInteres(BigDecimal tasaInteres) {
         this.tasaInteres = tasaInteres;
     }
 
-    public String getTipoPago() {
+    public TipoPago getTipoPago() {
         return tipoPago;
     }
 
-    public void setTipoPago(String tipoPago) {
+    public void setTipoPago(TipoPago tipoPago) {
         this.tipoPago = tipoPago;
     }
 
-    public String getEstadoPrestamo() {
+    public EstadoPrestamo getEstadoPrestamo() {
         return estadoPrestamo;
     }
 
-    public void setEstadoPrestamo(String estadoPrestamo) {
+    public void setEstadoPrestamo(EstadoPrestamo estadoPrestamo) {
         this.estadoPrestamo = estadoPrestamo;
     }
 
-    public Date getFechaSolicitud() {
+    public LocalDate getFechaSolicitud() {
         return fechaSolicitud;
     }
 
-    public void setFechaSolicitud(Date fechaSolicitud) {
+    public void setFechaSolicitud(LocalDate fechaSolicitud) {
         this.fechaSolicitud = fechaSolicitud;
     }
 }

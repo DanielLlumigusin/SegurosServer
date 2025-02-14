@@ -52,6 +52,6 @@ public class PagoService {
 
     // Obtener todos los pagos asociados a un préstamo
     public List<Pago> findPagosByPrestamoId(Long idPrestamo) {
-        return pagoRepository.findByPrestamoId(idPrestamo);
+        return pagoRepository.findByPrestamo_PrestamoId(idPrestamo);
     }
 }
