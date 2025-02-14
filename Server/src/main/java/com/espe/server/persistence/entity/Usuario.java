@@ -2,6 +2,8 @@ package com.espe.server.persistence.entity;
 
 import jakarta.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Usuarios")
@@ -22,15 +24,15 @@ public class Usuario {
 
     private String direccion;
 
-    @Column(nullable = false, unique = true)
-    private String correoElectronico;
+    @Column(name = "username", nullable = false, unique = true)
+    private String username;
 
-    @Column(nullable = false)
-    private String contrasenaHash;
+    @Column(name = "password", nullable = false)
+    private String password;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "rolId", nullable = false)
-    private Rol rol;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Rol> roles = new HashSet<>();
 
     // Getters y Setters
     public Long getUsuarioId() {
@@ -73,27 +75,29 @@ public class Usuario {
         this.direccion = direccion;
     }
 
-    public String getCorreoElectronico() {
-        return correoElectronico;
-    }
+    public String getUsername() {
+		return username;
+	}
 
-    public void setCorreoElectronico(String correoElectronico) {
-        this.correoElectronico = correoElectronico;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public String getContrasenaHash() {
-        return contrasenaHash;
-    }
+	public Set<Rol> getRoles() {
+		return roles;
+	}
 
-    public void setContrasenaHash(String contrasenaHash) {
-        this.contrasenaHash = contrasenaHash;
-    }
+	public void setRoles(Set<Rol> roles) {
+		this.roles = roles;
+	}
 
-    public Rol getRol() {
-        return rol;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setRol(Rol rol) {
-        this.rol = rol;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+    
 }

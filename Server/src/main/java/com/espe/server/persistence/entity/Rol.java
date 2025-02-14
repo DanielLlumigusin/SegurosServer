@@ -1,36 +1,56 @@
 package com.espe.server.persistence.entity;
 
-import jakarta.persistence.*;
 
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
+
+@Setter
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "Roles")
+@Table(name = "roles")
 public class Rol {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rolId;
+    private Long id;
 
-    @Column(nullable = false, unique = true)
-    private TipoRol nombreRol;
+    @Column(name = "role_name")
+    @Enumerated(EnumType.STRING)
+    private TipoRol roleEnum;
 
-    public Rol() {
-    	
-    }
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "role_permissions", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    private Set<Permiso> permisosList = new HashSet<>();
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public TipoRol getRoleEnum() {
+		return roleEnum;
+	}
+
+	public void setRoleEnum(TipoRol roleEnum) {
+		this.roleEnum = roleEnum;
+	}
+
+	public Set<Permiso> getPermisosList() {
+		return permisosList;
+	}
+
+	public void setPermisosList(Set<Permiso> permisosList) {
+		this.permisosList = permisosList;
+	}
     
-    // Getters y Setters
-    public Long getRolId() {
-        return rolId;
-    }
-
-    public void setRolId(Long rolId) {
-        this.rolId = rolId;
-    }
-
-    public TipoRol getNombreRol() {
-        return nombreRol;
-    }
-
-    public void setNombreRol(TipoRol nombreRol) {
-        this.nombreRol = nombreRol;
-    }
+    
 }

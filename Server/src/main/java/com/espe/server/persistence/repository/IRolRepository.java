@@ -10,5 +10,5 @@ import com.espe.server.persistence.entity.TipoRol;
 
 @Repository
 public interface IRolRepository extends CrudRepository<Rol, Long> {
-    Optional<Rol> findByNombreRol(TipoRol nombreRol); 
-    }
+    Optional<Rol> findByRoleEnum(TipoRol roleEnum);
+}

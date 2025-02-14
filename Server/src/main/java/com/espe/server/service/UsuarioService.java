@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.print.attribute.SetOfIntegerSyntax;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.espe.server.persistence.entity.Rol;
@@ -25,6 +26,8 @@ public class UsuarioService {
     @Autowired
     private IRolRepository rolRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     
     // Obtener todos los usuarios
     public List<Usuario> findAllUsers() {
@@ -38,18 +41,21 @@ public class UsuarioService {
 
     // Crear un nuevo usuario
     public Usuario createUser(Usuario newUsuario) {
-        // Buscar si el rol ya existe
-        Rol defaultRol = rolRepository.findByNombreRol(TipoRol.ADMIN)
+        // Encriptamos la contraseña
+        newUsuario.setPassword(passwordEncoder.encode(newUsuario.getPassword()));
+        
+        // Asignar un rol por defecto si no tiene uno
+        Rol defaultRol = rolRepository.findByRoleEnum(TipoRol.USER)
                 .orElseGet(() -> {
                     Rol nuevoRol = new Rol();
-                    nuevoRol.setNombreRol(TipoRol.ADMIN);
+                    nuevoRol.setRoleEnum(TipoRol.USER);
                     return rolRepository.save(nuevoRol); 
                 });
 
-        newUsuario.setRol(defaultRol);
+        newUsuario.setRoles(Set.of(defaultRol));
+        
         return usuarioRepository.save(newUsuario);
     }
-
 
     // Eliminar un usuario por su ID
     public boolean deleteUser(Long idUsuario) {
@@ -64,14 +70,21 @@ public class UsuarioService {
     // Actualizar un usuario existente
     public Optional<Usuario> updateUser(Long idUsuario, Usuario updatedUsuario) {
         return usuarioRepository.findById(idUsuario).map(usuario -> {
+            // Si la contraseña ha cambiado, encriptarla
+            if (updatedUsuario.getPassword() != null && !updatedUsuario.getPassword().isEmpty()) {
+                updatedUsuario.setPassword(passwordEncoder.encode(updatedUsuario.getPassword()));
+            }
+            
+            // Actualizar la información del usuario
             usuario.setNombreCompleto(updatedUsuario.getNombreCompleto());
             usuario.setIdentificacion(updatedUsuario.getIdentificacion());
             usuario.setFechaNacimiento(updatedUsuario.getFechaNacimiento());
             usuario.setDireccion(updatedUsuario.getDireccion());
-            usuario.setCorreoElectronico(updatedUsuario.getCorreoElectronico());
-            usuario.setContrasenaHash(updatedUsuario.getContrasenaHash());
-            usuario.setRol(updatedUsuario.getRol());
+            usuario.setUsername(updatedUsuario.getUsername());
+            usuario.setRoles(updatedUsuario.getRoles());
+            
             return usuarioRepository.save(usuario);
         });
     }
 }
+

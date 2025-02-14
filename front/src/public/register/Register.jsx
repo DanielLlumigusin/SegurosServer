@@ -8,11 +8,11 @@ const Register = () => {
     const [fechaNacimiento, setFechaNacimiento] = useState("");
     const [direccion, setDireccion] = useState("");
     const [correoElectronico, setCorreoElectronico] = useState("");
-    const [contrasenaHash, setContrasenaHash] = useState("");
-    const [mensaje, setMensaje] = useState(""); // Para mostrar mensajes de éxito o error
+    const [password, setPassword] = useState("");
+    const [mensaje, setMensaje] = useState("");
 
     async function registrar() {
-        if (!nombreCompleto || !identificacion || !fechaNacimiento || !direccion || !correoElectronico || !contrasenaHash) {
+        if (!nombreCompleto || !identificacion || !fechaNacimiento || !direccion || !correoElectronico || !password) {
             setMensaje("Todos los campos son obligatorios");
             return;
         }
@@ -24,7 +24,7 @@ const Register = () => {
                 fechaNacimiento,
                 direccion,
                 correoElectronico,
-                contrasenaHash
+                password
             });
 
             setMensaje("Registro exitoso");
@@ -41,7 +41,7 @@ const Register = () => {
             <input type="date" value={fechaNacimiento} onChange={e => setFechaNacimiento(e.target.value)} />
             <input type="text" placeholder="Dirección" value={direccion} onChange={e => setDireccion(e.target.value)} />
             <input type="email" placeholder="Correo Electrónico" value={correoElectronico} onChange={e => setCorreoElectronico(e.target.value)} />
-            <input type="password" placeholder="Contraseña" value={contrasenaHash} onChange={e => setContrasenaHash(e.target.value)} />
+            <input type="password" placeholder="Contraseña" value={password} onChange={e => setPassword(e.target.value)} />
 
             <button onClick={registrar}>Registrarse</button>
 
