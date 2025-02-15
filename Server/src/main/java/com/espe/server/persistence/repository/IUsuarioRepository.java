@@ -10,4 +10,5 @@ import com.espe.server.persistence.entity.Usuario;
 @Repository
 public interface IUsuarioRepository extends CrudRepository<Usuario, Long>{
 	 Optional<Usuario> findUsuarioByUsername(String username);
+
 }

@@ -28,6 +28,15 @@ public class Rol {
     @JoinTable(name = "role_permissions", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private Set<Permiso> permisosList = new HashSet<>();
 
+    public Rol() {
+		// TODO Auto-generated constructor stub
+	}
+    
+	public Rol(TipoRol roleEnum) {
+		super();
+		this.roleEnum = roleEnum;
+	}
+
 	public Long getId() {
 		return id;
 	}

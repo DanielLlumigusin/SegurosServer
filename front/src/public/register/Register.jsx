@@ -18,12 +18,12 @@ const Register = () => {
         }
 
         try {
-            const response = await axios.post(`${URLBASE}/usuarios`, {
+            const response = await axios.post(`${URLBASE}/auth/register`, {
                 nombreCompleto,
-                identificacion,
+                cedula: identificacion,
                 fechaNacimiento,
                 direccion,
-                correoElectronico,
+                username: correoElectronico, 
                 password
             });
 

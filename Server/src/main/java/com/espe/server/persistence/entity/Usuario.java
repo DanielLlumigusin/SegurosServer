@@ -1,13 +1,20 @@
 package com.espe.server.persistence.entity;
 
 import jakarta.persistence.*;
+
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "Usuarios")
-public class Usuario {
+public class Usuario implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +24,7 @@ public class Usuario {
     private String nombreCompleto;
 
     @Column(nullable = false, unique = true)
-    private String identificacion;
+    private String cedula;
 
     @Column(nullable = false)
     private Date fechaNacimiento;
@@ -34,7 +41,28 @@ public class Usuario {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Rol> roles = new HashSet<>();
 
-    // Getters y Setters
+    public Usuario() {
+	}
+    
+    public Usuario( String nombreCompleto, String cedula, Date fechaNacimiento, String direccion,
+			String username, String password, Set<Rol> roles) {
+		super();
+		this.nombreCompleto = nombreCompleto;
+		this.cedula = cedula;
+		this.fechaNacimiento = fechaNacimiento;
+		this.direccion = direccion;
+		this.username = username;
+		this.password = password;
+		this.roles = roles;
+	}
+
+
+
+	public Usuario(Usuario usuario, List<SimpleGrantedAuthority> authorityList) {
+		// TODO Auto-generated constructor stub
+	}
+
+	// Getters y Setters
     public Long getUsuarioId() {
         return usuarioId;
     }
@@ -51,15 +79,16 @@ public class Usuario {
         this.nombreCompleto = nombreCompleto;
     }
 
-    public String getIdentificacion() {
-        return identificacion;
-    }
 
-    public void setIdentificacion(String identificacion) {
-        this.identificacion = identificacion;
-    }
+    public String getCedula() {
+		return cedula;
+	}
 
-    public Date getFechaNacimiento() {
+	public void setCedula(String cedula) {
+		this.cedula = cedula;
+	}
+
+	public Date getFechaNacimiento() {
         return fechaNacimiento;
     }
 
@@ -99,5 +128,26 @@ public class Usuario {
 		this.password = password;
 	}
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+    public boolean isAccountNonExpired() {
+       return true;
+    }
+    @Override
+    public boolean isAccountNonLocked() {
+       return true;
+    }
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
     
 }

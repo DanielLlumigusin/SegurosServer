@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.espe.server.persistence.entity.Usuario;
-import com.espe.server.persistence.entity.UsuarioDetails;
 import com.espe.server.persistence.repository.IUsuarioRepository;
 
 import java.util.ArrayList;
@@ -36,6 +35,6 @@ public class UsuarioDetailService implements UserDetailsService {
         	.forEach(permission -> authorityList.add(new SimpleGrantedAuthority(permission.getNombre())));
 
 
-        return new UsuarioDetails(usuario, authorityList);  
+        return new Usuario(usuario, authorityList);  
     }
 }

@@ -47,7 +47,7 @@ public class UsuarioService {
         // Asignar un rol por defecto si no tiene uno
         Rol defaultRol = rolRepository.findByRoleEnum(TipoRol.USER)
                 .orElseGet(() -> {
-                    Rol nuevoRol = new Rol();
+                    Rol nuevoRol = new Rol(TipoRol.USER);
                     nuevoRol.setRoleEnum(TipoRol.USER);
                     return rolRepository.save(nuevoRol); 
                 });
@@ -77,7 +77,7 @@ public class UsuarioService {
             
             // Actualizar la información del usuario
             usuario.setNombreCompleto(updatedUsuario.getNombreCompleto());
-            usuario.setIdentificacion(updatedUsuario.getIdentificacion());
+            usuario.setCedula(updatedUsuario.getCedula());
             usuario.setFechaNacimiento(updatedUsuario.getFechaNacimiento());
             usuario.setDireccion(updatedUsuario.getDireccion());
             usuario.setUsername(updatedUsuario.getUsername());

@@ -15,64 +15,61 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class SecurityConfig implements WebMvcConfigurer{
+public class SecurityConfig implements WebMvcConfigurer {
 
-	@Override
+    // Configuración de CORS para permitir solicitudes desde el frontend
+    @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173") // Permite solicitudes desde el frontend
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowCredentials(true)
-                .allowedHeaders("*");
+            .allowedOrigins("http://localhost:5173") // Sin la barra final "/"
+            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            .allowCredentials(true)
+            .allowedHeaders("*");
     }
-	
-	 @Bean
-	    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-	        return httpSecurity
-	                .csrf(csrf -> csrf.disable())
-	                .httpBasic(Customizer.withDefaults())
-	                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-	                .authorizeHttpRequests(http -> {
-	                    // Configurar los endpoints publicos
-	                    http.requestMatchers(HttpMethod.GET, "/api/login").permitAll();
-	                    http.requestMatchers(HttpMethod.GET, "/api/register").permitAll();
-	                    http.requestMatchers(HttpMethod.GET,"/api/usuarios").permitAll();
-	                    http.requestMatchers(HttpMethod.GET,"/api/usuarios/{idUsuarios}").permitAll();
-	                    http.requestMatchers(HttpMethod.POST,"/api/usuarios").permitAll();
-	                    // Cofnigurar los endpoints privados
-	                    http.requestMatchers(HttpMethod.POST, "/auth/post").hasAnyRole("ADMIN", "DEVELOPER");
-	                    http.requestMatchers(HttpMethod.PATCH, "/auth/patch").hasAnyAuthority("REFACTOR");
 
-	                    // Configurar el resto de endpoint - NO ESPECIFICADOS
-	                    http.anyRequest().denyAll();
-	                })
-	                .build();
-	    }
-	 
-	 @Bean
-	    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-	        return authenticationConfiguration.getAuthenticationManager();
-	    }
+    // Configuración de seguridad para los endpoints
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+            .csrf(csrf -> csrf.disable())  // Deshabilitar CSRF para permitir peticiones desde el frontend
+            .httpBasic(Customizer.withDefaults()) 
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless JWT
+            .authorizeHttpRequests(http -> {
+                // Endpoints públicos (se permiten sin autenticación)
+                http.requestMatchers("/auth/register", "/auth/login").permitAll();
+                http.requestMatchers(HttpMethod.GET, "/auth/**").permitAll();
+                
+                // Todos los demás requieren autenticación
+                http.anyRequest().authenticated();
+            })
+            .build();
+    }
 
-	    @Bean
-	    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailService){
-	        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-	        provider.setPasswordEncoder(passwordEncoder());
-	        provider.setUserDetailsService(userDetailService);
-	        return provider;
-	    }
+    // Configuración del manejador de autenticación
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
-	    @Bean
-	    public PasswordEncoder passwordEncoder(){
-	        return new BCryptPasswordEncoder();
-	    }
+    // Configuración del proveedor de autenticación con codificación de contraseñas
+    @Bean
+    AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder());
+        provider.setUserDetailsService(userDetailsService);
+        return provider;
+    }
+
+    // Bean para encriptar contraseñas con BCrypt
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
