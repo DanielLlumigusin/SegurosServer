@@ -4,7 +4,8 @@ import "./Header.css"
 const Header = () => {
     
     function logOut(){
-        window.location.href="/";
+        localStorage.removeItem("token");
+        window.location.href="/login";
     }
 
     return (
