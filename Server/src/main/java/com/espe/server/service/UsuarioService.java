@@ -38,6 +38,10 @@ public class UsuarioService {
     public Optional<Usuario> findByIdUsuario(Long idUsuario) {
         return usuarioRepository.findById(idUsuario);
     }
+    
+    public Optional<Usuario> findByUsername(String username) {
+        return usuarioRepository.findUsuarioByUsername(username);
+    }
 
     // Crear un nuevo usuario
     public Usuario createUser(Usuario newUsuario) {

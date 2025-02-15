@@ -1,45 +1,46 @@
 package com.espe.server.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.espe.server.Jwt.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig implements WebMvcConfigurer {
 
+    @Autowired
+    private JwtAuthenticationFilter jwtRequestFilter; // Filtro JWT
+
     // Configuración de CORS para permitir solicitudes desde el frontend
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-            .allowedOrigins("http://localhost:5173") // Sin la barra final "/"
-            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-            .allowCredentials(true)
-            .allowedHeaders("*");
+            .allowedOrigins("http://localhost:5173") // Origen permitido (tu frontend)
+            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Métodos permitidos
+            .allowCredentials(true) // Permite credenciales (cookies, tokens)
+            .allowedHeaders("*"); // Encabezados permitidos
     }
 
     // Configuración de seguridad para los endpoints
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-            .csrf(csrf -> csrf.disable())  // Deshabilitar CSRF para permitir peticiones desde el frontend
-            .httpBasic(Customizer.withDefaults()) 
+            .csrf(csrf -> csrf.disable()) // Deshabilita CSRF
+            .cors(Customizer.withDefaults()) // Habilita CORS con la configuración definida en addCorsMappings
+            .httpBasic(Customizer.withDefaults()) // Configura autenticación básica (opcional)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless JWT
             .authorizeHttpRequests(http -> {
                 // Endpoints públicos (se permiten sin autenticación)
@@ -49,27 +50,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 // Todos los demás requieren autenticación
                 http.anyRequest().authenticated();
             })
+            .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class) // Agrega el filtro JWT
             .build();
-    }
-
-    // Configuración del manejador de autenticación
-    @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    // Configuración del proveedor de autenticación con codificación de contraseñas
-    @Bean
-    AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(userDetailsService);
-        return provider;
-    }
-
-    // Bean para encriptar contraseñas con BCrypt
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }

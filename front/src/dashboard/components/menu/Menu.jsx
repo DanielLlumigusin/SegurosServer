@@ -1,28 +1,25 @@
 import "./Menu.css"
 
 const Menu = () => {
-    return(
+    return (
         <>
             <ul>
                 <li>
-                    <a href="#">Página Web</a>
+                    <a href="/perfil">Mi perfil</a>
                 </li>
                 <li>
-                    Usuarios
+                    <a href="/prestamo">
+                        Préstamo
+                    </a>
                 </li>
                 <li>
-                    Roles
+                    <a href="/pagos">
+                        Pagos
+                    </a>
                 </li>
                 <li>
-                    Préstamos
+                    <a href="/tabla-amortizacion">Tabla Amortizacion</a>
                 </li>
-                <li>
-                    Seguros
-                </li>
-                <li>
-                    Pagos
-                </li>
-
             </ul>
         </>
     )

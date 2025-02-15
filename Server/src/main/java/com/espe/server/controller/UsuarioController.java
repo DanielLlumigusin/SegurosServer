@@ -10,7 +10,6 @@ import com.espe.server.service.UsuarioService;
 
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
@@ -37,6 +36,21 @@ public class UsuarioController {
                 return ResponseEntity.status(HttpStatus.OK).body(usuario.get());
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado con ID: " + idUser);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener el usuario: " + e.getMessage());
+        }
+    }
+    
+    //Obtener un usuario por username
+    @GetMapping("/username")
+    public ResponseEntity<?> findUser(@RequestParam String username) {
+        try {
+            Optional<Usuario> usuario = usuarioService.findByUsername(username);
+            if (usuario.isPresent()) {
+                return ResponseEntity.status(HttpStatus.OK).body(usuario.get());
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado con username: " + username);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener el usuario: " + e.getMessage());
