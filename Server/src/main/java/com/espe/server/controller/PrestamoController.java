@@ -32,6 +32,34 @@ public class PrestamoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener el préstamo: " + e.getMessage());
         }
     }
+    
+    @GetMapping("/usuario/{usuarioId}/aprobado")
+    public ResponseEntity<?> findPrestamoAprobadoByUsuarioId(@PathVariable("usuarioId") Long usuarioId) {
+        try {
+            List<Prestamo> prestamo = prestamoService.findPrestamoAprobadoByUsuarioId(usuarioId);
+            if (!prestamo.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.OK).body(prestamo);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró un préstamo aprobado para el usuario con ID: " + usuarioId);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener el préstamo: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/usuario/{usuarioId}/solicitados")
+    public ResponseEntity<?> findPrestamosSolicitadosByUsuarioId(@PathVariable("usuarioId") Long usuarioId) {
+        try {
+            List<Prestamo> prestamos = prestamoService.findPrestamosSolicitadosByUsuarioId(usuarioId);
+            if (!prestamos.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.OK).body(prestamos);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron préstamos solicitados para el usuario con ID: " + usuarioId);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener los préstamos: " + e.getMessage());
+        }
+    }
 
     // Obtener todos los préstamos
     @GetMapping

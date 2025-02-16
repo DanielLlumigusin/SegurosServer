@@ -1,5 +1,7 @@
 package com.espe.server.service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +29,7 @@ public class PagoService {
 
     // Crear un nuevo pago
     public Pago createPago(Pago newPago) {
+    	newPago.setFechaPago(Date.valueOf(LocalDate.now()));
         return pagoRepository.save(newPago);
     }
 

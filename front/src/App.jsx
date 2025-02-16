@@ -8,6 +8,8 @@ import PublicRoute from './PublicRoute';
 import Prestamo from './public/prestamo/Prestamo.jsx';
 import NotFound from './public/notFound/NotFound.jsx';
 import Perfil from './public/perfil/Perfil.jsx';
+import Pago from './public/pago/Pago.jsx';
+import PrestamoSolicitado from './public/prestamo/PrestamoSolicitado.jsx';
 
 function App() {
   return (
@@ -23,8 +25,10 @@ function App() {
         {/* Rutas privadas protegidas por PrivateRoute */}
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path='/perfil' element={<Perfil />} />
+          <Route path='/perfil' element={<Perfil  />} />
           <Route path='/prestamo' element={<Prestamo />} />
+          <Route path='/prestamos-solicitados' element={<PrestamoSolicitado />} />
+          <Route path='/pagos' element={<Pago />} />
         </Route>
         <Route path='*' element={<NotFound/>} />
       </Routes>

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { getDataUsername } from "../../utils/tools";
+import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import { getDataUsername } from "../../service/usuarioService";
 
-const Perfil = () => {
+const useUsuario = () => {
     const [usuario, setUsuario] = useState(null);
-    const [username, setUsername] = useState(null);
-    const [error, setError] = useState(null);
+    const [username, setUsername] = useState();
+    const [error, setError] = useState();
     const token = localStorage.getItem("token");
 
     useEffect(() => {
@@ -50,42 +50,7 @@ const Perfil = () => {
         }
     }, [username]);
 
-    if (error) {
-        return <div>{error}</div>;
-    }
-
-    if (!usuario || !usuario.roles) {
-        return <div>Cargando...</div>;
-    }
-
-    const formatFechaNacimiento = (fecha) => {
-        if (!fecha) return "Fecha no disponible";
-        const date = new Date(fecha);
-        return date.toLocaleDateString("es-ES");
-    };
-
-    return (
-        <div>
-            <h3>Nombre Completo: {usuario.nombreCompleto}</h3>
-            <p>Cédula: {usuario.cedula}</p>
-            <p>Fecha de Nacimiento: {formatFechaNacimiento(usuario.fechaNacimiento)}</p>
-            <p>Dirección: {usuario.direccion}</p>
-            <p>Username: {usuario.username}</p>
-            <h4>Roles y Permisos:</h4>
-            <ul>
-                {usuario.roles.map((rol) => (
-                    <li key={rol.id}>
-                        <strong>{rol.roleEnum}</strong>
-                        <ul>
-                            {rol.permisosList.map((permiso) => (
-                                <li key={permiso.id}>{permiso.nombre}</li>
-                            ))}
-                        </ul>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+    return { usuario, error };
 };
 
-export default Perfil;
+export default useUsuario;

@@ -9,7 +9,12 @@ const Menu = () => {
                 </li>
                 <li>
                     <a href="/prestamo">
-                        Préstamo
+                        Solicitar Préstamo
+                    </a>
+                </li>
+                <li>
+                    <a href="/prestamos-solicitados">
+                        Mis Préstamos
                     </a>
                 </li>
                 <li>
