@@ -2,6 +2,7 @@ package com.espe.server.persistence.entity;
 
 import jakarta.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "pagos")
@@ -20,7 +21,7 @@ public class Pago {
     private double montoPago;
 
     @Column(name = "fecha_pago", nullable = false)
-    private Date fechaPago;
+    private LocalDate fechaPago;
 
     @Column(name = "metodo_pago", nullable = false)
     private String metodoPago;
@@ -50,15 +51,15 @@ public class Pago {
         this.montoPago = montoPago;
     }
 
-    public Date getFechaPago() {
-        return fechaPago;
-    }
+    public LocalDate getFechaPago() {
+		return fechaPago;
+	}
 
-    public void setFechaPago(Date fechaPago) {
-        this.fechaPago = fechaPago;
-    }
+	public void setFechaPago(LocalDate fechaPago) {
+		this.fechaPago = fechaPago;
+	}
 
-    public String getMetodoPago() {
+	public String getMetodoPago() {
         return metodoPago;
     }
 

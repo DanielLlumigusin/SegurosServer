@@ -29,7 +29,7 @@ public class PagoService {
 
     // Crear un nuevo pago
     public Pago createPago(Pago newPago) {
-    	newPago.setFechaPago(Date.valueOf(LocalDate.now()));
+    	newPago.setFechaPago(LocalDate.now());
         return pagoRepository.save(newPago);
     }
 
