@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { URLBASE } from '../../utils/tools';
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
     const [nombreCompleto, setNombreCompleto] = useState("");
@@ -10,6 +11,8 @@ const Register = () => {
     const [correoElectronico, setCorreoElectronico] = useState("");
     const [password, setPassword] = useState("");
     const [mensaje, setMensaje] = useState("");
+
+    const navigate = useNavigate();
 
     async function registrar() {
         if (!nombreCompleto || !identificacion || !fechaNacimiento || !direccion || !correoElectronico || !password) {
@@ -33,6 +36,10 @@ const Register = () => {
         }
     }
 
+    const returnToLogin = () => {
+        navigate('/login');
+    };
+
     return (
         <div>
             <h2>Registro</h2>
@@ -44,6 +51,8 @@ const Register = () => {
             <input type="password" placeholder="Contraseña" value={password} onChange={e => setPassword(e.target.value)} />
 
             <button onClick={registrar}>Registrarse</button>
+
+            <button onClick={returnToLogin}>Cancelar</button>
 
             {mensaje && <p>{mensaje}</p>}
         </div>

@@ -9,9 +9,8 @@ const LoginDashboard = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
-
+    
     const sendCredential = async () => {
-        // Verificar que ambos campos estén completos
         if (!username || !password) {
             setError("Por favor, complete ambos campos.");
             return;
@@ -21,26 +20,25 @@ const LoginDashboard = () => {
         setError(''); 
         
         try {
-            // Hacer la solicitud de login
             const response = await axios.post(`${URLBASE}/auth/login`, {
                 username,
                 password
             });
 
-            // Guardar el token en el almacenamiento local
             console.log("Token recibido:", response.data.token);
             localStorage.setItem("token", response.data.token);
 
-            // Redirigir al usuario al dashboard solo si el login fue exitoso
             navigate("/dashboard");
-
         } catch (error) {
-            // Mostrar un error en caso de que algo falle en la autenticación
             setError("Error al iniciar sesión: " + (error.response?.data?.message || error.message));
         } finally {
-            // Detener el loading, independientemente de si fue exitoso o no
             setLoading(false);
         }
+    };
+
+    // Nueva función para redirigir a la página de registro
+    const irARegistro = () => {
+        navigate('/register');
     };
 
     return (
@@ -66,9 +64,15 @@ const LoginDashboard = () => {
                 />
             </div>
 
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p>{error}</p>}
+
             <button onClick={sendCredential} disabled={loading}>
                 {loading ? 'Cargando...' : 'Enviar'}
+            </button>
+
+            {/* Botón para ir a la página de registro */}
+            <button onClick={irARegistro}>
+                Ir a Registro
             </button>
         </div>
     );
