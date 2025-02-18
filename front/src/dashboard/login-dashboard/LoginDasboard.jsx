@@ -2,6 +2,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { URLBASE } from '../../utils/tools';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/header/Navbar';
+import './LoginDashboard.css';
 
 const LoginDashboard = () => {
     const [username, setUsername] = useState('');
@@ -9,7 +11,7 @@ const LoginDashboard = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    
+
     const sendCredential = async () => {
         if (!username || !password) {
             setError("Por favor, complete ambos campos.");
@@ -17,8 +19,8 @@ const LoginDashboard = () => {
         }
 
         setLoading(true);
-        setError(''); 
-        
+        setError('');
+
         try {
             const response = await axios.post(`${URLBASE}/auth/login`, {
                 username,
@@ -36,44 +38,49 @@ const LoginDashboard = () => {
         }
     };
 
-    // Nueva función para redirigir a la página de registro
+    // Función para redirigir a la página de registro
     const irARegistro = () => {
         navigate('/register');
     };
 
     return (
-        <div>
-            <div>
-                <label htmlFor="username">Correo electrónico</label>
+        <div className="login-container">
+            <Navbar />
+            <div className="login-field">
+                <label htmlFor="username" className="login-label">Correo electrónico</label>
                 <input
                     id="username"
                     type="email"
                     placeholder="Username"
                     value={username}
                     onChange={e => setUsername(e.target.value)}
+                    className="login-input"
                 />
             </div>
-            <div>
-                <label htmlFor="password">Contraseña</label>
+            <div className="login-field">
+                <label htmlFor="password" className="login-label">Contraseña</label>
                 <input
                     id="password"
                     type="password"
                     placeholder="Contraseña"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
+                    className="login-input"
                 />
             </div>
 
-            {error && <p>{error}</p>}
+            {error && <p className="error-message">{error}</p>}
 
-            <button onClick={sendCredential} disabled={loading}>
+            <button onClick={sendCredential} disabled={loading} className="login-button">
                 {loading ? 'Cargando...' : 'Enviar'}
             </button>
 
-            {/* Botón para ir a la página de registro */}
-            <button onClick={irARegistro}>
-                Ir a Registro
-            </button>
+            <p className="register-text">
+                ¿No tienes cuenta?{' '}
+                <span onClick={irARegistro} className="register-link">
+                    Crear una cuenta
+                </span>
+            </p>
         </div>
     );
 };

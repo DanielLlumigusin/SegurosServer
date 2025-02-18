@@ -1,0 +1,40 @@
+/* Estilos generales para fijar la barra de navegación en la parte superior con degradado de fondo */
+.navbar {
+    padding: 10px 20px; /* Espaciado interno */
+    display: flex; /* Utiliza flexbox para la disposición horizontal */
+    justify-content: space-between; /* Espacia el logo y los enlaces */
+    align-items: center; /* Alineación vertical de los elementos */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Sombra para dar profundidad */
+    border-bottom: 1px solid #ccc; /* Borde inferior sutil */
+    position: fixed; /* Fija la barra en la parte superior */
+    width: 100%; /* Ancho completo */
+    top: 0; /* Posición superior */
+    left: 0; /* Alineado a la izquierda */
+    z-index: 1000; /* Asegura que la barra esté sobre otros contenidos */
+    background-image: linear-gradient(to right, #efef92, #f16363, skyblue, white); /* Degradado de izquierda a derecha */
+}
+
+
+/* Estilo para el logo dentro de la barra de navegación */
+.logo a {
+    color: #333; /* Color para el texto del logo */
+    font-weight: bold; /* Fuente en negrita */
+    font-size: 20px; /* Tamaño grande para el logo */
+    text-decoration: none; /* Sin subrayado */
+}
+
+/* Estilos para los enlaces dentro de la barra de navegación */
+.navbar a {
+    color: #333; /* Color inicial de los enlaces */
+    text-decoration: none; /* Sin subrayado */
+    padding: 8px 12px; /* Espaciado interno */
+    margin: 0 5px; /* Margen entre enlaces */
+    font-size: 16px; /* Tamaño de fuente estándar */
+    transition: color 0.3s ease; /* Transición suave al cambiar color */
+}
+
+/* Estilo al pasar el mouse sobre los enlaces */
+.navbar a:hover {
+    color: #0056b3; /* Color al pasar el mouse */
+    text-decoration: underline; /* Subrayado para indicar interactividad */
+}
