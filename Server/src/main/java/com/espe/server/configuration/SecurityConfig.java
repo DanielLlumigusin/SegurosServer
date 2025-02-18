@@ -47,8 +47,10 @@ public class SecurityConfig implements WebMvcConfigurer {
                 http.requestMatchers("/auth/register", "/auth/login").permitAll();
                 http.requestMatchers(HttpMethod.GET, "/auth/**").permitAll();
                 
+                http.requestMatchers("/api/**").authenticated();
+                http.requestMatchers("/admin/**").authenticated();
                 // Todos los demás requieren autenticación
-                http.anyRequest().authenticated();
+                http.anyRequest().denyAll();
             })
             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class) // Agrega el filtro JWT
             .build();

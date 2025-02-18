@@ -1,4 +1,4 @@
-package com.espe.server.controller;
+package com.espe.server.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/tablas-amortizacion")
-public class TablaAmortizacionController {
+@RequestMapping("/admin/tablas-amortizacion")
+public class Admin {
 
     @Autowired
     private TablaAmortizacionService tablaAmortizacionService;

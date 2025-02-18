@@ -1,4 +1,4 @@
-package com.espe.server.controller;
+package com.espe.server.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,8 +11,8 @@ import com.espe.server.service.UsuarioService;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/usuarios")
-public class UsuarioController {
+@RequestMapping("/admin/usuarios")
+public class AdminUsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;

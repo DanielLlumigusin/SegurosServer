@@ -1,4 +1,4 @@
-package com.espe.server.controller;
+package com.espe.server.controller.admin;
 
 import com.espe.server.persistence.entity.LogActividad;
 import com.espe.server.service.LogActividadService;
@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/logs-actividades")
-public class LogActividadController {
+@RequestMapping("/admin/logs-actividades")
+public class AdminLogActividadController {
 
     @Autowired
     private LogActividadService logActividadService;
@@ -27,7 +27,7 @@ public class LogActividadController {
         }
     }
 
-    @GetMapping("/{idLog}")
+    @GetMapping("/admin/{idLog}")
     public ResponseEntity<?> findLogById(@PathVariable("idLog") Long idLog) {
         try {
             Optional<LogActividad> log = logActividadService.findLogById(idLog);
