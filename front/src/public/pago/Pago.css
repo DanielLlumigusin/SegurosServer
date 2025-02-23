@@ -1,0 +1,132 @@
+/* Pago.css */
+.pago-container {
+    max-width: 1000px;
+    margin: 100px auto;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.pago-seccion-container{
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.pago-title {
+    text-align: center;
+    font-size: 32px;
+    color: rgb(7, 27, 64);
+    margin-bottom: 30px;
+}
+
+.pago-seccion {
+    margin-bottom: 40px;
+}
+
+.pago-subtitle {
+    font-size: 24px;
+    color: rgb(7, 27, 64);
+    margin-bottom: 20px;
+}
+
+.pago-cargando {
+    text-align: center;
+    font-size: 18px;
+    color: #555;
+}
+
+/* ListaPagos.css */
+.lista-pagos-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background: #f8f9fa;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.lista-pagos-header {
+    background-color: rgb(7, 27, 64);
+    color: #fff;
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+.lista-pagos-row:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.lista-pagos-cell {
+    padding: 10px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    color: #333;
+}
+
+.lista-pagos-table tr:hover {
+    background-color: #e9f5ff;
+}
+
+.lista-pagos-sin-datos {
+    text-align: center;
+    font-size: 16px;
+    color: #888;
+    margin-top: 20px;
+}
+
+/* FormularioPago.css */
+.formulario-pago {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.formulario-pago-group {
+    margin-bottom: 15px;
+}
+
+.formulario-pago-label {
+    display: block;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.formulario-pago-input,
+.formulario-pago-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.formulario-pago-input:focus,
+.formulario-pago-select:focus {
+    border-color: #007bff;
+}
+
+.formulario-pago-button {
+    width: 100%;
+    padding: 10px;
+    background: rgb(7, 27, 64);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.formulario-pago-button:hover {
+    background: #0056b3;
+}

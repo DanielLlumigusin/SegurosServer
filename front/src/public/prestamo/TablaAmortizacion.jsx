@@ -2,24 +2,24 @@ import React from "react";
 
 const TablaAmortizacion = ({ tablaAmortizacion }) => {
     return (
-        <table border="1">
+        <table className="prestamo-table">
             <thead>
                 <tr>
-                    <th>Periodo</th>
-                    <th>Cuota</th>
-                    <th>Interés</th>
-                    <th>Capital</th>
-                    <th>Saldo Pendiente</th>
+                    <th className="prestamo-table-header">Periodo</th>
+                    <th className="prestamo-table-header">Cuota</th>
+                    <th className="prestamo-table-header">Interés</th>
+                    <th className="prestamo-table-header">Capital</th>
+                    <th className="prestamo-table-header">Saldo Pendiente</th>
                 </tr>
             </thead>
             <tbody>
                 {tablaAmortizacion.map((fila, index) => (
-                    <tr key={index}>
-                        <td>{fila.periodo}</td>
-                        <td>${fila.cuota}</td>
-                        <td>${fila.interes}</td>
-                        <td>${fila.capital}</td>
-                        <td>${fila.saldoPendiente}</td>
+                    <tr key={index} className="prestamo-table-row">
+                        <td className="prestamo-table-cell">{fila.periodo}</td>
+                        <td className="prestamo-table-cell">${fila.cuota}</td>
+                        <td className="prestamo-table-cell">${fila.interes}</td>
+                        <td className="prestamo-table-cell">${fila.capital}</td>
+                        <td className="prestamo-table-cell">${fila.saldoPendiente}</td>
                     </tr>
                 ))}
             </tbody>

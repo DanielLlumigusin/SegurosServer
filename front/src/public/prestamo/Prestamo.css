@@ -1,0 +1,126 @@
+/* Prestamo.css */
+.prestamo-container {
+    max-width: 900px;
+    margin: 100px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+}
+
+.prestamo-title {
+    text-align: center;
+    font-size: 28px;
+    color: rgb(7, 27, 64);
+}
+
+.prestamo-note {
+    text-align: center;
+    font-size: 14px;
+    color: rgb(190, 135, 52);
+}
+
+/* Configuración para dos columnas */
+.prestamo-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.prestamo-left,
+.prestamo-right {
+    flex: 1;
+    min-width: 300px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.prestamo-right {
+    text-align: center;
+}
+
+.prestamo-subtitle {
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: rgb(7, 27, 64);
+}
+
+.prestamo-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: rgb(7, 27, 64);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.prestamo-button:hover {
+    background: #0056b3;
+}
+
+.prestamo-input,
+.prestamo-select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.prestamo-input:focus,
+.prestamo-select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.prestamo-mensaje {
+    text-align: center;
+    color: #d9534f;
+    font-weight: bold;
+}
+
+
+/* TablaAmortizacion.css */
+.prestamo-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: 'Poppins', sans-serif;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.prestamo-table-header {
+    background-color: rgb(7, 27, 64);
+    color: #fff;
+    padding: 10px;
+    text-align: left;
+    font-size: 16px;
+    border: 1px solid #ddd;
+}
+
+.prestamo-table-row:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.prestamo-table-cell {
+    padding: 10px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    color: #333;
+}
+
+.prestamo-table tr:hover {
+    background-color: #e9f5ff;
+}

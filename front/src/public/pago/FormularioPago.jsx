@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 
-const FormularioPago = ({ onRealizarPago }) => {
+const FormularioPago = ({prestamo, onRealizarPago }) => {
     const [montoPago, setMontoPago] = useState(0);
     const [metodoPago, setMetodoPago] = useState("");
-
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!montoPago || !metodoPago) {
@@ -13,11 +12,13 @@ const FormularioPago = ({ onRealizarPago }) => {
         onRealizarPago(montoPago, metodoPago);
     };
 
+    console.log(prestamo);
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>Monto del Pago:</label>
+        <form className="formulario-pago" onSubmit={handleSubmit}>
+            <div className="formulario-pago-group">
+                <label className="formulario-pago-label">Monto del Pago:</label>
                 <input
+                    className="formulario-pago-input"
                     type="number"
                     value={montoPago}
                     onChange={(e) => setMontoPago(parseFloat(e.target.value))}
@@ -25,9 +26,10 @@ const FormularioPago = ({ onRealizarPago }) => {
                 />
             </div>
 
-            <div>
-                <label>Método de Pago:</label>
+            <div className="formulario-pago-group">
+                <label className="formulario-pago-label">Método de Pago:</label>
                 <select
+                    className="formulario-pago-select"
                     value={metodoPago}
                     onChange={(e) => setMetodoPago(e.target.value)}
                     required
@@ -39,7 +41,7 @@ const FormularioPago = ({ onRealizarPago }) => {
                 </select>
             </div>
 
-            <button type="submit">Realizar Pago</button>
+            <button type="submit" className="formulario-pago-button">Realizar Pago</button>
         </form>
     );
 };

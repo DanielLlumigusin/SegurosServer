@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import FormularioPago from "./FormularioPago";
 import ListaPagos from "./ListaPagos";
 import Mensaje from "../components/Mensaje";
@@ -6,6 +6,7 @@ import usePago from "../../utils/hooks/usePago";
 import usePrestamoAprobado from "../../utils/hooks/usePrestamoAprobado";
 import useUsuario from "../../utils/hooks/useUsuario";
 import PrestamoCard from "../prestamo/PrestamoCard";
+import "./Pago.css";
 
 const Pago = () => {
     const { usuario, error } = useUsuario();
@@ -32,7 +33,7 @@ const Pago = () => {
     }
 
     if (cargandoPrestamo) {
-        return <p>Cargando...</p>;
+        return <p className="pago-cargando">Cargando...</p>;
     }
 
     if (!prestamoActivo) {
@@ -40,19 +41,26 @@ const Pago = () => {
     }
 
     return (
-        <div>
-            <h1>Gestión de Pagos</h1>
-
+        <div className="pago-container">
+            <h1 className="pago-title">Gestión de Pagos</h1>
             <Mensaje mensaje={mensajePrestamo || mensaje} />
 
-            <h2>Detalle del Préstamo Activo</h2>
-            <PrestamoCard prestamo={prestamoActivo} />
+            <div className="pago-seccion-container">
+                <section className="pago-seccion">
+                    <h2 className="pago-subtitle">Préstamo Activo</h2>
+                    <PrestamoCard prestamo={prestamoActivo} />
+                </section>
 
-            <h2>Realizar un Pago</h2>
-            <FormularioPago onRealizarPago={handleRealizarPago} />
+                <section className="pago-seccion">
+                    <h2 className="pago-subtitle">Realizar un Pago</h2>
+                    <FormularioPago prestamo={prestamoActivo} onRealizarPago={handleRealizarPago} />
+                </section>
 
-            <h2>Lista de Pagos</h2>
-            <ListaPagos pagos={listaPagos} />
+                <section className="pago-seccion">
+                    <h2 className="pago-subtitle">Lista de Pagos</h2>
+                    <ListaPagos pagos={listaPagos} />
+                </section>
+            </div>
         </div>
     );
 };

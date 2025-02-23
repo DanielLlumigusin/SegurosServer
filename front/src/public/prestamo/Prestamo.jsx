@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Header from "../../components/header/Header";
+import "./Prestamo.css";
 import FormularioPrestamo from "./FormularioPrestamo";
 import TablaAmortizacion from "./TablaAmortizacion";
 import ResumenPrestamo from "./ResumenPrestamo";
@@ -48,30 +48,31 @@ const Prestamo = () => {
     };
 
     return (
-        <div>
-            <Header />
-            <h1>Solicitar Préstamo</h1>
-            <p>Nota: Solo se puede hacer un solo préstamo por persona</p>
-
+        <div className="prestamo-container">
+            <h1 className="prestamo-title">Solicitar Préstamo</h1>
+            <p className="prestamo-note">Nota: Solo se puede hacer un solo préstamo por persona</p>
             <Mensaje mensaje={mensaje} />
-
-            <FormularioPrestamo
-                monto={monto}
-                plazo={plazo}
-                tipoTasa={tipoTasa}
-                tipoPago={tipoPago}
-                tasasInteres={tasasInteres}
-                onMontoChange={(e) => setMonto(parseFloat(e.target.value))}
-                onPlazoChange={(e) => setPlazo(parseInt(e.target.value))}
-                onTipoTasaChange={(e) => setTipoTasa(e.target.value)}
-                onTipoPagoChange={(e) => setTipoPago(e.target.value)}
-                onSubmit={handleSolicitarPrestamo}
-            />
-
-            <ResumenPrestamo cuota={cuota} tasaInteres={tasasInteres[tipoTasa]} tipoPago={tipoPago} />
-
-            <h3>Tabla de Amortización</h3>
-            <TablaAmortizacion tablaAmortizacion={tablaAmortizacion} />
+            <div className="prestamo-wrapper">
+                <div className="prestamo-left">
+                    <FormularioPrestamo
+                        monto={monto}
+                        plazo={plazo}
+                        tipoTasa={tipoTasa}
+                        tipoPago={tipoPago}
+                        tasasInteres={tasasInteres}
+                        onMontoChange={(e) => setMonto(parseFloat(e.target.value))}
+                        onPlazoChange={(e) => setPlazo(parseInt(e.target.value))}
+                        onTipoTasaChange={(e) => setTipoTasa(e.target.value)}
+                        onTipoPagoChange={(e) => setTipoPago(e.target.value)}
+                        onSubmit={handleSolicitarPrestamo}
+                    />
+                    <ResumenPrestamo cuota={cuota} tasaInteres={tasasInteres[tipoTasa]} tipoPago={tipoPago} />
+                </div>
+                <div className="prestamo-right">
+                    <h3>Tabla de Amortización</h3>
+                    <TablaAmortizacion tablaAmortizacion={tablaAmortizacion} />
+                </div>
+            </div>
         </div>
     );
 };
