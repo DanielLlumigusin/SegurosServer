@@ -5,13 +5,14 @@
     justify-content: space-between; /* Espacia el logo y los enlaces */
     align-items: center; /* Alineación vertical de los elementos */
     box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Sombra para dar profundidad */
-    border-bottom: 1px solid #ccc; /* Borde inferior sutil */
+    border-bottom: 3px solid rgb(190, 135, 52); /* Borde inferior sutil */
     position: fixed; /* Fija la barra en la parte superior */
     width: 100%; /* Ancho completo */
     top: 0; /* Posición superior */
     left: 0; /* Alineado a la izquierda */
     z-index: 1000; /* Asegura que la barra esté sobre otros contenidos */
-    background-image: linear-gradient(to right, #efef92, #f16363, skyblue, white); /* Degradado de izquierda a derecha */
+    background: rgb(7, 27, 64);/* Degradado de izquierda a derecha */
+    color: white;
 }
 
 
@@ -25,7 +26,7 @@
 
 /* Estilos para los enlaces dentro de la barra de navegación */
 .navbar a {
-    color: #333; /* Color inicial de los enlaces */
+    color: white; /* Color inicial de los enlaces */
     text-decoration: none; /* Sin subrayado */
     padding: 8px 12px; /* Espaciado interno */
     margin: 0 5px; /* Margen entre enlaces */
@@ -37,4 +38,12 @@
 .navbar a:hover {
     color: #0056b3; /* Color al pasar el mouse */
     text-decoration: underline; /* Subrayado para indicar interactividad */
+}
+
+.logo-navbar{
+    height: 50px;
+}
+
+.btn-logout{
+    background-color: rgb(127, 8, 8);
 }

@@ -6,6 +6,7 @@ const PrivateRoute = () => {
 
   // Si no hay token, redirige a la página de login
   if (!token) {
+    window.location.reload;
     return <Navigate to="/" />;
   }
 

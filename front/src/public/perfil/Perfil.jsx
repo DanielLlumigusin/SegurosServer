@@ -1,91 +1,128 @@
-import React, { useState, useEffect } from "react";
-import { getDataUsername } from "../../utils/tools";
-import { jwtDecode } from "jwt-decode";
+import React, { useState } from "react";
+import ImgDefault from "../../assets/img/perfil-default.png";
+import useUsuario from "../../utils/hooks/useUsuario";
+import "./Perfil.css"; // Importamos el CSS
 
 const Perfil = () => {
-    const [usuario, setUsuario] = useState(null);
-    const [username, setUsername] = useState(null);
-    const [error, setError] = useState(null);
-    const token = localStorage.getItem("token");
+  const { usuario, error, actualizarUsuario } = useUsuario();
+  const [editMode, setEditMode] = useState(false);
+  const [formData, setFormData] = useState({
+    nombreCompleto: "",
+    cedula: "",
+    fechaNacimiento: "",
+    direccion: "",
+  });
 
-    useEffect(() => {
-        if (token) {
-            try {
-                const payload = jwtDecode(token);
-                const currentTime = Date.now() / 1000;
+//   if (error) {
+//     return <div className="perfil__error">{error}</div>;
+//   }
 
-                if (payload.exp < currentTime) {
-                    console.error("El token ha expirado.");
-                    localStorage.removeItem("token");
-                    setError("El token ha expirado. Por favor, inicia sesión nuevamente.");
-                    window.location.href = "/login";
-                    return;
-                }
+  if (!usuario) {
+    return <div className="perfil__loading">Cargando...</div>;
+  }
 
-                const decodedUsername = payload.sub;
-                setUsername(decodedUsername);
-            } catch (error) {
-                console.error("Error al decodificar el token:", error);
-                setError("Error al decodificar el token");
-                window.location.href = "/login";
-            }
-        } else {
-            setError("No se encontró el token en localStorage");
-            window.location.href = "/login";
-        }
-    }, [token]);
+  const formatFechaNacimiento = (fecha) => {
+    if (!fecha) return "Fecha no disponible";
+    const date = new Date(fecha);
+    return date.toLocaleDateString("es-ES");
+  };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await getDataUsername(username);
-                setUsuario(data);
-            } catch (error) {
-                setError(error.message);
-            }
-        };
+  const handleEditClick = () => {
+    setFormData({
+      usuarioId: usuario.usuarioId,
+      nombreCompleto: usuario.nombreCompleto,
+      fechaNacimiento: usuario.fechaNacimiento.slice(0,10),
+      direccion: usuario.direccion,
 
-        if (username) {
-            fetchData();
-        }
-    }, [username]);
+    });
+    setEditMode(true);
+  };
 
-    if (error) {
-        return <div>{error}</div>;
-    }
+  const handleSaveClick = () => {
+    // Para actualizar se asume que el usuario también tiene su username
+    actualizarUsuario({ ...formData, username: usuario.username });
+    setEditMode(false);
+  };
 
-    if (!usuario || !usuario.roles) {
-        return <div>Cargando...</div>;
-    }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
-    const formatFechaNacimiento = (fecha) => {
-        if (!fecha) return "Fecha no disponible";
-        const date = new Date(fecha);
-        return date.toLocaleDateString("es-ES");
-    };
+  return (
+    <div className="perfil">
+      <div className="perfil__header">
+        <img className="perfil__imagen" src={ImgDefault} alt="Perfil" />
+        <h3 className="perfil__nombre">
+          {editMode ? (
+            <input
+              type="text"
+              name="nombreCompleto"
+              value={formData.nombreCompleto}
+              onChange={handleChange}
+              className="perfil__input"
+            />
+          ) : (
+            usuario.nombreCompleto
+          )}
+        </h3>
+      </div>
 
-    return (
-        <div>
-            <h3>Nombre Completo: {usuario.nombreCompleto}</h3>
-            <p>Cédula: {usuario.cedula}</p>
-            <p>Fecha de Nacimiento: {formatFechaNacimiento(usuario.fechaNacimiento)}</p>
-            <p>Dirección: {usuario.direccion}</p>
-            <p>Username: {usuario.username}</p>
-            <h4>Roles y Permisos:</h4>
-            <ul>
-                {usuario.roles.map((rol) => (
-                    <li key={rol.id}>
-                        <strong>{rol.roleEnum}</strong>
-                        <ul>
-                            {rol.permisosList.map((permiso) => (
-                                <li key={permiso.id}>{permiso.nombre}</li>
-                            ))}
-                        </ul>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+      <div className="perfil__info">
+        <p>
+          <strong>Cédula: </strong>
+           {usuario.cedula}
+        </p>
+        <p>
+          <strong>Fecha de Nacimiento: </strong>
+          {editMode ? (
+            <input
+              type="date"
+              name="fechaNacimiento"
+              value={formData.fechaNacimiento}
+              onChange={handleChange}
+              className="perfil__input"
+            />
+          ) : (
+            formatFechaNacimiento(usuario.fechaNacimiento)
+          )}
+        </p>
+        <p>
+          <strong>Dirección: </strong>
+          {editMode ? (
+            <input
+              type="text"
+              name="direccion"
+              value={formData.direccion}
+              onChange={handleChange}
+              className="perfil__input"
+            />
+          ) : (
+            usuario.direccion
+          )}
+        </p>
+        <p>
+          <strong>Username: </strong>
+          <span>{usuario.username}</span>
+        </p>
+      </div>
+
+      <div className="perfil__acciones">
+        {editMode ? (
+          <button className="perfil__boton perfil__boton--guardar" onClick={handleSaveClick}>
+            Guardar
+          </button>
+        ) : (
+          <button className="perfil__boton perfil__boton--editar" onClick={handleEditClick}>
+            Editar
+          </button>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default Perfil;

@@ -1,8 +1,6 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginDashboard from './dashboard/login-dashboard/LoginDasboard';
-import Dashboard from './dashboard/index/dashboard.jsx';
-import Register from './public/register/Register.jsx';
+import Register from './authentication/register/Register.jsx';
 import PrivateRoute from './PrivateRoute'; 
 import PublicRoute from './PublicRoute'; 
 import Prestamo from './public/prestamo/Prestamo.jsx';
@@ -10,21 +8,25 @@ import NotFound from './public/notFound/NotFound.jsx';
 import Perfil from './public/perfil/Perfil.jsx';
 import Pago from './public/pago/Pago.jsx';
 import PrestamoSolicitado from './public/prestamo/PrestamoSolicitado.jsx';
+import Login from './authentication/login/Login.jsx';
+import Navbar from './components/header/Navbar.jsx';
+import Home from './public/home/Home.jsx';
 
 function App() {
   return (
     <BrowserRouter>
+     <Navbar />
       <Routes>
         {/* Rutas públicas protegidas por PublicRoute */}
         <Route element={<PublicRoute />}>
-          <Route path="/login" element={<LoginDashboard />} />
-          <Route path="/" element={<LoginDashboard />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path='/register' element={<Register />} />
         </Route>
 
         {/* Rutas privadas protegidas por PrivateRoute */}
         <Route element={<PrivateRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path='/home' element={<Home />} />
           <Route path='/perfil' element={<Perfil  />} />
           <Route path='/prestamo' element={<Prestamo />} />
           <Route path='/prestamos-solicitados' element={<PrestamoSolicitado />} />

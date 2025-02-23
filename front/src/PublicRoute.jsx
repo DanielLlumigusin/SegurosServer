@@ -6,7 +6,8 @@ const PublicRoute = () => {
 
   // Si hay un token, redirige al dashboard (o cualquier página protegida)
   if (token) {
-    return <Navigate to="/dashboard" />;
+    window.location.reload;
+    return <Navigate to="/home" />;
   }
 
   // Si no hay token, permite el acceso a las páginas de login o registro

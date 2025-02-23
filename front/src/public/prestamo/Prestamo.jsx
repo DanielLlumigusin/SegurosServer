@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Header from "../../dashboard/components/header/Header";
+import Header from "../../components/header/Header";
 import FormularioPrestamo from "./FormularioPrestamo";
 import TablaAmortizacion from "./TablaAmortizacion";
 import ResumenPrestamo from "./ResumenPrestamo";

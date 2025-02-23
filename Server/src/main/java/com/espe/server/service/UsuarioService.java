@@ -72,23 +72,16 @@ public class UsuarioService {
     }
 
     // Actualizar un usuario existente
+ // Actualizar un usuario existente
     public Optional<Usuario> updateUser(Long idUsuario, Usuario updatedUsuario) {
-        return usuarioRepository.findById(idUsuario).map(usuario -> {
-            // Si la contraseña ha cambiado, encriptarla
-            if (updatedUsuario.getPassword() != null && !updatedUsuario.getPassword().isEmpty()) {
-                updatedUsuario.setPassword(passwordEncoder.encode(updatedUsuario.getPassword()));
-            }
-            
-            // Actualizar la información del usuario
-            usuario.setNombreCompleto(updatedUsuario.getNombreCompleto());
-            usuario.setCedula(updatedUsuario.getCedula());
-            usuario.setFechaNacimiento(updatedUsuario.getFechaNacimiento());
-            usuario.setDireccion(updatedUsuario.getDireccion());
-            usuario.setUsername(updatedUsuario.getUsername());
-            usuario.setRoles(updatedUsuario.getRoles());
-            
-            return usuarioRepository.save(usuario);
+        return usuarioRepository.findById(idUsuario).map(usuarioExistente -> {
+            usuarioExistente.setNombreCompleto(updatedUsuario.getNombreCompleto());
+            usuarioExistente.setFechaNacimiento(updatedUsuario.getFechaNacimiento());
+            usuarioExistente.setDireccion(updatedUsuario.getDireccion());
+
+            return usuarioRepository.save(usuarioExistente);
         });
     }
+
 }
 
