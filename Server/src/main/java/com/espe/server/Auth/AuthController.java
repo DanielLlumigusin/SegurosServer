@@ -22,6 +22,11 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(request));
     }
 
+    @PostMapping("/admin/login")
+    public ResponseEntity<AuthResponse> loginAdmin(@RequestBody LoginRequest request) {
+        return ResponseEntity.ok(authService.loginAdmin(request));
+    }
+    
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) throws ParseException {
         return ResponseEntity.ok(authService.register(request));

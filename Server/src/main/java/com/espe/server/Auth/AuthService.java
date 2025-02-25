@@ -5,6 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.management.relation.Role;
+import javax.management.relation.RoleInfoNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,7 +27,6 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    @Autowired
     public AuthService(
         IUsuarioRepository userRepository,
         JwtService jwtService,
@@ -48,6 +50,30 @@ public class AuthService {
         String token = jwtService.getToken(user);
         return new AuthResponse(token);
     }
+    
+    public AuthResponse loginAdmin(LoginRequest request) {
+        // Buscar al usuario por nombre de usuario
+        Usuario usuario = userRepository.findUsuarioByUsername(request.getUsername())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // Verificar si el usuario tiene el rol ADMIN
+        boolean esAdmin = usuario.getRoles().stream()
+                .anyMatch(rol -> rol.getRoleEnum().name().equals("ADMIN"));
+        if (!esAdmin) {
+            throw new RuntimeException("Acceso denegado: No eres administrador");
+        }
+
+        // Verificar la contraseña
+        if (!passwordEncoder.matches(request.getPassword(), usuario.getPassword())) {
+            throw new RuntimeException("Contraseña incorrecta");
+        }
+
+        // Generar token JWT
+        String token = jwtService.getToken(usuario);
+        return new AuthResponse(token);
+    }
+
+
 
 
     public AuthResponse register(RegisterRequest request) throws ParseException {

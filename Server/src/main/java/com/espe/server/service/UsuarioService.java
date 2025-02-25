@@ -1,11 +1,8 @@
 package com.espe.server.service;
 
-import java.nio.charset.IllegalCharsetNameException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
-import javax.print.attribute.SetOfIntegerSyntax;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -71,7 +68,6 @@ public class UsuarioService {
         }
     }
 
-    // Actualizar un usuario existente
  // Actualizar un usuario existente
     public Optional<Usuario> updateUser(Long idUsuario, Usuario updatedUsuario) {
         return usuarioRepository.findById(idUsuario).map(usuarioExistente -> {
