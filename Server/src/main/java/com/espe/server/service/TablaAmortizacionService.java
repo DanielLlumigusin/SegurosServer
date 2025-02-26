@@ -3,7 +3,6 @@ package com.espe.server.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.espe.server.persistence.entity.TablaAmortizacion;
@@ -12,8 +11,11 @@ import com.espe.server.persistence.repository.ITablaAmortizacionRepository;
 @Service
 public class TablaAmortizacionService {
 
-    @Autowired
-    private ITablaAmortizacionRepository tablaAmortizacionRepository;
+    private final ITablaAmortizacionRepository tablaAmortizacionRepository;
+    
+    public TablaAmortizacionService(ITablaAmortizacionRepository tablaAmortizacionRepository) {
+    	this.tablaAmortizacionRepository = tablaAmortizacionRepository;
+    }
 
     // Obtener todas las entradas de la tabla de amortización
     public List<TablaAmortizacion> findAllTablasAmortizacion() {

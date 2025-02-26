@@ -1,10 +1,10 @@
-package com.espe.server.Auth;
+package com.espe.server.auth;
 
 public class AuthResponse {
-    String token;
+    
+	String token;
 
     public AuthResponse() {
-		// TODO Auto-generated constructor stub
 	}
     
 	public AuthResponse(String token) {
@@ -18,7 +18,5 @@ public class AuthResponse {
 
 	public void setToken(String token) {
 		this.token = token;
-	} 
-    
-    
+	}  
 }

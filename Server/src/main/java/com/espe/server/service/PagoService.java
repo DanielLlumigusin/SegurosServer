@@ -1,11 +1,9 @@
 package com.espe.server.service;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.espe.server.persistence.entity.Pago;
@@ -14,8 +12,11 @@ import com.espe.server.persistence.repository.IPagoRepository;
 @Service
 public class PagoService {
 
-    @Autowired
-    private IPagoRepository pagoRepository;
+    private final IPagoRepository pagoRepository;
+    
+    public PagoService(IPagoRepository pagoRepository) {
+    	this.pagoRepository = pagoRepository;
+    }
 
     // Obtener todos los pagos
     public List<Pago> findAllPagos() {

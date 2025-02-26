@@ -1,6 +1,5 @@
 package com.espe.server.controller.admin;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,86 +12,90 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/admin/tablas-amortizacion")
-public class Admin {
+public class AdminTablasAmortizacion {
 
-    @Autowired
-    private TablaAmortizacionService tablaAmortizacionService;
+    private final TablaAmortizacionService tablaAmortizacionService;
+    
+    public AdminTablasAmortizacion(TablaAmortizacionService tablaAmortizacionService) {
+    	this.tablaAmortizacionService = tablaAmortizacionService;
+    }
 
     // Obtener todas las entradas de la tabla de amortización
     @GetMapping
-    public ResponseEntity<?> findAllTablasAmortizacion() {
+    public ResponseEntity<List<TablaAmortizacion>> findAllTablasAmortizacion() {
         try {
             List<TablaAmortizacion> tablas = tablaAmortizacionService.findAllTablasAmortizacion();
-            return ResponseEntity.status(HttpStatus.OK).body(tablas);
+            return ResponseEntity.ok(tablas);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener las tablas de amortización: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
+
     // Obtener una entrada de la tabla de amortización por su ID
     @GetMapping("/{idAmortizacion}")
-    public ResponseEntity<?> findTablaAmortizacionById(@PathVariable("idAmortizacion") Long idAmortizacion) {
+    public ResponseEntity<TablaAmortizacion> findTablaAmortizacionById(@PathVariable Long idAmortizacion) {
         try {
             Optional<TablaAmortizacion> tabla = tablaAmortizacionService.findTablaAmortizacionById(idAmortizacion);
             if (tabla.isPresent()) {
                 return ResponseEntity.status(HttpStatus.OK).body(tabla.get());
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tabla de amortización no encontrada con ID: " + idAmortizacion);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener la tabla de amortización: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     // Crear una nueva entrada en la tabla de amortización
     @PostMapping
-    public ResponseEntity<?> createTablaAmortizacion(@RequestBody TablaAmortizacion newTablaAmortizacion) {
+    public ResponseEntity<TablaAmortizacion> createTablaAmortizacion(@RequestBody TablaAmortizacion newTablaAmortizacion) {
         try {
             TablaAmortizacion tablaCreada = tablaAmortizacionService.createTablaAmortizacion(newTablaAmortizacion);
             return ResponseEntity.status(HttpStatus.CREATED).body(tablaCreada);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear la tabla de amortización: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     // Actualizar una entrada existente en la tabla de amortización
     @PutMapping("/{idAmortizacion}")
-    public ResponseEntity<?> updateTablaAmortizacion(@PathVariable("idAmortizacion") Long idAmortizacion, @RequestBody TablaAmortizacion updatedTablaAmortizacion) {
+    public ResponseEntity<TablaAmortizacion> updateTablaAmortizacion(@PathVariable Long idAmortizacion, @RequestBody TablaAmortizacion updatedTablaAmortizacion) {
         try {
             Optional<TablaAmortizacion> tablaActualizada = tablaAmortizacionService.updateTablaAmortizacion(idAmortizacion, updatedTablaAmortizacion);
             if (tablaActualizada.isPresent()) {
                 return ResponseEntity.status(HttpStatus.OK).body(tablaActualizada.get());
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tabla de amortización no encontrada con ID: " + idAmortizacion);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar la tabla de amortización: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     // Eliminar una entrada de la tabla de amortización por su ID
     @DeleteMapping("/{idAmortizacion}")
-    public ResponseEntity<?> deleteTablaAmortizacion(@PathVariable("idAmortizacion") Long idAmortizacion) {
+    public ResponseEntity<Void> deleteTablaAmortizacion(@PathVariable Long idAmortizacion) {
         try {
             boolean eliminado = tablaAmortizacionService.deleteTablaAmortizacion(idAmortizacion);
             if (eliminado) {
-                return ResponseEntity.status(HttpStatus.OK).body("Tabla de amortización eliminada correctamente");
+                return ResponseEntity.noContent().build();
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tabla de amortización no encontrada con ID: " + idAmortizacion);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar la tabla de amortización: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     // Obtener todas las entradas de la tabla de amortización asociadas a un préstamo
     @GetMapping("/prestamo/{idPrestamo}")
-    public ResponseEntity<?> findTablasAmortizacionByPrestamoId(@PathVariable("idPrestamo") Long idPrestamo) {
+    public ResponseEntity<List<TablaAmortizacion>> findTablasAmortizacionByPrestamoId(@PathVariable Long idPrestamo) {
         try {
             List<TablaAmortizacion> tablas = tablaAmortizacionService.findTablasAmortizacionByPrestamoId(idPrestamo);
             return ResponseEntity.status(HttpStatus.OK).body(tablas);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener las tablas de amortización: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

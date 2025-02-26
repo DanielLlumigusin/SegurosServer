@@ -1,4 +1,4 @@
-package com.espe.server.Auth;
+package com.espe.server.auth;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,7 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.espe.server.Jwt.JwtService;
+import com.espe.server.jwt.JwtService;
 import com.espe.server.persistence.entity.Rol;
 import com.espe.server.persistence.entity.TipoRol;
 import com.espe.server.persistence.entity.Usuario;
@@ -25,7 +25,6 @@ public class AuthService {
     private final IUsuarioRepository userRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
 
     public AuthService(
         IUsuarioRepository userRepository,
@@ -36,7 +35,6 @@ public class AuthService {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
     }
 
     public AuthResponse login(LoginRequest request) {

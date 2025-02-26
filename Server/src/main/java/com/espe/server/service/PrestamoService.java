@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.espe.server.persistence.entity.EstadoPrestamo;
@@ -17,11 +16,14 @@ import com.espe.server.persistence.repository.IUsuarioRepository;
 @Service
 public class PrestamoService {
 
-    @Autowired
-    private IPrestamoRepository prestamoRepository;
+    private final IPrestamoRepository prestamoRepository;
     
-    @Autowired
-    private IUsuarioRepository usuarioRepository;
+    private final IUsuarioRepository usuarioRepository;
+    
+    public PrestamoService(IPrestamoRepository prestamoRepository,IUsuarioRepository usuarioRepository) {
+    	this.prestamoRepository = prestamoRepository;
+    	this.usuarioRepository = usuarioRepository;
+    }
     
     // Obtener un préstamo por su ID
     public Optional<Prestamo> findPrestamoById(Long idPrestamo) {

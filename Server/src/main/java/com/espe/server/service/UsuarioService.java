@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,14 +16,21 @@ import com.espe.server.persistence.repository.IUsuarioRepository;
 @Service
 public class UsuarioService {
 
-    @Autowired
-    private IUsuarioRepository usuarioRepository;
+    private final IUsuarioRepository usuarioRepository;
     
-    @Autowired
-    private IRolRepository rolRepository;
+    private final IRolRepository rolRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+    
+    public UsuarioService(
+    		IUsuarioRepository usuarioRepository,
+    		IRolRepository rolRepository,
+    		PasswordEncoder passwordEncoder
+    		) {
+		this.usuarioRepository = usuarioRepository;
+		this.rolRepository = rolRepository;
+		this.passwordEncoder = passwordEncoder;
+	}
     
     // Obtener todos los usuarios
     public List<Usuario> findAllUsers() {

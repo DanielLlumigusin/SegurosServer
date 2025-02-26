@@ -1,4 +1,4 @@
-package com.espe.server.Auth;
+package com.espe.server.auth;
 
 public class LoginRequest {
 

@@ -1,6 +1,5 @@
 package com.espe.server.persistence.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 

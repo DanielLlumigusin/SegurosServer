@@ -1,6 +1,5 @@
 package com.espe.server.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,8 +16,11 @@ import com.espe.server.persistence.repository.IUsuarioRepository;
 @Configuration
 public class ApplicationConfig {
 
-	@Autowired
-    private IUsuarioRepository userRepository;
+    private final IUsuarioRepository userRepository;
+	
+    public ApplicationConfig(IUsuarioRepository userRepository) {
+    	this.userRepository = userRepository;
+    }	
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception

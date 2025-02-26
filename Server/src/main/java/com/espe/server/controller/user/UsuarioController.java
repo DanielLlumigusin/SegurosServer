@@ -1,6 +1,5 @@
 package com.espe.server.controller.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,62 +13,66 @@ import java.util.Optional;
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioService usuarioService;
+    
+    private final UsuarioService usuarioService;
+    
+    public UsuarioController(UsuarioService usuarioService) {
+    	this.usuarioService = usuarioService;
+    }
 
     // Obtener un usuario por su ID
     @GetMapping("/{idUser}")
-    public ResponseEntity<?> findUser(@PathVariable("idUser") Long idUser) {
+    public ResponseEntity<Usuario> findUser(@PathVariable Long idUser) {
         try {
             Optional<Usuario> usuario = usuarioService.findByIdUsuario(idUser);
             if (usuario.isPresent()) {
                 return ResponseEntity.status(HttpStatus.OK).body(usuario.get());
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado con ID: " + idUser);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener el usuario: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
     
     //Obtener un usuario por username
     @GetMapping("/username")
-    public ResponseEntity<?> findUser(@RequestParam String username) {
+    public ResponseEntity<Usuario> findUser(@RequestParam String username) {
         try {
             Optional<Usuario> usuario = usuarioService.findByUsername(username);
             if (usuario.isPresent()) {
                 return ResponseEntity.status(HttpStatus.OK).body(usuario.get());
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado con username: " + username);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener el usuario: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     // Crear un nuevo usuario
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody Usuario newUsuario) {
+    public ResponseEntity<Usuario> createUser(@RequestBody Usuario newUsuario) {
         try {
             Usuario usuarioCreado = usuarioService.createUser(newUsuario);
             return ResponseEntity.status(HttpStatus.CREATED).body(usuarioCreado);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el usuario: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     // Actualizar un usuario existente
     @PutMapping("/{idUser}")
-    public ResponseEntity<?> updateUser(@PathVariable("idUser") Long idUser, @RequestBody Usuario updatedUsuario) {
+    public ResponseEntity<Usuario> updateUser(@PathVariable("idUser") Long idUser, @RequestBody Usuario updatedUsuario) {
         try {
             Optional<Usuario> usuarioActualizado = usuarioService.updateUser(idUser, updatedUsuario);
             if (usuarioActualizado.isPresent()) {
                 return ResponseEntity.status(HttpStatus.OK).body(usuarioActualizado.get());
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado con ID: " + idUser);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar el usuario: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

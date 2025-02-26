@@ -2,7 +2,6 @@ package com.espe.server.service;
 
 import com.espe.server.persistence.entity.LogActividad;
 import com.espe.server.persistence.repository.ILogActividadRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,8 +10,11 @@ import java.util.Optional;
 @Service
 public class LogActividadService {
 
-    @Autowired
-    private ILogActividadRepository logActividadRepository;
+    private final ILogActividadRepository logActividadRepository;
+    
+    public LogActividadService(ILogActividadRepository logActividadRepository) {
+    	this.logActividadRepository = logActividadRepository;
+    }
 
     public List<LogActividad> findAllLogs() {
         return (List<LogActividad>)logActividadRepository.findAll();
