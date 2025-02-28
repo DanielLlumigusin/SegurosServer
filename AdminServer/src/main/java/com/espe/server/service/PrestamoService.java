@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import com.espe.server.persistence.entity.EstadoPrestamo;
 import com.espe.server.persistence.entity.LogActividad;
 import com.espe.server.persistence.entity.Prestamo;
+import com.espe.server.persistence.entity.TablaAmortizacion;
 import com.espe.server.persistence.entity.Usuario;
 import com.espe.server.persistence.repository.ILogActividadRepository;
 import com.espe.server.persistence.repository.IPrestamoRepository;
+import com.espe.server.persistence.repository.ITablaAmortizacionRepository;
 import com.espe.server.persistence.repository.IUsuarioRepository;
 
 @Service
@@ -21,14 +23,19 @@ public class PrestamoService {
     private final IPrestamoRepository prestamoRepository;
     private final ILogActividadRepository logActividadRepository;
     private final IUsuarioRepository usuarioRepository;
-    
+    private final ITablaAmortizacionRepository tablaAmortizacionRepository;
+    private final TablaAmortizacionService tablaAmortizacionService;
     public PrestamoService(
     		IPrestamoRepository prestamoRepository,
     		IUsuarioRepository usuarioRepository,
-    		ILogActividadRepository logActividadRepository) {
+    		ILogActividadRepository logActividadRepository,
+    		ITablaAmortizacionRepository tablaAutorizacionRepository,
+    		TablaAmortizacionService tablaAmortizacionService) {
     	this.prestamoRepository = prestamoRepository;
     	this.logActividadRepository = logActividadRepository;
     	this.usuarioRepository = usuarioRepository;
+    	this.tablaAmortizacionRepository = tablaAutorizacionRepository;
+    	this.tablaAmortizacionService = tablaAmortizacionService;
     }
     
     // Obtener todos los préstamos
@@ -59,28 +66,22 @@ public class PrestamoService {
         }
     }
 
- // Actualizar un préstamo existente
+    //Actualizar Prestamo
     public Optional<Prestamo> updatePrestamo(Long idPrestamo, Prestamo updatedPrestamo, String username) {
-        // Buscar el préstamo en la base de datos
         Optional<Prestamo> prestamoOpt = prestamoRepository.findById(idPrestamo);
-        
-        // Si el préstamo no existe, devolver Optional vacío
+
         if (!prestamoOpt.isPresent()) {
             return Optional.empty();
         }
 
-        // Obtener el préstamo existente
         Prestamo prestamoExistente = prestamoOpt.get();
-        
         Optional<Usuario> usuarioOpt = usuarioRepository.findUsuarioByUsername(username);
-    	
-    	if (!usuarioOpt.isPresent()) {
+
+        if (!usuarioOpt.isPresent()) {
             return Optional.empty();
         }
-    	
-    	Usuario usuario = usuarioOpt.get();
 
-        // Crear el log de actividad para la actualización
+        Usuario usuario = usuarioOpt.get();
         LogActividad logActividad = new LogActividad(
                 usuario, 
                 "Actualizar Prestamo",
@@ -88,37 +89,26 @@ public class PrestamoService {
                 "El préstamo con ID " + idPrestamo + " ha sido actualizado."
         );
 
-        // Verificar qué campos han cambiado
         boolean cambios = false;
-        if (!prestamoExistente.getMontoSolicitado().equals(updatedPrestamo.getMontoSolicitado())) {
-            prestamoExistente.setMontoSolicitado(updatedPrestamo.getMontoSolicitado());
-            cambios = true;
-        }
-        if (!(prestamoExistente.getPlazoAmortizacion() == updatedPrestamo.getPlazoAmortizacion())) {
-            prestamoExistente.setPlazoAmortizacion(updatedPrestamo.getPlazoAmortizacion());
-            cambios = true;
-        }
-        if (!prestamoExistente.getTasaInteres().equals(updatedPrestamo.getTasaInteres())) {
-            prestamoExistente.setTasaInteres(updatedPrestamo.getTasaInteres());
-            cambios = true;
-        }
-        if (!prestamoExistente.getTipoPago().equals(updatedPrestamo.getTipoPago())) {
-            prestamoExistente.setTipoPago(updatedPrestamo.getTipoPago());
-            cambios = true;
-        }
+
         if (!prestamoExistente.getEstadoPrestamo().equals(updatedPrestamo.getEstadoPrestamo())) {
             prestamoExistente.setEstadoPrestamo(updatedPrestamo.getEstadoPrestamo());
             cambios = true;
+
+            // Si el préstamo es aprobado, generar y guardar la tabla de amortización
+            if (updatedPrestamo.getEstadoPrestamo() == EstadoPrestamo.APROBADO) {
+                tablaAmortizacionService.generarYGuardarTablaAmortizacion(prestamoExistente);
+            }
         }
 
-        // Si hay cambios, guardamos la actividad en el log y actualizamos el préstamo
         if (cambios) {
             logActividadRepository.save(logActividad);
             return Optional.of(prestamoRepository.save(prestamoExistente));
         } else {
-            return Optional.empty();  // Si no hubo cambios, no actualizamos ni registramos nada
+            return Optional.empty();
         }
     }
+
 
 
 

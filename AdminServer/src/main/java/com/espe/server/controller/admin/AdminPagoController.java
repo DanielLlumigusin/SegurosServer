@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import com.espe.server.persistence.entity.Pago;
 import com.espe.server.service.PagoService;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,19 +47,10 @@ public class AdminPagoController {
         }
     }
 
-    // Actualizar un pago existente
-    @PutMapping("/{idPago}")
-    public ResponseEntity<Pago> updatePago(@PathVariable Long idPago, @RequestBody Pago updatedPago, @RequestBody String username) {
-        try {
-            Optional<Pago> pagoActualizado = pagoService.updatePago(idPago, updatedPago, username);
-            if (pagoActualizado.isPresent()) {
-                return ResponseEntity.status(HttpStatus.OK).body(pagoActualizado.get());
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    @PostMapping("/{id}/pago")
+    public String registrarPago(@PathVariable Long id, @RequestParam int numeroPago, @RequestParam BigDecimal montoPago) {
+        boolean exito = pagoService.registrarPago(id, numeroPago, montoPago);
+        return exito ? "Pago registrado correctamente" : "Error al registrar el pago";
     }
 
     // Eliminar un pago por su ID

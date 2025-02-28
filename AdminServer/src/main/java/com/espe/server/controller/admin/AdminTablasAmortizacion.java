@@ -46,6 +46,21 @@ public class AdminTablasAmortizacion {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    
+    @GetMapping("/{id}/amortizacion")
+    public ResponseEntity<List<TablaAmortizacion>> obtenerTablaAmortizacion(@PathVariable Long id) {
+        try {
+            List<TablaAmortizacion> tabla = tablaAmortizacionService.findTablasAmortizacionByPrestamoId(id);
+
+            if (!tabla.isEmpty()) {
+                return ResponseEntity.ok(tabla);  // Retorna la lista con estado 200 OK
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna 404 Not Found
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna 500 si hay error
+        }
+    }
 
 
     // Actualizar una entrada existente en la tabla de amortización

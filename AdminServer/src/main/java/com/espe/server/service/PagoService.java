@@ -1,5 +1,6 @@
 package com.espe.server.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -51,58 +52,26 @@ public class PagoService {
     }
 
  // Actualizar un pago existente
-    public Optional<Pago> updatePago(Long idPago, Pago updatedPago, String username) {
+    public boolean registrarPago(Long prestamoId, int numeroPago, BigDecimal montoPago) {
+        Optional<TablaAmortizacion> cuotaOpt = tablaAmortizacionRepository.findByPrestamoIdAndNumeroPago(prestamoId, numeroPago);
 
-    	
-    	Optional<Usuario> usuarioOpt = usuarioRepository.findUsuarioByUsername(username);
-    	
-    	if (!usuarioOpt.isPresent()) {
-            return Optional.empty();
+        if (!cuotaOpt.isPresent()) {
+            return false;
         }
-    	
-    	Usuario usuario = usuarioOpt.get();
-        
-        Optional<Pago> pagoOpt = pagoRepository.findById(idPago);
-        
-        if (!pagoOpt.isPresent()) {
-            return Optional.empty();
-        }
-        
-        Pago pagoExistente = pagoOpt.get();
 
-        // Verificar qué campos han cambiado
-        boolean cambios = false;
+        TablaAmortizacion cuota = cuotaOpt.get();
 
-        if (!pagoExistente.getEstadoPago().equals(updatedPago.getEstadoPago())) {
-            pagoExistente.setEstadoPago(updatedPago.getEstadoPago());
-            cambios = true;
+        if (montoPago.compareTo(cuota.getMontoPago()) < 0) {
+            return false; 
         }
-        
-        TablaAmortizacion tablaAmortizacion = new TablaAmortizacion(
-        		idPago, 
-        		pagoExistente.getPrestamo(), 
-        		pagoExistente.getMontoPago(), 
-        		null, 
-        		null, 
-        		null, 
-        		null, 
-        		null);
-        
-        // Crear el log de actividad para la actualización
-        LogActividad logActividad = new LogActividad(
-                usuario, 
-                "Actualizar Pago",
-                LocalDate.now(), 
-                "El pago con ID " + idPago + " ha sido actualizado."
-        );
 
-        // Si hay cambios, guardamos la actividad en el log y actualizamos el pago
-        if (cambios) {
-            logActividadRepository.save(logActividad);
-            return Optional.of(pagoRepository.save(pagoExistente));
-        } else {
-            return Optional.empty();  
-        }
+        BigDecimal nuevoSaldo = cuota.getSaldoRestante().subtract(cuota.getCapital());
+        cuota.setSaldoRestante(nuevoSaldo);
+
+        // Guardar actualización
+        tablaAmortizacionRepository.save(cuota);
+
+        return true;
     }
 
  // Eliminar un pago por su ID

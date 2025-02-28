@@ -40,13 +40,12 @@ public class TablaAmortizacion {
     @Positive(message = "El saldo restante debe ser un valor positivo")
     private BigDecimal saldoRestante;
     
-    public TablaAmortizacion(Long amortizacionId, Prestamo prestamo, int numeroPago,
+    public TablaAmortizacion(Prestamo prestamo, int numeroPago,
 			@Positive(message = "El monto del pago debe ser un valor positivo") BigDecimal montoPago,
 			LocalDate fechaPago, @Positive(message = "El interés debe ser un valor positivo") BigDecimal interes,
 			@Positive(message = "El capital debe ser un valor positivo") BigDecimal capital,
 			@Positive(message = "El saldo restante debe ser un valor positivo") BigDecimal saldoRestante) {
 		super();
-		this.amortizacionId = amortizacionId;
 		this.prestamo = prestamo;
 		this.numeroPago = numeroPago;
 		this.montoPago = montoPago;
