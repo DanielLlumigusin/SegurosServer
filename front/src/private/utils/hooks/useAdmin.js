@@ -1,13 +1,17 @@
-// src/hooks/useAdmin.js
-import { useState } from 'react';
-import axios from 'axios';
-import { URLBASE } from '../tools';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import ApiAxios from "../../../utils/axiosInterceptor";
 
-const useAdmin = () => {
+const useAuth = () => {
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    const [error, setError] = useState("");
+    const [isAuthenticated, setIsAuthenticated] = useState(null);
+    const [userRole, setUserRole] = useState(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        validateUser();
+    }, []);
 
     const login = async (username, password) => {
         if (!username || !password) {
@@ -16,26 +20,54 @@ const useAdmin = () => {
         }
 
         setLoading(true);
-        setError('');
+        setError("");
 
         try {
-            const response = await axios.post(`${URLBASE}/auth/admin/login`, { username, password });
-            localStorage.setItem("token", response.data.token);
-            window.location.reload;
+            const response = await ApiAxios.post("/auth/login", { username, password });
+            setIsAuthenticated(true);
+            setUserRole(response.data.role);
             navigate("/home");
         } catch (error) {
-            setError("Error al iniciar sesión: " + (error.response?.data?.message || error.message));
+            setError("Error al iniciar sesión: " + (error.response?.data || "Credenciales incorrectas"));
         } finally {
             setLoading(false);
         }
     };
 
-    const logout = () => {
-        localStorage.removeItem("token");
-        navigate("/");
+    const logout = async () => {
+        try {
+            await ApiAxios.post("/auth/logout");
+            setIsAuthenticated(false);
+            setUserRole(null);
+            navigate("/login");
+        } catch (error) {
+            console.error("Error al cerrar sesión:", error);
+        }
     };
 
-    return { login, logout, loading, error, setError };
+    const validateUser = async () => {
+        try {
+            const response = await ApiAxios.get("/auth/validate-user");
+            setIsAuthenticated(true);
+            setUserRole(response.data.role);
+        } catch (error) {
+            setIsAuthenticated(false);
+            setUserRole(null);
+        }
+    };
+
+    const validateAdmin = async () => {
+        try {
+            const response = await ApiAxios.get("/auth/validate-admin");
+            setIsAuthenticated(true);
+            setUserRole(response.data.role);
+            return response.data.role === "ADMIN";
+        } catch (error) {
+            return false;
+        }
+    };
+
+    return { login, logout, validateUser, validateAdmin, isAuthenticated, userRole, loading, error, setError };
 };
 
-export default useAdmin;
+export default useAuth;

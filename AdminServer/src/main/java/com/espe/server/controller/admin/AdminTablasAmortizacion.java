@@ -47,16 +47,6 @@ public class AdminTablasAmortizacion {
         }
     }
 
-    // Crear una nueva entrada en la tabla de amortización
-    @PostMapping
-    public ResponseEntity<TablaAmortizacion> createTablaAmortizacion(@RequestBody TablaAmortizacion newTablaAmortizacion) {
-        try {
-            TablaAmortizacion tablaCreada = tablaAmortizacionService.createTablaAmortizacion(newTablaAmortizacion);
-            return ResponseEntity.status(HttpStatus.CREATED).body(tablaCreada);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
 
     // Actualizar una entrada existente en la tabla de amortización
     @PutMapping("/{idAmortizacion}")

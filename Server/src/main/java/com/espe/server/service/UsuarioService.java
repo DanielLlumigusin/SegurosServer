@@ -2,33 +2,26 @@ package com.espe.server.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.espe.server.persistence.entity.Rol;
 import com.espe.server.persistence.entity.TipoRol;
 import com.espe.server.persistence.entity.Usuario;
-import com.espe.server.persistence.repository.IRolRepository;
 import com.espe.server.persistence.repository.IUsuarioRepository;
 
 @Service
 public class UsuarioService {
 
     private final IUsuarioRepository usuarioRepository;
-    
-    private final IRolRepository rolRepository;
 
     private final PasswordEncoder passwordEncoder;
     
     public UsuarioService(
     		IUsuarioRepository usuarioRepository,
-    		IRolRepository rolRepository,
     		PasswordEncoder passwordEncoder
     		) {
 		this.usuarioRepository = usuarioRepository;
-		this.rolRepository = rolRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
     
@@ -48,18 +41,12 @@ public class UsuarioService {
 
     // Crear un nuevo usuario
     public Usuario createUser(Usuario newUsuario) {
+    	
+    	
         // Encriptamos la contraseña
         newUsuario.setPassword(passwordEncoder.encode(newUsuario.getPassword()));
-        
-        // Asignar un rol por defecto si no tiene uno
-        Rol defaultRol = rolRepository.findByRoleEnum(TipoRol.USER)
-                .orElseGet(() -> {
-                    Rol nuevoRol = new Rol(TipoRol.USER);
-                    nuevoRol.setRoleEnum(TipoRol.USER);
-                    return rolRepository.save(nuevoRol); 
-                });
 
-        newUsuario.setRoles(Set.of(defaultRol));
+        newUsuario.setTipoRol(TipoRol.USER);
         
         return usuarioRepository.save(newUsuario);
     }

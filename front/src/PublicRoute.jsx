@@ -1,17 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
 
 const PublicRoute = () => {
-  // Verifica si el token está presente en el localStorage
   const token = localStorage.getItem("token");
 
-  // Si hay un token, redirige al dashboard (o cualquier página protegida)
-  if (token) {
-    window.location.reload;
-    return <Navigate to="/home" />;
-  }
-
-  // Si no hay token, permite el acceso a las páginas de login o registro
-  return <Outlet />;
+  return token ? <Navigate to="/home" replace /> : <Outlet />;
 };
 
 export default PublicRoute;

@@ -22,7 +22,7 @@ public class AdminPrestamoController {
     
     // Obtener un préstamo por su ID
     @GetMapping("/{idPrestamo}")
-    public ResponseEntity<Prestamo> findPrestamoById(@PathVariable("idPrestamo") Long idPrestamo) {
+    public ResponseEntity<Prestamo> findPrestamoById(@PathVariable Long idPrestamo) {
         try {
             Optional<Prestamo> prestamo = prestamoService.findPrestamoById(idPrestamo);
             if (prestamo.isPresent()) {
@@ -36,7 +36,7 @@ public class AdminPrestamoController {
     }
     
     @GetMapping("/usuario/{usuarioId}/aprobado")
-    public ResponseEntity<List<Prestamo>> findPrestamoAprobadoByUsuarioId(@PathVariable("usuarioId") Long usuarioId) {
+    public ResponseEntity<List<Prestamo>> findPrestamoAprobadoByUsuarioId(@PathVariable Long usuarioId) {
         try {
             List<Prestamo> prestamo = prestamoService.findPrestamoAprobadoByUsuarioId(usuarioId);
             if (!prestamo.isEmpty()) {
@@ -50,7 +50,7 @@ public class AdminPrestamoController {
     }
 
     @GetMapping("/usuario/{usuarioId}/solicitados")
-    public ResponseEntity<List<Prestamo>> findPrestamosSolicitadosByUsuarioId(@PathVariable("usuarioId") Long usuarioId) {
+    public ResponseEntity<List<Prestamo>> findPrestamosSolicitadosByUsuarioId(@PathVariable Long usuarioId) {
         try {
             List<Prestamo> prestamos = prestamoService.findPrestamosSolicitadosByUsuarioId(usuarioId);
             if (!prestamos.isEmpty()) {
@@ -74,22 +74,11 @@ public class AdminPrestamoController {
         }
     }
 
-    // Crear un nuevo préstamo
-    @PostMapping
-    public ResponseEntity<Prestamo> createPrestamo(@RequestBody Prestamo newPrestamo) {
-        try {
-            Prestamo prestamoCreado = prestamoService.createPrestamo(newPrestamo);
-            return ResponseEntity.status(HttpStatus.CREATED).body(prestamoCreado);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
     // Actualizar un préstamo existente
     @PutMapping("/{idPrestamo}")
-    public ResponseEntity<Prestamo> updatePrestamo(@PathVariable("idPrestamo") Long idPrestamo, @RequestBody Prestamo updatedPrestamo) {
+    public ResponseEntity<Prestamo> updatePrestamo(@PathVariable Long idPrestamo, @RequestBody Prestamo updatedPrestamo, @RequestBody String username) {
         try {
-            Optional<Prestamo> prestamoActualizado = prestamoService.updatePrestamo(idPrestamo, updatedPrestamo);
+            Optional<Prestamo> prestamoActualizado = prestamoService.updatePrestamo(idPrestamo, updatedPrestamo, username);
             if (prestamoActualizado.isPresent()) {
                 return ResponseEntity.status(HttpStatus.OK).body(prestamoActualizado.get());
             } else {
@@ -102,9 +91,9 @@ public class AdminPrestamoController {
 
     // Eliminar un préstamo por su ID
     @DeleteMapping("/{idPrestamo}")
-    public ResponseEntity<Void> deletePrestamo(@PathVariable("idPrestamo") Long idPrestamo) {
+    public ResponseEntity<Void> deletePrestamo(@PathVariable Long idPrestamo, @RequestBody String username) {
         try {
-            boolean eliminado = prestamoService.deletePrestamo(idPrestamo);
+            boolean eliminado = prestamoService.deletePrestamo(idPrestamo, username);
             if (eliminado) {
                 return ResponseEntity.noContent().build();
             } else {

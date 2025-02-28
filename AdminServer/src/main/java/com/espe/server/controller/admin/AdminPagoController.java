@@ -20,7 +20,6 @@ public class AdminPagoController {
     	this.pagoService = pagoService;
     }
     
-    
     // Obtener todos los pagos
     @GetMapping
     public ResponseEntity<List<Pago>> findAllPagos() {
@@ -34,7 +33,7 @@ public class AdminPagoController {
 
     // Obtener un pago por su ID
     @GetMapping("/{idPago}")
-    public ResponseEntity<Pago> findPagoById(@PathVariable("idPago") Long idPago) {
+    public ResponseEntity<Pago> findPagoById(@PathVariable Long idPago) {
         try {
             Optional<Pago> pago = pagoService.findPagoById(idPago);
             if (pago.isPresent()) {
@@ -47,22 +46,11 @@ public class AdminPagoController {
         }
     }
 
-    // Crear un nuevo pago
-    @PostMapping
-    public ResponseEntity<Pago> createPago(@RequestBody Pago newPago) {
-        try {
-            Pago pagoCreado = pagoService.createPago(newPago);
-            return ResponseEntity.status(HttpStatus.CREATED).body(pagoCreado);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
     // Actualizar un pago existente
     @PutMapping("/{idPago}")
-    public ResponseEntity<Pago> updatePago(@PathVariable("idPago") Long idPago, @RequestBody Pago updatedPago) {
+    public ResponseEntity<Pago> updatePago(@PathVariable Long idPago, @RequestBody Pago updatedPago, @RequestBody String username) {
         try {
-            Optional<Pago> pagoActualizado = pagoService.updatePago(idPago, updatedPago);
+            Optional<Pago> pagoActualizado = pagoService.updatePago(idPago, updatedPago, username);
             if (pagoActualizado.isPresent()) {
                 return ResponseEntity.status(HttpStatus.OK).body(pagoActualizado.get());
             } else {
@@ -75,9 +63,9 @@ public class AdminPagoController {
 
     // Eliminar un pago por su ID
     @DeleteMapping("/{idPago}")
-    public ResponseEntity<Void> deletePago(@PathVariable("idPago") Long idPago) {
+    public ResponseEntity<Void> deletePago(@PathVariable Long idPago, @RequestBody String username) {
         try {
-            boolean eliminado = pagoService.deletePago(idPago);
+            boolean eliminado = pagoService.deletePago(idPago, username);
             if (eliminado) {
                 return ResponseEntity.status(HttpStatus.OK).build();
             } else {
@@ -90,7 +78,7 @@ public class AdminPagoController {
 
     // Obtener todos los pagos asociados a un préstamo
     @GetMapping("/prestamo/{idPrestamo}")
-    public ResponseEntity<List<Pago>> findPagosByPrestamoId(@PathVariable("idPrestamo") Long idPrestamo) {
+    public ResponseEntity<List<Pago>> findPagosByPrestamoId(@PathVariable Long idPrestamo) {
         try {
             List<Pago> pagos = pagoService.findPagosByPrestamoId(idPrestamo);
             return ResponseEntity.status(HttpStatus.OK).body(pagos);

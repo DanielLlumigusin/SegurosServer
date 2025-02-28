@@ -44,38 +44,13 @@ public class AdminUsuarioController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    
-    //Obtener un usuario por username
-    @GetMapping("/username")
-    public ResponseEntity<Usuario> findUser(@RequestParam String username) {
-        try {
-            Optional<Usuario> usuario = usuarioService.findByUsername(username);
-            if (usuario.isPresent()) {
-                return ResponseEntity.status(HttpStatus.OK).body(usuario.get());
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
 
-    // Crear un nuevo usuario
-    @PostMapping
-    public ResponseEntity<Usuario> createUser(@RequestBody Usuario newUsuario) {
-        try {
-            Usuario usuarioCreado = usuarioService.createUser(newUsuario);
-            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioCreado);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
 
     // Actualizar un usuario existente
     @PutMapping("/{idUser}")
-    public ResponseEntity<Usuario> updateUser(@PathVariable Long idUser, @RequestBody Usuario updatedUsuario) {
+    public ResponseEntity<Usuario> updateUser(@PathVariable Long idUser, @RequestBody Usuario updatedUsuario, @RequestBody String username) {
         try {
-            Optional<Usuario> usuarioActualizado = usuarioService.updateUser(idUser, updatedUsuario);
+            Optional<Usuario> usuarioActualizado = usuarioService.updateUser(idUser, updatedUsuario, username);
             if (usuarioActualizado.isPresent()) {
                 return ResponseEntity.status(HttpStatus.OK).body(usuarioActualizado.get());
             } else {
@@ -88,9 +63,9 @@ public class AdminUsuarioController {
 
     // Eliminar un usuario por su ID
     @DeleteMapping("/{idUser}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long idUser) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Long idUser, @RequestBody String username) {
         try {
-            boolean eliminado = usuarioService.deleteUser(idUser);
+            boolean eliminado = usuarioService.deleteUser(idUser, username);
             if (eliminado) {
                 return ResponseEntity.noContent().build();
             } else {

@@ -1,17 +1,23 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import useAuth from "./utils/hooks/useAuth";
 
 const PrivateRoute = () => {
-  // Verifica si el token está presente en el localStorage
-  const token = localStorage.getItem("token");
+  const { validateUser, isAuthenticated, loading } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Si no hay token, redirige a la página de login
-  if (!token) {
-    window.location.reload;
-    return <Navigate to="/" />;
-  }
+  useEffect(() => {
+    const checkAuth = async () => {
+      await validateUser();
+      setIsLoading(false);
+    };
 
-  // Si hay token, permite el acceso a las rutas privadas
-  return <Outlet />;
+    checkAuth();
+  }, []);
+
+  if (loading || isLoading) return <div>Cargando...</div>;
+
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default PrivateRoute;

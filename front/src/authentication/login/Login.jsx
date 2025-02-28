@@ -8,7 +8,7 @@ import './Login.css';
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const { login, loading, error, setError } = useAuth();
+    const { login, loading, error} = useAuth();
     const navigate = useNavigate();
 
     return (
