@@ -23,11 +23,6 @@ export const updateUser = async (nuevosDatos) => {
         nombreCompleto: nuevosDatos.nombreCompleto,
         fechaNacimiento: nuevosDatos.fechaNacimiento,
         direccion: nuevosDatos.direccion
-    }, {
-        headers: {
-            // Aquí se podría agregar el token en los headers si es necesario
-            'Authorization': `Bearer ${Cookies.get('token')}` // Si usas JWT
-        }
     });
 
     if (response.status !== 200) throw new Error("Error al actualizar los datos");
@@ -35,13 +30,11 @@ export const updateUser = async (nuevosDatos) => {
 };
 
 // Función para eliminar usuario
-export const deleteUser = async (idUser) => {
-    const response = await ApiAxios.delete(`/admin/usuarios/${idUser}`, {
-        headers: {
-            'Authorization': `Bearer ${Cookies.get('token')}` // Agregar el token en el header si se necesita
-        }
-    });
-
-    if (response.status !== 200) throw new Error("Error al eliminar el usuario");
-    return response.status;
+export const deleteUser = async (usuarioId) => {
+    try {
+        const response = await ApiAxios.delete(`/admin/usuarios/${usuarioId}`);
+        return response.status;
+    } catch (error) {
+        throw ("Error al eliminar el usuario ", error);
+    }
 };

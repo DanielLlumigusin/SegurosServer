@@ -1,32 +1,37 @@
-import { useState } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import './App.css'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import './App.css';
 import Login from './auth/Login';
 import Home from './screens/home/Home';
 import GestionUsuarios from './screens/usuarios/GestionUsuarios';
-import Sidebar from './screens/components/sidebar/Sidebar';
+import GestionPrestamos from './screens/prestamos/GestionPrestamos';
 import ProtectedRoute from './ProtectedRoute';
+import Layout from './Layout';  
+import NotFound from './screens/notFound/NotFound';
+import LogActividad from "./screens/logActividad/LogActividad";
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
-      <Sidebar />
+    <BrowserRouter>
       <Routes>
+        {/* Rutas no protegidas */}
         <Route path="/login" element={<Login />} />
-        
-        {/* Agrupamos las rutas protegidas dentro de ProtectedRoute */}
+        <Route path="/" element={<Login />} />
+
+        {/* Rutas protegidas agrupadas */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/home" element={<Home />} />
-          <Route path="/usuarios" element={<GestionUsuarios />} />
+          <Route element={<Layout />}> 
+            <Route path="/home" element={<Home />} />
+            <Route path="/usuarios" element={<GestionUsuarios />} />
+            <Route path='/prestamos' element={<GestionPrestamos />} />
+            <Route path='/historial' element={<LogActividad />} />
+          </Route>
         </Route>
 
-        {/* Si no hay coincidencias, redirigir al login */}
-        <Route path="*" element={<Login />} />
+        {/* Ruta para páginas no encontradas */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
-    </>
-  )
+  );
 }
 
-export default App
+export default App;

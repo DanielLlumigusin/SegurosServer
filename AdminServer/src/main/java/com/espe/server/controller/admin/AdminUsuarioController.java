@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import com.espe.server.persistence.entity.Usuario;
 import com.espe.server.service.UsuarioService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -62,10 +66,18 @@ public class AdminUsuarioController {
     }
 
     // Eliminar un usuario por su ID
-    @DeleteMapping("/{idUser}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long idUser, @RequestBody String username) {
+    @DeleteMapping("/{usuarioId}")
+    public ResponseEntity<Void> deleteUser(HttpServletRequest request, @PathVariable Long usuarioId) {
         try {
-            boolean eliminado = usuarioService.deleteUser(idUser, username);
+        	
+            String username = getUsernameFromCookies(request);
+            
+            if (username == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            boolean eliminado = usuarioService.deleteUser(usuarioId, username);
+            
             if (eliminado) {
                 return ResponseEntity.noContent().build();
             } else {
@@ -74,6 +86,19 @@ public class AdminUsuarioController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+    
+ // Método para obtener el username de las cookies
+    private String getUsernameFromCookies(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("sub".equals(cookie.getName())) { // Ajusta el nombre del cookie según lo que uses
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 
 

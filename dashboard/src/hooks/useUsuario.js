@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getDataUsername, updateUser, getAllUsuarios } from "../service/usuarioService";
+import { getDataUsername, updateUser, getAllUsuarios, deleteUser } from "../service/usuarioService";
 
 const useUsuario = () => {
     const [usuario, setUsuario] = useState(null);
@@ -53,11 +53,21 @@ const useUsuario = () => {
         }
     };
 
+    const eliminarUsuario = async (usuarioId) => {
+        try {
+            await deleteUser(usuarioId);
+        } catch (error) {
+            console.log("Error al eliminar usuario", error);
+            setError("Error al eliminar al Usuario");
+        }
+    }
+
     return { 
         usuario, 
         listaUsuarios, 
         error, 
         actualizarUsuario, 
+        eliminarUsuario,
         loadingUsuario, 
         loadingUsuarios, 
         fetchUsuarios 
