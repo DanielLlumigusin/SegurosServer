@@ -1,19 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 
 const FormularioPrestamo = ({ monto, plazo, tipoTasa, tipoPago, tasasInteres, onMontoChange, onPlazoChange, onTipoTasaChange, onTipoPagoChange, onSubmit }) => {
+    const [errorMonto, setErrorMonto] = useState("");
+    const [errorPlazo, setErrorPlazo] = useState("");
+
+    const handleMontoChange = (e) => {
+        const value = parseInt(e.target.value, 10);
+        if (isNaN(value)) {
+            setErrorMonto("Por favor, ingrese un número válido.");
+        } else if (value < 500 || value > 50000) {
+            setErrorMonto("El monto debe estar entre $500 y $50,000.");
+        } else {
+            setErrorMonto("");
+        }
+        onMontoChange(e);
+    };
+
+    const handlePlazoChange = (e) => {
+        const value = parseInt(e.target.value, 10);
+        if (isNaN(value)) {
+            setErrorPlazo("Por favor, ingrese un número válido.");
+        } else if (value < 6 || value > 60) {
+            setErrorPlazo("El plazo debe estar entre 6 y 60 meses.");
+        } else {
+            setErrorPlazo("");
+        }
+        onPlazoChange(e);
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (monto < 500 || monto > 50000) {
+            setErrorMonto("El monto debe estar entre $500 y $50,000.");
+            return;
+        }
+        if (plazo < 6 || plazo > 60) {
+            setErrorPlazo("El plazo debe estar entre 6 y 60 meses.");
+            return;
+        }
+        onSubmit(e);
+    };
+
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit}>
             <div>
                 <label>Monto Solicitado:</label>
                 <input
                     type="number"
                     value={monto}
-                    onChange={onMontoChange}
+                    onChange={handleMontoChange}
                     min="500"
                     max="50000"
                     required
                     className="prestamo-input"
                 />
+                {errorMonto && <p style={{ color: "red" }}>{errorMonto}</p>}
             </div>
 
             <div>
@@ -21,12 +62,13 @@ const FormularioPrestamo = ({ monto, plazo, tipoTasa, tipoPago, tasasInteres, on
                 <input
                     type="number"
                     value={plazo}
-                    onChange={onPlazoChange}
+                    onChange={handlePlazoChange}
                     min="6"
                     max="60"
                     required
                     className="prestamo-input"
                 />
+                {errorPlazo && <p style={{ color: "red" }}>{errorPlazo}</p>}
             </div>
 
             <div>
@@ -42,7 +84,7 @@ const FormularioPrestamo = ({ monto, plazo, tipoTasa, tipoPago, tasasInteres, on
 
             <div>
                 <label>Tipo de Pago:</label>
-                <select  value={tipoPago} onChange={onTipoPagoChange} className="prestamo-select">
+                <select value={tipoPago} onChange={onTipoPagoChange} className="prestamo-select">
                     <option value="MENSUAL">Mensual</option>
                     <option value="SEMANAL">Semanal</option>
                     <option value="ANUAL">Anual</option>

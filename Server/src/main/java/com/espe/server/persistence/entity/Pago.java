@@ -24,6 +24,9 @@ public class Pago {
 
     @Column(name = "metodo_pago", nullable = false)
     private String metodoPago;
+    
+    @Column(name = "estado_pago", nullable = false)
+    private String estadoPago;
 
     // Getters y Setters
     public Long getPagoId() {
@@ -65,4 +68,14 @@ public class Pago {
     public void setMetodoPago(String metodoPago) {
         this.metodoPago = metodoPago;
     }
+
+	public String getEstadoPago() {
+		return estadoPago;
+	}
+
+	public void setEstadoPago(String estadoPago) {
+		this.estadoPago = estadoPago;
+	}
+    
+
 }

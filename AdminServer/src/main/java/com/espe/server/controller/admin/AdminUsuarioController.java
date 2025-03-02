@@ -9,7 +9,6 @@ import com.espe.server.service.UsuarioService;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -88,18 +87,22 @@ public class AdminUsuarioController {
         }
     }
     
- // Método para obtener el username de las cookies
+ // Método para obtener el 'username' desde las cookies
     private String getUsernameFromCookies(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
+
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if ("sub".equals(cookie.getName())) { // Ajusta el nombre del cookie según lo que uses
+                if ("sub".equals(cookie.getName())) {
                     return cookie.getValue();
                 }
             }
         }
+        
+        // Si no encuentra el cookie, devuelve null
         return null;
     }
+
 
 
 }

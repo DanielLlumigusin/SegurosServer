@@ -46,7 +46,7 @@ public class UsuarioService {
         // Encriptamos la contraseña
         newUsuario.setPassword(passwordEncoder.encode(newUsuario.getPassword()));
 
-        newUsuario.setTipoRol(TipoRol.USER);
+        newUsuario.setRol(TipoRol.USER);
         
         return usuarioRepository.save(newUsuario);
     }
@@ -62,8 +62,8 @@ public class UsuarioService {
     }
 
  // Actualizar un usuario existente
-    public Optional<Usuario> updateUser(Long idUsuario, Usuario updatedUsuario) {
-        return usuarioRepository.findById(idUsuario).map(usuarioExistente -> {
+    public Optional<Usuario> updateUser(String username, Usuario updatedUsuario) {
+        return usuarioRepository.findUsuarioByUsername(username).map(usuarioExistente -> {
             usuarioExistente.setNombreCompleto(updatedUsuario.getNombreCompleto());
             usuarioExistente.setFechaNacimiento(updatedUsuario.getFechaNacimiento());
             usuarioExistente.setDireccion(updatedUsuario.getDireccion());

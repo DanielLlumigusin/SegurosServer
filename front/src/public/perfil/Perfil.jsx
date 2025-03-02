@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import ImgDefault from "../../assets/img/perfil-default.png";
-import useUsuario from "../../utils/hooks/useUsuario";
-import "./Perfil.css"; // Importamos el CSS
+import useUsuario from "../../hooks/useUsuario";
+import "./Perfil.css";
 
 const Perfil = () => {
-  const { usuario, error, actualizarUsuario } = useUsuario();
+  const {usuario, error, actualizarUsuario } = useUsuario();
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     nombreCompleto: "",
@@ -13,9 +13,9 @@ const Perfil = () => {
     direccion: "",
   });
 
-//   if (error) {
-//     return <div className="perfil__error">{error}</div>;
-//   }
+  if (error) {
+    return <div className="perfil__error">{error}</div>;
+  }
 
   if (!usuario) {
     return <div className="perfil__loading">Cargando...</div>;
@@ -31,7 +31,7 @@ const Perfil = () => {
     setFormData({
       usuarioId: usuario.usuarioId,
       nombreCompleto: usuario.nombreCompleto,
-      fechaNacimiento: usuario.fechaNacimiento.slice(0,10),
+      fechaNacimiento: usuario.fechaNacimiento.slice(0, 10),
       direccion: usuario.direccion,
 
     });
@@ -39,8 +39,7 @@ const Perfil = () => {
   };
 
   const handleSaveClick = () => {
-    // Para actualizar se asume que el usuario también tiene su username
-    actualizarUsuario({ ...formData, username: usuario.username });
+    actualizarUsuario({ ...formData});
     setEditMode(false);
   };
 
@@ -74,7 +73,7 @@ const Perfil = () => {
       <div className="perfil__info">
         <p>
           <strong>Cédula: </strong>
-           {usuario.cedula}
+          {usuario.cedula}
         </p>
         <p>
           <strong>Fecha de Nacimiento: </strong>

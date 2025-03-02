@@ -1,6 +1,5 @@
 import { useState } from "react";
 import axios from "axios";
-import { URLBASE } from '../tools';
 import { useNavigate } from "react-router-dom";
 
 const useRegister = () => {

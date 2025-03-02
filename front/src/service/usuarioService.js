@@ -1,23 +1,36 @@
 import ApiAxios from "../utils/axiosInterceptor";
-import { URLBASE } from "../utils/tools";
 
-export const getDataUsername = async (username) => {
-    const response = await ApiAxios.get(`${URLBASE}/api/usuarios/username`,
-        {
-            params: {
-                username
-            }
-        });
-    return response.data;
+// Obtiene los datos por username
+export const getDataUser = async () => {
+    try {
+        const response = await ApiAxios.get(`/api/usuarios/data-user`);
+        return response.data;
+    } catch (error) {
+        console.error("Error al obtener el usuario con username ", error);
+        throw error;
+    }
 };
 
+// Actualiza los datos del usuario
 export const updateUser = async (nuevosDatos) => {
-    // Llama a tu API para actualizar los datos del usuario
-    const response = await ApiAxios.put(`${URLBASE}/api/usuarios/${nuevosDatos.usuarioId}`, {
-            nombreCompleto:nuevosDatos.nombreCompleto,
-            fechaNacimiento: nuevosDatos.fechaNacimiento,
-            direccion:nuevosDatos.direccion
-    });
-    if (!response.ok) throw new Error("Error al actualizar los datos");
-    return await response.json();
+    try {
+         await ApiAxios.put(`/api/usuarios`, {
+                nombreCompleto:nuevosDatos.nombreCompleto,
+                fechaNacimiento: nuevosDatos.fechaNacimiento,
+                direccion:nuevosDatos.direccion
+        });
+    } catch (error) {
+        console.error("Error al actualizar al usuario", error);
+        throw error
+    }
 };
+
+//Crea un nuevo Usuario
+export const createUser = async (usuario) => {
+    try {
+        await ApiAxios.post('/api/usuarios',{usuario});
+    } catch (error) {
+        console.error("Error al crear un usuario", error);
+        throw error;
+    }
+}

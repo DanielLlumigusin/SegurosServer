@@ -1,23 +1,19 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useEffect, useState } from "react";
-import useAuth from "./utils/hooks/useAuth";
+import useAuth from "./hooks/useAuth";
+import NavbarSigin from "./components/header/NavbarSigin";
 
 const PrivateRoute = () => {
-  const { validateUser, isAuthenticated, loading } = useAuth();
-  const [isLoading, setIsLoading] = useState(true);
+  const { isAuthenticated, loading } = useAuth();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      await validateUser();
-      setIsLoading(false);
-    };
+  if (loading) return <div>Cargando...</div>;
 
-    checkAuth();
-  }, []);
-
-  if (loading || isLoading) return <div>Cargando...</div>;
-
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+  return (
+    <>
+      <NavbarSigin />
+      
+      {isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />}
+    </>
+  );
 };
 
 export default PrivateRoute;

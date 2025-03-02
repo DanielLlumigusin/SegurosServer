@@ -1,6 +1,6 @@
 import React from "react";
-import useUsuario from "../../utils/hooks/useUsuario";
-import usePrestamoSolicitado from "../../utils/hooks/usePrestamoSolicitado";
+import useUsuario from "../../hooks/useUsuario";
+import usePrestamoSolicitado from "../../hooks/usePrestamoSolicitado";
 import ListaPrestamos from "./ListaPrestamos";
 import Mensaje from "../components/Mensaje";
 import "./PrestamoSolicitado.css";

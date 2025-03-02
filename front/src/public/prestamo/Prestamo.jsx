@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import "./Prestamo.css";
+import React, { useState, useEffect } from "react";
 import FormularioPrestamo from "./FormularioPrestamo";
 import TablaAmortizacion from "./TablaAmortizacion";
 import ResumenPrestamo from "./ResumenPrestamo";
 import Mensaje from "../components/Mensaje";
-import usePrestamo from "../../utils/hooks/usePrestamo";
-import useUsuario from "../../utils/hooks/useUsuario";
-import prestamoService from "../../service/prestamoService";
+import usePrestamo from "../../hooks/usePrestamo";
+import useUsuario from "../../hooks/useUsuario";
+import { calcularCuota, generarTablaAmortizacion } from "../../utils/calcularCuota";
+import "./Prestamo.css";
 
 const tasasInteres = {
     "Básica": 5.0,
@@ -20,9 +20,20 @@ const Prestamo = () => {
     const [tipoTasa, setTipoTasa] = useState("Básica");
     const [tipoPago, setTipoPago] = useState("MENSUAL");
     const [mensaje, setMensaje] = useState("");
+    const [cuota, setCuota] = useState(0);
+    const [tablaAmortizacion, setTablaAmortizacion] = useState([]);
 
     const { usuario, error } = useUsuario();
-    const { cuota, tablaAmortizacion } = usePrestamo(monto, plazo, tasasInteres[tipoTasa], tipoPago);
+    const { crearPrestamo, errorPrestamo, loadingPrestamo } = usePrestamo();
+
+    // Recalcular cuota y tabla de amortización cada vez que los valores cambian
+    useEffect(() => {
+        const nuevaCuota = calcularCuota(monto, plazo, tasasInteres[tipoTasa], tipoPago);
+        setCuota(nuevaCuota);
+
+        const nuevaTablaAmortizacion = generarTablaAmortizacion(monto, plazo, tasasInteres[tipoTasa], tipoPago);
+        setTablaAmortizacion(nuevaTablaAmortizacion);
+    }, [monto, plazo, tipoTasa, tipoPago]);
 
     const handleSolicitarPrestamo = async (e) => {
         e.preventDefault();
@@ -36,7 +47,14 @@ const Prestamo = () => {
             return;
         }
         try {
-            await prestamoService.solicitarPrestamo(monto, plazo, tasasInteres[tipoTasa], tipoPago, usuario);
+            const prestamo = {
+                monto: monto,
+                plazo: plazo,
+                tasaInteres: tasasInteres[tipoTasa],
+                tipoPago: tipoPago,
+                usuario: usuario 
+            }
+            await crearPrestamo(prestamo);
             setMensaje("Préstamo solicitado con éxito.");
             setMonto(1000);
             setPlazo(12);

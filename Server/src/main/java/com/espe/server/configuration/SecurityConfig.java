@@ -2,7 +2,6 @@ package com.espe.server.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,19 +29,18 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) 
             .cors(cors -> cors.configurationSource(request -> {
                 var corsConfig = new org.springframework.web.cors.CorsConfiguration();
-                corsConfig.addAllowedOrigin("http://localhost:5173"); // Dominio del frontend
-                corsConfig.addAllowedMethod("*"); // Permitir todos los métodos (GET, POST, etc.)
-                corsConfig.addAllowedHeader("*"); // Permitir todos los headers
-                corsConfig.setAllowCredentials(true); // Importante para permitir cookies HTTP-only
+                corsConfig.addAllowedOrigin("http://localhost:3000");
+                corsConfig.addAllowedMethod("*"); 
+                corsConfig.addAllowedHeader("*"); 
+                corsConfig.setAllowCredentials(true);
                 return corsConfig;
             }))
             .httpBasic(Customizer.withDefaults()) 
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // No usar sesiones en el backend
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> {
-                auth.requestMatchers("/auth/register", "/auth/login", "/auth/admin/login").permitAll();
-                auth.requestMatchers(HttpMethod.GET, "/auth/**").permitAll();
-                auth.requestMatchers("/api/**", "/admin/**").authenticated(); // Protege rutas privadas
-                auth.anyRequest().denyAll(); // Denegar cualquier otra petición
+                auth.requestMatchers("/auth/login","/auth/check").permitAll();
+                auth.requestMatchers("/api/**", "/auth/logout").authenticated(); 
+                auth.anyRequest().denyAll();
             })
             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
             .build();

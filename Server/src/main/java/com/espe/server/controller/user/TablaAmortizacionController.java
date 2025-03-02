@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/user/tablas-amortizacion")
+@RequestMapping("/api/tablas-amortizacion")
 public class TablaAmortizacionController {
 
     private final TablaAmortizacionService tablaAmortizacionService;

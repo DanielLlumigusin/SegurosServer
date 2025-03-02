@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { getDataUsername, updateUser, getAllUsuarios, deleteUser } from "../service/usuarioService";
 
 const useUsuario = () => {
-    const [usuario, setUsuario] = useState(null);
+    const [usuario, setUsuario] = useState(null);  
     const [listaUsuarios, setListaUsuarios] = useState([]);
     const [error, setError] = useState(null);
     const [loadingUsuario, setLoadingUsuario] = useState(true);

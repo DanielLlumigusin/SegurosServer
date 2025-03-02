@@ -11,11 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.WebUtils;
 import com.espe.server.jwt.JwtService;
-import com.espe.server.persistence.entity.TipoRol;
 import com.espe.server.persistence.entity.Usuario;
 import com.espe.server.service.UsuarioService;
 
@@ -30,6 +28,14 @@ public class AuthController {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.jwtService = jwtService;
+    }
+    
+    @GetMapping("/check")
+    public ResponseEntity<?> checkAuth(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No autenticado");
+        }
+        return ResponseEntity.ok("Autenticado");
     }
 
     @PostMapping("/login")
@@ -50,12 +56,11 @@ public class AuthController {
             // Configuración segura de la cookie
             Cookie cookie = new Cookie("token", token);
             cookie.setHttpOnly(true);
-            cookie.setSecure(false); // Cambiar a true en producción con HTTPS
+            cookie.setSecure(false);
             cookie.setPath("/");
             cookie.setMaxAge(3600);
             response.addCookie(cookie);
 
-            // Devolver solo información necesaria (sin el token)
             Map<String, String> responseBody = new HashMap<>();
             responseBody.put("message", "Login exitoso");
             responseBody.put("role", user.getRol().name());
@@ -67,57 +72,13 @@ public class AuthController {
     }
 
 
-    @GetMapping("/validate-user")
-    public ResponseEntity<?> validateUser(HttpServletRequest request) {
-        return validateRole(request, null); // Permite cualquier usuario autenticado
-    }
-
-    @GetMapping("/validate-admin")
-    public ResponseEntity<?> validateAdmin(HttpServletRequest request) {
-        return validateRole(request, TipoRol.ADMIN); // Solo ADMIN
-    }
-
-    private ResponseEntity<?> validateRole(HttpServletRequest request, TipoRol rolRequerido) {
-        Cookie cookie = WebUtils.getCookie(request, "token");
-        if (cookie == null) {
-            return ResponseEntity.status(401).body("No autenticado");
-        }
-
-        String token = cookie.getValue();
-        String role;
-        
-        try {
-            role = jwtService.getClaim(token, claims -> claims.get("role", String.class));
-            if (!jwtService.isTokenValid(token)) {
-                return ResponseEntity.status(401).body("Token inválido");
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(401).body("Token inválido o expirado");
-        }
-
-        if (rolRequerido != null && !rolRequerido.name().equals(role)) {
-            return ResponseEntity.status(403).body("Acceso denegado");
-        }
-
-        return ResponseEntity.ok(Map.of("message", "Autenticado", "role", role));
-    }
-
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
-        // Verificar si el usuario está autenticado antes de limpiar la sesión
-        if (SecurityContextHolder.getContext().getAuthentication() != null) {
-            SecurityContextHolder.clearContext(); // Limpiar la autenticación en Spring Security
-        }
-
-        // Invalidar la sesión en el servidor si existe
-        if (request.getSession(false) != null) {
-            request.getSession().invalidate();
-        }
 
         // Eliminar cookie del token
         Cookie cookie = new Cookie("token", "");
         cookie.setHttpOnly(true);
-        cookie.setSecure(true); // ⚠️ Cambiar a `true` en producción si usas HTTPS
+        cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge(0);
         response.addCookie(cookie);

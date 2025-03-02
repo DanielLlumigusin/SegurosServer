@@ -1,35 +1,42 @@
 import ApiAxios from "../utils/axiosInterceptor"; 
-import { URLBASE } from "../utils/tools"; 
 
-const solicitarPrestamo = async (monto, plazo, tasaInteres, tipoPago, usuario) => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-        throw new Error("No se encontró el token de autenticación. Por favor, inicie sesión.");
+export const solicitarPrestamo = async (monto, plazo, tasaInteres, tipoPago, usuario) => {
+    try {
+        const response = await ApiAxios.post(
+            `/api/prestamos`,
+            {
+                usuario:usuario,
+                montoSolicitado: parseFloat(monto),
+                plazoAmortizacion: parseInt(plazo),
+                tasaInteres: parseFloat(tasaInteres),
+                tipoPago: tipoPago
+            }
+        );
+    } catch (error) {
+        console.error("No se puede registrar el prestamo ", error);
+        throw error;
     }
-
-    const response = await ApiAxios.post(
-        `${URLBASE}/api/prestamos`,
-        {
-            usuario:usuario,
-            montoSolicitado: parseFloat(monto),
-            plazoAmortizacion: parseInt(plazo),
-            tasaInteres: parseFloat(tasaInteres),
-            tipoPago: tipoPago
-        }
-    );
-
     return response.data;
 };
 
-const getPrestamoAprobadoByUsuarioId = async (usuarioId) =>{
-    const response = (await ApiAxios.get(`${URLBASE}/api/prestamos/usuario/${usuarioId}/aprobado`));
-    return response.data;
+
+export const getPrestamoAprobadoByUsuarioId = async (usuarioId) =>{
+    try {
+        const response = (await ApiAxios.get(`/api/prestamos/usuario/${usuarioId}/aprobado`));
+        return response.data;    
+    } catch (error) {
+        console.error("No se puede obtener los prestamos Aprobados", error);
+        throw error;
+    }
 }
 
-const getPrestamoSolicitadoByUsuarioId = async (usuarioId) =>{
-    const response = await ApiAxios.get(`${URLBASE}/api/prestamos/usuario/${usuarioId}/solicitados`);
-    return response.data;
+export const getPrestamoSolicitadoByUsuarioId = async (usuarioId) =>{
+    try {
+        const response = await ApiAxios.get(`/api/prestamos/usuario/${usuarioId}/solicitados`);
+        return response.data;
+    } catch (error) {
+        console.error("No se puede obtener los prestamos aprobados", error);
+        throw error;
+    }
 }
 
-export default { solicitarPrestamo, getPrestamoAprobadoByUsuarioId, getPrestamoSolicitadoByUsuarioId };

@@ -11,7 +11,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.espe.server.jwt.JwtAuthenticationFilter;
-import com.espe.server.persistence.entity.TipoRol;
 
 @Configuration
 @EnableWebSecurity

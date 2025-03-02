@@ -1,18 +1,16 @@
 package com.espe.server.persistence.entity;
 
 import jakarta.persistence.*;
-
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "Usuarios")
-public class Usuario implements UserDetails{
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,37 +27,31 @@ public class Usuario implements UserDetails{
 
     private String direccion;
 
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(nullable = false)
     private String password;
 
-    @Column(name = "rol")
+    @Enumerated(EnumType.STRING) // Se asegura de que se almacene como texto
+    @Column(nullable = false)
     private TipoRol rol;
 
     public Usuario() {
-	}
-    
-    public Usuario( String nombreCompleto, String cedula, Date fechaNacimiento, String direccion,
-			String username, String password, TipoRol rol) {
-		super();
-		this.nombreCompleto = nombreCompleto;
-		this.cedula = cedula;
-		this.fechaNacimiento = fechaNacimiento;
-		this.direccion = direccion;
-		this.username = username;
-		this.password = password;
-		this.rol = rol;
-	}
+    }
 
+    public Usuario(String nombreCompleto, String cedula, Date fechaNacimiento, String direccion,
+                   String username, String password, TipoRol rol) {
+        this.nombreCompleto = nombreCompleto;
+        this.cedula = cedula;
+        this.fechaNacimiento = fechaNacimiento;
+        this.direccion = direccion;
+        this.username = username;
+        this.password = password;
+        this.rol = rol;
+    }
 
-
-	public Usuario(Usuario usuario, List<SimpleGrantedAuthority> authorityList) {
-		// TODO Auto-generated constructor stub
-	}
-
-	// Getters y Setters
+    // Getters y Setters
     public Long getUsuarioId() {
         return usuarioId;
     }
@@ -76,16 +68,15 @@ public class Usuario implements UserDetails{
         this.nombreCompleto = nombreCompleto;
     }
 
-
     public String getCedula() {
-		return cedula;
-	}
+        return cedula;
+    }
 
-	public void setCedula(String cedula) {
-		this.cedula = cedula;
-	}
+    public void setCedula(String cedula) {
+        this.cedula = cedula;
+    }
 
-	public Date getFechaNacimiento() {
+    public Date getFechaNacimiento() {
         return fechaNacimiento;
     }
 
@@ -101,50 +92,54 @@ public class Usuario implements UserDetails{
         this.direccion = direccion;
     }
 
+    @Override
     public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public TipoRol getRol() {
-		return rol;
-	}
-
-	public void setTipoRol(TipoRol rol) {
-		this.rol = rol;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-    public boolean isAccountNonExpired() {
-       return true;
+        return username;
     }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public TipoRol getRol() {
+        return rol;
+    }
+
+    public void setRol(TipoRol rol) {
+        this.rol = rol;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + rol.name()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
     @Override
     public boolean isAccountNonLocked() {
-       return true;
+        return true;
     }
+
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
     @Override
     public boolean isEnabled() {
         return true;
     }
-    
 }

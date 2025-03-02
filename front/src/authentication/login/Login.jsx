@@ -1,7 +1,6 @@
-// src/pages/Login.js
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuth from '../../utils/hooks/useAuth';
+import useAuth from '../../hooks/useAuth';
 import logo from "../../assets/img/logo.jpg";
 import './Login.css';
 

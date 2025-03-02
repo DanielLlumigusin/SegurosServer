@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.espe.server.persistence.entity.EstadoPrestamo;
 import com.espe.server.persistence.entity.LogActividad;
 import com.espe.server.persistence.entity.Prestamo;
-import com.espe.server.persistence.entity.TablaAmortizacion;
 import com.espe.server.persistence.entity.Usuario;
 import com.espe.server.persistence.repository.ILogActividadRepository;
 import com.espe.server.persistence.repository.IPrestamoRepository;
@@ -23,7 +22,6 @@ public class PrestamoService {
     private final IPrestamoRepository prestamoRepository;
     private final ILogActividadRepository logActividadRepository;
     private final IUsuarioRepository usuarioRepository;
-    private final ITablaAmortizacionRepository tablaAmortizacionRepository;
     private final TablaAmortizacionService tablaAmortizacionService;
     public PrestamoService(
     		IPrestamoRepository prestamoRepository,
@@ -34,7 +32,6 @@ public class PrestamoService {
     	this.prestamoRepository = prestamoRepository;
     	this.logActividadRepository = logActividadRepository;
     	this.usuarioRepository = usuarioRepository;
-    	this.tablaAmortizacionRepository = tablaAutorizacionRepository;
     	this.tablaAmortizacionService = tablaAmortizacionService;
     }
     

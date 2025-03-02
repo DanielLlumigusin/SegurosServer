@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import FormularioPago from "./FormularioPago";
 import ListaPagos from "./ListaPagos";
 import Mensaje from "../components/Mensaje";
-import usePago from "../../utils/hooks/usePago";
-import usePrestamoAprobado from "../../utils/hooks/usePrestamoAprobado";
-import useUsuario from "../../utils/hooks/useUsuario";
+import usePago from "../../hooks/usePago";
+import usePrestamoAprobado from "../../hooks/usePrestamoAprobado";
+import useUsuario from "../../hooks/useUsuario";
 import PrestamoCard from "../prestamo/PrestamoCard";
 import "./Pago.css";
 

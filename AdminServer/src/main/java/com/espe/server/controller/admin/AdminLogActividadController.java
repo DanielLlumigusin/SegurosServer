@@ -13,7 +13,7 @@ import java.util.Optional;
 @RequestMapping("/admin/logs-actividades")
 public class AdminLogActividadController {
 
-    private final LogActividadService logActividadService;
+    private final LogActividadService logActividadService; 
     
     public AdminLogActividadController(LogActividadService logActividadService) {
     	this.logActividadService = logActividadService;
