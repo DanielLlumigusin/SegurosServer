@@ -9,8 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface ITablaAmortizacionRepository extends JpaRepository<TablaAmortizacion, Long> {
-	List<TablaAmortizacion> findByPrestamo_PrestamoId(Long id);
-	List<TablaAmortizacion> findByPrestamoId(Long prestamoId);
-    Optional<TablaAmortizacion> findByPrestamoIdAndNumeroPago(Long prestamoId, int numeroPago);
-
+    List<TablaAmortizacion> findByPrestamoPrestamoId(Long prestamoId); // Corregida
+    Optional<TablaAmortizacion> findByPrestamoPrestamoIdAndNumeroPago(Long prestamoId, int numeroPago);
 }

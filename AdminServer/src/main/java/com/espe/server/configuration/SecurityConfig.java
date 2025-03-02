@@ -2,7 +2,6 @@ package com.espe.server.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.espe.server.jwt.JwtAuthenticationFilter;
+import com.espe.server.persistence.entity.TipoRol;
 
 @Configuration
 @EnableWebSecurity
@@ -26,12 +26,11 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-    	String allowedOrigin = System.getenv("CORS_ALLOWED_ORIGIN");
         return httpSecurity
             .csrf(csrf -> csrf.disable()) 
             .cors(cors -> cors.configurationSource(request -> {
                 var corsConfig = new org.springframework.web.cors.CorsConfiguration();
-                corsConfig.addAllowedOrigin(allowedOrigin); 
+                corsConfig.addAllowedOrigin("http://localhost:5173"); 
                 corsConfig.addAllowedMethod("*"); 
                 corsConfig.addAllowedHeader("*"); 
                 corsConfig.setAllowCredentials(true); 
@@ -40,8 +39,8 @@ public class SecurityConfig {
             .httpBasic(Customizer.withDefaults()) 
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> {
-                auth.requestMatchers("/auth/register", "/auth/login", "/auth/admin/login").permitAll();
-                auth.requestMatchers("/api/**", "/admin/**").authenticated();
+                auth.requestMatchers("/auth/login").permitAll();
+                auth.requestMatchers("/admin/**","/auth/logout","/auth/check").hasRole("ADMIN");
                 auth.anyRequest().denyAll(); 
             })
             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)

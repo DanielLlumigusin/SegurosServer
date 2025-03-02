@@ -32,25 +32,47 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
+        // Obtener la cookie "token" del request
         Cookie cookie = WebUtils.getCookie(request, "token");
 
+        // Verificar si la cookie existe
         if (cookie != null) {
             String token = cookie.getValue();
-            try {
-                String username = jwtService.getUsernameFromToken(token);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                if (jwtService.isTokenValid(token)) {
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (token != null && !token.isEmpty()) {
+                try {
+                    // Obtener el username del token
+                    String username = jwtService.getUsernameFromToken(token);
+
+                    // Verificar que el username sea válido
+                    if (username != null && !username.isEmpty()) {
+                        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+                        // Verificar si el token es válido
+                        if (jwtService.isTokenValid(token)) {
+                            // Establecer la autenticación en el contexto de seguridad
+                            UsernamePasswordAuthenticationToken authentication =
+                                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                            SecurityContextHolder.getContext().setAuthentication(authentication);
+                        } else {
+                            SecurityContextHolder.clearContext(); // Limpiar el contexto si el token no es válido
+                        }
+                    } else {
+                        SecurityContextHolder.clearContext(); // Limpiar el contexto si el username es inválido
+                    }
+
+                } catch (Exception e) {
+                    // Limpiar el contexto en caso de cualquier error
+                    SecurityContextHolder.clearContext();
+                    // Agregar logs de error para depuración (opcional)
+                    logger.error("Error durante la autenticación del token", e);
                 }
-            } catch (Exception e) {
-                SecurityContextHolder.clearContext();
             }
         }
 
+        // Continuar con la cadena de filtros
         chain.doFilter(request, response);
     }
 }
+

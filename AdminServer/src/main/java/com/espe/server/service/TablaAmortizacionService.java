@@ -56,7 +56,7 @@ public class TablaAmortizacionService {
 
     // Obtener todas las entradas de la tabla de amortización asociadas a un préstamo
     public List<TablaAmortizacion> findTablasAmortizacionByPrestamoId(Long idPrestamo) {
-        return tablaAmortizacionRepository.findByPrestamo_PrestamoId(idPrestamo);
+        return tablaAmortizacionRepository.findByPrestamoPrestamoId(idPrestamo);
     }
     
     

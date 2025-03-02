@@ -53,7 +53,7 @@ public class PagoService {
 
  // Actualizar un pago existente
     public boolean registrarPago(Long prestamoId, int numeroPago, BigDecimal montoPago) {
-        Optional<TablaAmortizacion> cuotaOpt = tablaAmortizacionRepository.findByPrestamoIdAndNumeroPago(prestamoId, numeroPago);
+        Optional<TablaAmortizacion> cuotaOpt = tablaAmortizacionRepository.findByPrestamoPrestamoIdAndNumeroPago(prestamoId, numeroPago);
 
         if (!cuotaOpt.isPresent()) {
             return false;

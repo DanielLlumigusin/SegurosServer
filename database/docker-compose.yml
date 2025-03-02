@@ -6,10 +6,12 @@ services:
     container_name: mysql_seguros
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: seguros
+      ADMIN: ${ADMIN}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      CLIENTE: ${CLIENTE}
+      CLIENTE_PASSWORD: ${CLIENTE_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql

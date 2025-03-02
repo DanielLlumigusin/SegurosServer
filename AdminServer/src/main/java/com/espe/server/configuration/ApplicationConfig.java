@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.espe.server.persistence.repository.IUsuarioRepository;
 
+
 @Configuration
 public class ApplicationConfig {
 
