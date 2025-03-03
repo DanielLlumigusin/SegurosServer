@@ -5,7 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.espe.server.persistence.entity.Prestamo;
+import com.espe.server.persistence.entity.Usuario;
 import com.espe.server.service.PrestamoService;
+import com.espe.server.service.UsuarioService;
+import com.espe.server.utils.InfoCookie;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,9 +20,14 @@ import java.util.Optional;
 public class PrestamoController {
 
     private final PrestamoService prestamoService;
+    private final UsuarioService usuarioService;
     
-    public PrestamoController(PrestamoService prestamoService) {
+    public PrestamoController(
+    		PrestamoService prestamoService,
+    		UsuarioService usuarioService
+    		) {
     	this.prestamoService = prestamoService;
+    	this.usuarioService = usuarioService;
     }
 
     // Obtener un préstamo por su ID
@@ -35,29 +45,50 @@ public class PrestamoController {
         }
     }
     
-    @GetMapping("/usuario/{usuarioId}/aprobado")
-    public ResponseEntity<List<Prestamo>> findPrestamoAprobadoByUsuarioId(@PathVariable Long usuarioId) {
+    @GetMapping("/aprobado")
+    public ResponseEntity<List<Prestamo>> findPrestamoAprobado(HttpServletRequest request) {
         try {
-            List<Prestamo> prestamo = prestamoService.findPrestamoAprobadoByUsuarioId(usuarioId);
-            if (!prestamo.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.OK).body(prestamo);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            InfoCookie infoCookie = new InfoCookie();
+            String username = infoCookie.getUsernameFromCookies(request);
+            
+            Optional<Usuario> usuarioOptional = usuarioService.findByUsername(username);
+            
+            // Si el usuario no existe, devolver UNAUTHORIZED (401)
+            if (usuarioOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
+            
+            Long usuarioId = usuarioOptional.get().getUsuarioId();
+            List<Prestamo> prestamos = prestamoService.findPrestamoAprobadoByUsuarioId(usuarioId);
+
+            // Devolver 200 OK con lista vacía en caso de no encontrar préstamos
+            return ResponseEntity.ok(prestamos);
+            
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @GetMapping("/usuario/{usuarioId}/solicitados")
-    public ResponseEntity<List<Prestamo>> findPrestamosSolicitadosByUsuarioId(@PathVariable Long usuarioId) {
+
+    @GetMapping("/solicitado")
+    public ResponseEntity<List<Prestamo>> findPrestamoSolicitado(HttpServletRequest request) {
         try {
-            List<Prestamo> prestamos = prestamoService.findPrestamosSolicitadosByUsuarioId(usuarioId);
-            if (!prestamos.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.OK).body(prestamos);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            InfoCookie infoCookie = new InfoCookie();
+            String username = infoCookie.getUsernameFromCookies(request);
+            
+            Optional<Usuario> usuarioOptional = usuarioService.findByUsername(username);
+            
+            // Si el usuario no existe, devolver UNAUTHORIZED (401)
+            if (usuarioOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
+            
+            Long usuarioId = usuarioOptional.get().getUsuarioId();
+            List<Prestamo> prestamos = prestamoService.findPrestamosSolicitadosByUsuarioId(usuarioId);
+
+            // Devolver 200 OK con lista vacía en caso de no encontrar préstamos
+            return ResponseEntity.ok(prestamos);
+            
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -65,9 +96,11 @@ public class PrestamoController {
 
     // Crear un nuevo préstamo
     @PostMapping
-    public ResponseEntity<Prestamo> createPrestamo(@RequestBody Prestamo newPrestamo) {
+    public ResponseEntity<Prestamo> createPrestamo(HttpServletRequest request, @RequestBody Prestamo newPrestamo) {
         try {
-            Prestamo prestamoCreado = prestamoService.createPrestamo(newPrestamo);
+        	InfoCookie infoCookie = new InfoCookie();
+        	String username = infoCookie.getUsernameFromCookies(request);
+            Prestamo prestamoCreado = prestamoService.createPrestamo(newPrestamo, username);
             return ResponseEntity.status(HttpStatus.CREATED).body(prestamoCreado);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

@@ -20,7 +20,10 @@ public class PrestamoService {
     
     private final IUsuarioRepository usuarioRepository;
     
-    public PrestamoService(IPrestamoRepository prestamoRepository,IUsuarioRepository usuarioRepository) {
+    public PrestamoService(
+    		IPrestamoRepository prestamoRepository,
+    		IUsuarioRepository usuarioRepository
+    		) {
     	this.prestamoRepository = prestamoRepository;
     	this.usuarioRepository = usuarioRepository;
     }
@@ -31,20 +34,32 @@ public class PrestamoService {
     }
 
     // Crear un nuevo préstamo
-    public Prestamo createPrestamo(Prestamo newPrestamo) {
-        
-    	Long usuarioId = newPrestamo.getUsuario().getUsuarioId();
+    public Prestamo createPrestamo(Prestamo newPrestamo, String username) {
 
+        Optional<Usuario> usuarioOptional = usuarioRepository.findUsuarioByUsername(username);
+
+        // Validar si el usuario existe
+        Usuario usuario = usuarioOptional.orElseThrow(() -> 
+            new IllegalStateException("El usuario no existe.")
+        );
+
+        Long usuarioId = usuario.getUsuarioId();
+
+        // Verificar si el usuario ya tiene un préstamo activo
         boolean tienePrestamoActivo = prestamoRepository.existsByUsuarioUsuarioIdAndEstadoPrestamo(usuarioId, EstadoPrestamo.ACTIVO);
 
         if (tienePrestamoActivo) {
             throw new IllegalStateException("El usuario ya tiene un préstamo activo y no puede solicitar otro.");
         }
-        
+
+        // Asignar el usuario correctamente
+        newPrestamo.setUsuario(usuario);
         newPrestamo.setEstadoPrestamo(EstadoPrestamo.SOLICITADO);
         newPrestamo.setFechaSolicitud(LocalDate.now());
+
         return prestamoRepository.save(newPrestamo);
     }
+
 
     public List<Prestamo> findPrestamoAprobadoByUsuarioId(Long usuarioId) {
     	Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { solicitarPrestamo, getPrestamoAprobadoByUsuarioId, getPrestamoSolicitadoByUsuarioId } from "../service/prestamoService";
+import { solicitarPrestamo, getPrestamoAprobado, getPrestamoSolicitado } from "../service/prestamoService";
 
 const usePrestamo = () => {
     
@@ -12,19 +12,19 @@ const usePrestamo = () => {
         try {
             setErrorPrestamo('');
             setLoadingPrestamo(true);
-            await solicitarPrestamo(prestamo.monto,prestamo.plazo, prestamo.tasaInteres, prestamo.tipoPago, prestamo.usuario)
+            await solicitarPrestamo(prestamo.monto,prestamo.plazo, prestamo.tasaInteres, prestamo.tipoPago)
         } catch (error) {
-            setErrorPrestamo("No se puede registrar el prestamo");
+            setErrorPrestamo("No se puede registrar el prestamo", error);
         }finally{
             setLoadingPrestamo(false);
         }
     }
 
-    const obtenerPrestamoAprobado = async (usuarioId) => {
+    const obtenerPrestamoAprobado = async () => {
         try {
             setErrorPrestamo('');
             setLoadingPrestamo(true);
-            const data = await getPrestamoAprobadoByUsuarioId(usuarioId);
+            const data = await getPrestamoAprobado();
             setPrestamoAprobado(data);
         } catch (error) {
             setErrorPrestamo("Error no se puede obtener el prestamo Aprobado");
@@ -33,11 +33,11 @@ const usePrestamo = () => {
         }
     }
 
-    const obtenerPrestamoSolicitado = async (usuarioId) => {
+    const obtenerPrestamoSolicitado = async () => {
         try {
             setErrorPrestamo('');
             setLoadingPrestamo(true);
-            const data = await getPrestamoSolicitadoByUsuarioId(usuarioId);
+            const data = await getPrestamoSolicitado();
             setPrestamoSolicitado(data);
         } catch (error) {
             setErrorPrestamo("Error no se puede obtener el prestamos Solicitados");
@@ -46,7 +46,13 @@ const usePrestamo = () => {
         }
     }
 
-    return {crearPrestamo, obtenerPrestamoAprobado, obtenerPrestamoSolicitado, prestamoAprobado, prestamoSolicitado , errorPrestamo, loadingPrestamo};
+    useEffect(() => {
+        obtenerPrestamoAprobado();
+        obtenerPrestamoSolicitado();
+    }, []);
+
+
+    return {crearPrestamo, prestamoAprobado, prestamoSolicitado , errorPrestamo, loadingPrestamo};
 };
 
 export default usePrestamo;

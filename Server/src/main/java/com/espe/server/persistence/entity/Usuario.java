@@ -8,6 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 @Entity
 @Table(name = "Usuarios")
 public class Usuario implements UserDetails {
@@ -33,7 +35,7 @@ public class Usuario implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING) // Se asegura de que se almacene como texto
+    @Enumerated(EnumType.STRING) 
     @Column(nullable = false)
     private TipoRol rol;
 

@@ -3,57 +3,56 @@ import FormularioPago from "./FormularioPago";
 import ListaPagos from "./ListaPagos";
 import Mensaje from "../components/Mensaje";
 import usePago from "../../hooks/usePago";
-import usePrestamoAprobado from "../../hooks/usePrestamoAprobado";
+import usePrestamo from "../../hooks/usePrestamo";
 import useUsuario from "../../hooks/useUsuario";
 import PrestamoCard from "../prestamo/PrestamoCard";
 import "./Pago.css";
 
 const Pago = () => {
     const { usuario, error } = useUsuario();
-    const { prestamoActivo, mensaje: mensajePrestamo, cargando: cargandoPrestamo } = usePrestamoAprobado(usuario?.usuarioId);
-    const { mensaje, listaPagos, realizarPago, cargarPagos } = usePago();
-
-    // Cargar los pagos al montar el componente
-    useEffect(() => {
-        if (prestamoActivo) {
-            cargarPagos(prestamoActivo.prestamoId);
-        }
-    }, [prestamoActivo, cargarPagos]);
+    const { prestamoAprobado, loadingPrestamo, errorPrestamo } = usePrestamo();
+    const { mensaje, listaPagos, realizarPago } = usePago();
 
     const handleRealizarPago = async (montoPago, metodoPago) => {
-        if (!prestamoActivo) {
+        if (!prestamoAprobado || !prestamoAprobado.prestamoId) {
             alert("No hay un préstamo activo para realizar el pago.");
             return;
         }
-        await realizarPago(prestamoActivo, montoPago, metodoPago);
+        
+        if (montoPago <= 0) {
+            alert("El monto de pago debe ser mayor a 0.");
+            return;
+        }
+
+        await realizarPago(prestamoAprobado, montoPago, metodoPago);
     };
 
     if (error) {
         return <Mensaje mensaje={error} />;
     }
 
-    if (cargandoPrestamo) {
+    if (loadingPrestamo) {
         return <p className="pago-cargando">Cargando...</p>;
     }
 
-    if (!prestamoActivo) {
-        return <Mensaje mensaje="No tienes un préstamo activo." />;
+    if (!prestamoAprobado || prestamoAprobado.length === 0) {
+        return <Mensaje mensaje="No tienes un préstamo aprobado." />;
     }
 
     return (
         <div className="pago-container">
             <h1 className="pago-title">Gestión de Pagos</h1>
-            <Mensaje mensaje={mensajePrestamo || mensaje} />
+            {(errorPrestamo || mensaje) && <Mensaje mensaje={errorPrestamo || mensaje} />}
 
             <div className="pago-seccion-container">
                 <section className="pago-seccion">
                     <h2 className="pago-subtitle">Préstamo Activo</h2>
-                    <PrestamoCard prestamo={prestamoActivo} />
+                    <PrestamoCard prestamo={prestamoAprobado} />
                 </section>
 
                 <section className="pago-seccion">
                     <h2 className="pago-subtitle">Realizar un Pago</h2>
-                    <FormularioPago prestamo={prestamoActivo} onRealizarPago={handleRealizarPago} />
+                    <FormularioPago prestamo={prestamoAprobado} onRealizarPago={handleRealizarPago} />
                 </section>
 
                 <section className="pago-seccion">

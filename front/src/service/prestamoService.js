@@ -1,11 +1,10 @@
 import ApiAxios from "../utils/axiosInterceptor"; 
 
-export const solicitarPrestamo = async (monto, plazo, tasaInteres, tipoPago, usuario) => {
+export const solicitarPrestamo = async (monto, plazo, tasaInteres, tipoPago) => {
     try {
         const response = await ApiAxios.post(
             `/api/prestamos`,
             {
-                usuario:usuario,
                 montoSolicitado: parseFloat(monto),
                 plazoAmortizacion: parseInt(plazo),
                 tasaInteres: parseFloat(tasaInteres),
@@ -20,9 +19,9 @@ export const solicitarPrestamo = async (monto, plazo, tasaInteres, tipoPago, usu
 };
 
 
-export const getPrestamoAprobadoByUsuarioId = async (usuarioId) =>{
+export const getPrestamoAprobado = async (usuarioId) =>{
     try {
-        const response = (await ApiAxios.get(`/api/prestamos/usuario/${usuarioId}/aprobado`));
+        const response = (await ApiAxios.get(`/api/prestamos/aprobado`));
         return response.data;    
     } catch (error) {
         console.error("No se puede obtener los prestamos Aprobados", error);
@@ -30,9 +29,9 @@ export const getPrestamoAprobadoByUsuarioId = async (usuarioId) =>{
     }
 }
 
-export const getPrestamoSolicitadoByUsuarioId = async (usuarioId) =>{
+export const getPrestamoSolicitado = async () =>{
     try {
-        const response = await ApiAxios.get(`/api/prestamos/usuario/${usuarioId}/solicitados`);
+        const response = await ApiAxios.get(`/api/prestamos/solicitado`);
         return response.data;
     } catch (error) {
         console.error("No se puede obtener los prestamos aprobados", error);
