@@ -27,8 +27,16 @@ export const updateUser = async (nuevosDatos) => {
 
 //Crea un nuevo Usuario
 export const createUser = async (usuario) => {
+    console.log(usuario);
     try {
-        await ApiAxios.post('/api/usuarios',{usuario});
+        await ApiAxios.post('/api/usuarios', {
+            cedula:usuario.cedula,
+            direccion:usuario.direccion,
+            fechaNacimiento: usuario.fechaNacimiento,
+            nombreCompleto:usuario.nombreCompleto,
+            password: usuario.password,
+            username: usuario.username    
+        });
     } catch (error) {
         console.error("Error al crear un usuario", error);
         throw error;

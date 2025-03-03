@@ -2,6 +2,7 @@ package com.espe.server.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -39,6 +40,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> {
                 auth.requestMatchers("/auth/login","/auth/check").permitAll();
+                auth.requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll();
                 auth.requestMatchers("/api/**", "/auth/logout").authenticated(); 
                 auth.anyRequest().denyAll();
             })

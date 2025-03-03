@@ -1,7 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import {createUser} from "../service/usuarioService";
 const useRegister = () => {
     const [loading, setLoading] = useState(false);
     const [mensaje, setMensaje] = useState("");
@@ -31,15 +30,15 @@ const useRegister = () => {
         setMensaje("");
 
         try {
-            await axios.post(`${URLBASE}/auth/register`, {
+            const usuario = {
                 nombreCompleto: datos.nombreCompleto,
                 cedula: datos.identificacion,
                 fechaNacimiento: datos.fechaNacimiento,
                 direccion: datos.direccion,
                 username: datos.correoElectronico,
                 password: datos.password
-            });
-
+            }
+            await createUser(usuario);
             setMensaje("Registro exitoso");
             navigate('/login');
         } catch (error) {
