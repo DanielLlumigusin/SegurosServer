@@ -39,8 +39,8 @@ public class SecurityConfig {
             .httpBasic(Customizer.withDefaults()) 
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> {
-                auth.requestMatchers("/auth/login","/auth/check").permitAll();
-                auth.requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll();
+                auth.requestMatchers("/auth/login","/auth/check", "/auth/reset-password", "/auth/send-email").permitAll();
+                auth.requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll(); //Para crear usuarios
                 auth.requestMatchers("/api/**", "/auth/logout").authenticated(); 
                 auth.anyRequest().denyAll();
             })

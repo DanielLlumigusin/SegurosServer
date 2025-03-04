@@ -10,6 +10,8 @@ import Pago from './public/pago/Pago.jsx';
 import PrestamoSolicitado from './public/prestamo/PrestamoSolicitado.jsx';
 import Login from './authentication/login/Login.jsx';
 import Home from './public/home/Home.jsx';
+import RecoveryPassword from './public/recoveryPassword/RecoveryPassword.jsx';
+import ResetPassword from './public/recoveryPassword/ResetPassword.jsx';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='*' element={<NotFound />} />
+            <Route path='/recuperar-cuenta' element={<RecoveryPassword />} />
+            <Route path='/reset-password' element={<ResetPassword />} />
         </Route>
 
         {/* Rutas privadas protegidas por PrivateRoute */}

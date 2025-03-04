@@ -20,9 +20,14 @@ public class JwtService {
 
     private static final String SECRET_KEY = "586E3272357538782F413F4428472B4B6250655368566B597033733676397924";
     private static final long EXPIRATION_TIME = 1000 * 60 * 60; // 1 hora
-
+    private static final long EXPIRATION_TIME_RECOVERY_PASSWORD = 1000 * 60 * 15;
+    		
     public String generateToken(Usuario user) {
         return generateToken(new HashMap<>(), user);
+    }
+    
+    public String generateTokenRecoveryPassword(Usuario user) {
+        return generateTokenRecoveryPassword(new HashMap<>(), user);
     }
 
     private String generateToken(Map<String, Object> extraClaims, Usuario user) {
@@ -32,6 +37,17 @@ public class JwtService {
             .claim("role", user.getRol())
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+            .signWith(getKey(), SignatureAlgorithm.HS256)
+            .compact();
+    }
+    
+    private String generateTokenRecoveryPassword(Map<String, Object> extraClaims, Usuario user) {
+        return Jwts.builder()
+            .setClaims(extraClaims)
+            .setSubject(user.getUsername())
+            .claim("role", user.getRol())
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME_RECOVERY_PASSWORD))
             .signWith(getKey(), SignatureAlgorithm.HS256)
             .compact();
     }

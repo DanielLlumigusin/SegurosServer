@@ -1,22 +1,35 @@
 /* Establecer la imagen de fondo para toda la pantalla */
-.login-background {
-    background: url(../../assets/img/background-login.jpg) no-repeat center center/cover;
+.login-background, .recovery-background {
+    position: relative;
     height: 100vh;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+}
+
+.login-background::before, .recovery-background::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url(../../assets/img/background-login.jpg) no-repeat center center/cover;
+    filter: blur(10px); /* Ajusta el nivel de desenfoque */
+    transform: scale(1.1); /* Evita bordes vacíos */
+    z-index: -1;
 }
 
 /* Contenedor del login con efecto de vidrio */
-.login-container {
+.login-container, .recovery-container {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(12px);
     padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     width: 380px;
-    text-align: center;
     background-color: rgba(7, 27, 64, 0.9);
     color: white;
 }
@@ -38,15 +51,15 @@
 }
 
 /* Etiquetas de los inputs */
-.login-label {
+.login-label, .recovery-label {
     display: block;
     font-weight: 600;
-    margin-bottom: 8px;
+    margin: 10px 0px 1px 0px;
     font-size: 1rem;
 }
 
 /* Inputs estilizados */
-.login-input {
+.login-input, .recovery-input {
     width: 100%;
     padding: 12px;
     margin-bottom: 15px;
@@ -58,9 +71,17 @@
     outline: none;
     transition: 0.3s;
 }
+.recovery-input::placeholder {
+    color: rgba(255, 255, 255, 0.934);
+}
 
 .login-input::placeholder {
     color: rgba(255, 255, 255, 0.934);
+}
+
+.recovery-input:focus {
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .login-input:focus {
@@ -69,7 +90,7 @@
 }
 
 /* Botón de login */
-.login-button {
+.login-button, .recovery-button{
     width: 100%;
     padding: 12px;
     background: linear-gradient(90deg, #4CAF50, #2E8B57);
@@ -82,9 +103,21 @@
     transition: 0.3s;
 }
 
+.recovery-button:hover {
+    background: linear-gradient(90deg, #45a049, #1e6d3d);
+    transform: scale(1.05);
+}
+
 .login-button:hover {
     background: linear-gradient(90deg, #45a049, #1e6d3d);
     transform: scale(1.05);
+}
+
+.login-button:focus {
+    outline: none; /* Elimina el borde del foco si no lo deseas */
+    background-color: #4CAF50; /* Cambia el color de fondo cuando el botón tiene el foco */
+    color: white; /* Cambia el color del texto */
+    transform: scale(1.05); /* Agranda ligeramente el botón */
 }
 
 /* Mensajes de error */
@@ -96,7 +129,8 @@
 }
 
 /* Texto de registro */
-.register-text {
+.register-text, .login-text, .forgot-password{
+    text-align: center;
     margin-top: 15px;
     font-size: 0.9rem;
 }

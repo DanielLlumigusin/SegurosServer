@@ -46,12 +46,12 @@ const Login = () => {
                     {loading ? 'Cargando...' : 'Ingresar'}
                 </button>
                 
-                <span className="forgot-password">
+                <p className="forgot-password">
                     ¿Olvidaste tu contraseña?{' '}
                     <span onClick={() => navigate('/recuperar-cuenta')} className="register-link">
                         Recuperar Contraseña
                     </span>
-                </span>
+                </p>
 
                 <p className="register-text">
                     ¿No tienes cuenta?{' '}
