@@ -1,12 +1,20 @@
 import { FaCheck } from "react-icons/fa";
+import usePrestamo from "../../../hooks/usePrestamo";
 
 const TablePrestamos = ({ data, error }) => {
+
+    const { aprobarPrestamoById } = usePrestamo();
+
     if (error) {
         return <div className="error-message">{error}</div>;
     }
 
     if (!data || data.length === 0) {
         return <div className="no-data-message">No hay préstamos disponibles.</div>;
+    }
+
+    const handleEditPrestamo = async (prestamo) => {
+        await aprobarPrestamoById(prestamo);
     }
 
     return (
@@ -36,7 +44,7 @@ const TablePrestamos = ({ data, error }) => {
                             <td>{datas.tipoPago}</td>
                             <td>{datas.estadoPrestamo}</td>
                             <td>{datas.fechaSolicitud}</td>
-                            <td><button><FaCheck /> Aprobar</button></td>
+                            <td><button onClick={(e) => handleEditPrestamo(datas)}><FaCheck /> Aprobar</button></td>
                         </tr>
                     );
                 })}

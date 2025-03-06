@@ -12,12 +12,17 @@ export const getAllPrestamos = async () => {
     }
 }
 
-//Actualizar los prestamos
-
-export const updatePrestamo = async (prestamo) => {
+//Aprobar el prestamo
+export const aprobarPrestamo = async (prestamo) => {
     try {
-        await ApiAxios.put("/admin/prestamos", prestamo);
+        const response = await ApiAxios.put('/admin/prestamos', {
+            prestamo: {
+                prestamoId: prestamo.prestamoId
+            }
+        });
+        return response.data;
     } catch (error) {
-        console.error("Error al actualizar el prestamo", error);
+        console.error("Error en aprobar el Prestamo: ", error);
+        throw error;
     }
 }

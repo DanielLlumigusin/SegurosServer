@@ -44,6 +44,22 @@ public class PrestamoService {
     public Optional<Prestamo> findPrestamoById(Long idPrestamo) {
         return prestamoRepository.findById(idPrestamo);
     }
+    
+    //Aprobar el prestamo
+    public boolean aprobarPrestamo(Prestamo prestamoByAprobar) {
+    	
+    	Optional<Prestamo> prestamoOpt = prestamoRepository.findById(prestamoByAprobar.getPrestamoId());
+    	
+    	if(prestamoOpt.isPresent()) {
+    		Prestamo prestamo = prestamoOpt.get();
+    		prestamo.setEstadoPrestamo(EstadoPrestamo.APROBADO);
+    		prestamoRepository.save(prestamo);
+    		return true;
+    	}else {
+    		return false;
+    	}
+    }
+    
 
     public List<Prestamo> findPrestamoAprobadoByUsuarioId(Long usuarioId) {
     	Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
@@ -64,15 +80,15 @@ public class PrestamoService {
     }
 
     //Actualizar Prestamo
-    public Optional<Prestamo> updatePrestamo(Long idPrestamo, Prestamo updatedPrestamo, String username) {
-        Optional<Prestamo> prestamoOpt = prestamoRepository.findById(idPrestamo);
+    public Optional<Prestamo> updatePrestamo(Prestamo updatedPrestamo) {
+        Optional<Prestamo> prestamoOpt = prestamoRepository.findById(updatedPrestamo.getPrestamoId());
 
         if (!prestamoOpt.isPresent()) {
             return Optional.empty();
         }
 
         Prestamo prestamoExistente = prestamoOpt.get();
-        Optional<Usuario> usuarioOpt = usuarioRepository.findUsuarioByUsername(username);
+        Optional<Usuario> usuarioOpt = usuarioRepository.findUsuarioByUsername(prestamoExistente.getUsuario().getUsername());
 
         if (!usuarioOpt.isPresent()) {
             return Optional.empty();
@@ -83,7 +99,7 @@ public class PrestamoService {
                 usuario, 
                 "Actualizar Prestamo",
                 LocalDate.now(), 
-                "El préstamo con ID " + idPrestamo + " ha sido actualizado."
+                "El préstamo con ID " + updatedPrestamo.getPrestamoId() + " ha sido actualizado."
         );
 
         boolean cambios = false;

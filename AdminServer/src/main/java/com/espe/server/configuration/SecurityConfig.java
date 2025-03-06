@@ -38,8 +38,8 @@ public class SecurityConfig {
             .httpBasic(Customizer.withDefaults()) 
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> {
-                auth.requestMatchers("/auth/login").permitAll();
-                auth.requestMatchers("/admin/**","/auth/logout","/auth/check").hasRole("ADMIN");
+                auth.requestMatchers("/auth/login", "/auth/check").permitAll();
+                auth.requestMatchers("/admin/**","/auth/logout").authenticated();
                 auth.anyRequest().denyAll(); 
             })
             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)

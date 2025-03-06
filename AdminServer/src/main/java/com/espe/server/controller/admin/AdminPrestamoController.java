@@ -73,12 +73,23 @@ public class AdminPrestamoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    
+    //Aprobar un prestamo
+    @PutMapping
+    public ResponseEntity<?> aprobarPrestamo(@RequestBody Prestamo prestamo){
+    	try {
+    		boolean respuesta = prestamoService.aprobarPrestamo(prestamo);
+			return ResponseEntity.status(HttpStatus.OK).body(respuesta);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+    }
 
     // Actualizar un préstamo existente
     @PutMapping("/{idPrestamo}")
-    public ResponseEntity<Prestamo> updatePrestamo(@PathVariable Long idPrestamo, @RequestBody Prestamo updatedPrestamo, @RequestBody String username) {
+    public ResponseEntity<Prestamo> updatePrestamo(@RequestBody Prestamo updatedPrestamo) {
         try {
-            Optional<Prestamo> prestamoActualizado = prestamoService.updatePrestamo(idPrestamo, updatedPrestamo, username);
+            Optional<Prestamo> prestamoActualizado = prestamoService.updatePrestamo(updatedPrestamo);
             if (prestamoActualizado.isPresent()) {
                 return ResponseEntity.status(HttpStatus.OK).body(prestamoActualizado.get());
             } else {

@@ -1,10 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ApiAxios from '../utils/axiosInterceptor';
+import { loginService, logoutService, checkService } from '../service/authService';
 
 const useAuth = () => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const navigate = useNavigate();
 
     const login = async (username, password) => {
@@ -12,15 +13,14 @@ const useAuth = () => {
             setError("Por favor, complete ambos campos.");
             return;
         }
-
         setLoading(true);
         setError('');
 
         try {
-            const response = await ApiAxios.post('/auth/login', { username, password });
-            navigate("/home");  // Redirigir a la página principal
+            await loginService(username, password);
+            navigate("/home");
         } catch (error) {
-            setError("Credenciales Incorrectas. Intentelo de nuevo");
+            setError("Credenciales Incorrectas");
         } finally {
             setLoading(false);
         }
@@ -28,14 +28,39 @@ const useAuth = () => {
 
     const logout = async () => {
         try {
-            const response = await ApiAxios.post('/auth/logout');
+            await logoutService();
+            setIsAuthenticated(false);
             navigate("/login");
         } catch (error) {
             console.error("Error al cerrar sesión:", error);
         }
     };
+
+    const check = async () => {
+        setLoading(true);
+        setError('');
+        try {
+            const response = await checkService();
+            if (response === "Autenticado") {
+                setIsAuthenticated(true);
+            } else {
+                setIsAuthenticated(false);
+            }
+        } catch (error) {
+            setIsAuthenticated(false);
+            setError("Error de autenticación");
+            navigate("/");
+        } finally {
+            setLoading(false);
+        }
+    };
     
-    return { login, logout, loading, error };
+
+    useEffect(() => {
+        check();
+    }, []);
+
+    return { login, logout, check, isAuthenticated, loading, error };
 };
 
 export default useAuth;
