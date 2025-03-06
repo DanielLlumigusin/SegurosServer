@@ -12,11 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.WebUtils;
 import com.espe.server.jwt.JwtService;
-import com.espe.server.persistence.entity.TipoRol;
 import com.espe.server.persistence.entity.Usuario;
 import com.espe.server.service.UsuarioService;
 
@@ -34,15 +31,15 @@ public class AuthController {
     }
     
     @GetMapping("/check")
-    public ResponseEntity<?> checkAuth(Authentication authentication) {
+    public ResponseEntity<String> checkAuth(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No autenticado");
         }
-        return ResponseEntity.ok("Autenticado");
+        return ResponseEntity.status(HttpStatus.OK).body("Autenticado");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletResponse response) {
+    public ResponseEntity<String> login(@RequestBody LoginRequest request, HttpServletResponse response) {
         try {
             authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
@@ -64,19 +61,15 @@ public class AuthController {
             cookie.setMaxAge(3600);
             response.addCookie(cookie);
 
-            // Devolver solo información necesaria (sin el token)
-            Map<String, String> responseBody = new HashMap<>();
-            responseBody.put("message", "Login exitoso");
-            responseBody.put("role", user.getRol().name());
-
-            return ResponseEntity.ok(responseBody);
+            return ResponseEntity.status(HttpStatus.OK).body("Login Exitoso");
+            
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
         }
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
 
         // Eliminar cookie del token
         Cookie cookie = new Cookie("token", "");
@@ -86,6 +79,6 @@ public class AuthController {
         cookie.setMaxAge(0);
         response.addCookie(cookie);
 
-        return ResponseEntity.ok("Logout exitoso");
+        return ResponseEntity.status(HttpStatus.OK).body("Exito en Cerrar Sesion");
     }
 }
