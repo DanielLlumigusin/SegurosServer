@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logoImage from "../../assets/img/logo-navbar.png";
 import useAuth from "../../hooks/useAuth";
@@ -29,7 +28,6 @@ const NavbarSigin = () => {
                     <a href="/pagos">Pagos</a>
                     <button className="btn-logout" onClick={handleLogout}>Cerrar Sesión</button>
                 </>
-
             </div>
         </div>
     );

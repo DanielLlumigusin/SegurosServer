@@ -1,16 +1,17 @@
-/* Contenedor general del perfil */
+/* Estilos para la clase "perfil" */
 .perfil {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333;
-  }
-  
-  /* Cabecera del perfil con imagen y nombre */
+  max-width: 800px; /* Establece un ancho máximo de 800px para evitar que el contenido sea demasiado amplio en pantallas grandes */
+  margin: 10rem auto; /* Margen superior e inferior de 2rem y centrado horizontalmente */
+  padding: 2rem; /* Espaciado interno (padding) de 2rem para separar el contenido del borde */
+  background-color: #ffffff; /* Color de fondo blanco */
+  border-radius: 8px; /* Bordes redondeados con un radio de 8px para un diseño más suave */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Agrega una sombra ligera para dar efecto de elevación */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Define la fuente del texto con una lista de respaldo */
+  color: #333; /* Color del texto en un tono gris oscuro para mejorar la legibilidad */
+}
+
+
+/* Cabecera del perfil con imagen y nombre */
   .perfil__header {
     display: flex;
     align-items: center;
