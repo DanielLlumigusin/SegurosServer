@@ -1,0 +1,73 @@
+/* Estilos generales */
+.home-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Sección de bienvenida */
+.hero-section {
+    background: linear-gradient(135deg, #1e1e2f, #252540);
+    color: white;
+    padding: 80px 20px;
+}
+
+.hero-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.hero-section p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    display: inline-block;
+    background: #ffd700;
+    color: #071b40;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: #e6c200;
+}
+
+/* Sección de características */
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 50px 20px;
+}
+
+.feature-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    text-align: center;
+}
+
+.feature-card img {
+    width: 60px;
+    margin-bottom: 15px;
+}
+
+.feature-card h3 {
+    color: #071b40;
+}
+
+/* Pie de página */
+.footer {
+    background: linear-gradient(135deg, #1e1e2f, #252540);
+    color: white;
+    padding: 15px;
+    margin-top: 30px;
+}
