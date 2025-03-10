@@ -30,16 +30,12 @@ public class PrestamoController {
     	this.usuarioService = usuarioService;
     }
 
-    // Obtener un préstamo por su ID
+    // Get a lending by ID
     @GetMapping("/{idPrestamo}")
     public ResponseEntity<Prestamo> findPrestamoById(@PathVariable Long idPrestamo) {
         try {
             Optional<Prestamo> prestamo = prestamoService.findPrestamoById(idPrestamo);
-            if (prestamo.isPresent()) {
-                return ResponseEntity.status(HttpStatus.OK).body(prestamo.get());
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
+            return prestamo.map(value -> ResponseEntity.status(HttpStatus.OK).body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -94,7 +90,7 @@ public class PrestamoController {
         }
     }
 
-    // Crear un nuevo préstamo
+    // Create un nuevo prestates
     @PostMapping
     public ResponseEntity<Prestamo> createPrestamo(HttpServletRequest request, @RequestBody Prestamo newPrestamo) {
         try {

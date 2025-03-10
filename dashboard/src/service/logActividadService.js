@@ -4,7 +4,7 @@ import ApiAxios from "../utils/axiosInterceptor";
 
 export const getLogsActividad = async () => {
     try {
-        const response = await ApiAxios.get('/admin/logs-actividades');
+        const response = await ApiAxios.get('/admin/logs');
         return response.data;
     } catch (error) {
         console.error(error);

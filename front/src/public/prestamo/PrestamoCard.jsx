@@ -10,7 +10,7 @@ const PrestamoCard = ({ prestamo }) => {
             <p className="prestamo-card-text">Tipo de Pago: {prestamo.tipoPago}</p>
             <p className="prestamo-card-text">Estado: {prestamo.estadoPrestamo}</p>
             <p className="prestamo-card-text">Fecha de Solicitud: {new Date(prestamo.fechaSolicitud).toLocaleDateString()}</p>
-            <p className="prestamo-card-text">Usuario: {prestamo.usuario.nombreCompleto}</p>
+            {/* <p className="prestamo-card-text">Usuario: {prestamo.usuario.nombreCompleto}</p> */}
         </div>
     );
 };

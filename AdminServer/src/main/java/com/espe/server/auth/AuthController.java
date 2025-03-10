@@ -1,10 +1,9 @@
 package com.espe.server.auth;
 
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -14,7 +13,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import com.espe.server.jwt.JwtService;
+import com.espe.server.persistence.entity.LogActividad;
 import com.espe.server.persistence.entity.Usuario;
+import com.espe.server.service.LogActividadService;
 import com.espe.server.service.UsuarioService;
 
 @RestController
@@ -23,11 +24,18 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final UsuarioService userService;
+    private final LogActividadService logActividadService;
     
-    public AuthController(AuthenticationManager authenticationManager, UsuarioService userService, JwtService jwtService) {
+    public AuthController(
+    		AuthenticationManager authenticationManager, 
+    		UsuarioService userService, 
+    		JwtService jwtService,
+    		LogActividadService logActividadService
+    		) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.jwtService = jwtService;
+        this.logActividadService = logActividadService;
     }
     
     @GetMapping("/check")
@@ -60,7 +68,10 @@ public class AuthController {
             cookie.setPath("/");
             cookie.setMaxAge(3600);
             response.addCookie(cookie);
-
+            
+            LogActividad logActividad = new LogActividad(user,"Iniciar sesion", LocalDate.now(),"El usuario acaba de iniciar sesión exitoso");
+            logActividadService.createLog(logActividad);
+            
             return ResponseEntity.status(HttpStatus.OK).body("Login Exitoso");
             
         } catch (Exception e) {
@@ -69,7 +80,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<String> logout(HttpServletResponse response) {
 
         // Eliminar cookie del token
         Cookie cookie = new Cookie("token", "");

@@ -47,6 +47,7 @@ public class AdminPagoController {
         }
     }
 
+    
     @PostMapping("/{id}/pago")
     public String registrarPago(@PathVariable Long id, @RequestParam int numeroPago, @RequestParam BigDecimal montoPago) {
         boolean exito = pagoService.registrarPago(id, numeroPago, montoPago);
@@ -76,6 +77,17 @@ public class AdminPagoController {
             return ResponseEntity.status(HttpStatus.OK).body(pagos);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    // Aprobar pago
+    @PutMapping("/{idPago}/aprobar")
+    public ResponseEntity<String> aprobarPago(@PathVariable Long idPago) {
+        boolean exito = pagoService.aprobarPago(idPago);
+        if (exito) {
+            return ResponseEntity.status(HttpStatus.OK).body("Pago aprobado y registrado en la tabla de amortización");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo aprobar el pago");
         }
     }
 }

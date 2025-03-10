@@ -13,6 +13,7 @@ const GestionPrestamos = () => {
             
     return (
         <>
+            <h1>Gestión de Prestamos</h1>
             <TablePrestamos data={listaPrestamos} error={errorPrestamo}/>
         </>
     );

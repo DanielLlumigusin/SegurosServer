@@ -18,3 +18,8 @@
     background-color: #f4f4f4;
   }
   
+  .table-prestamos {
+    width: 100%;
+    max-width: 900px;
+    margin: 20px auto;
+}

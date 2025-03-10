@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import com.espe.server.persistence.entity.TablaAmortizacion;
 import com.espe.server.service.TablaAmortizacionService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -37,10 +39,10 @@ public class TablaAmortizacionController {
 
 
     // Obtener todas las entradas de la tabla de amortización asociadas a un préstamo
-    @GetMapping("/prestamo/{idPrestamo}")
-    public ResponseEntity<List<TablaAmortizacion>> findTablasAmortizacionByPrestamoId(@PathVariable Long idPrestamo) {
+    @GetMapping("/prestamo")
+    public ResponseEntity<List<TablaAmortizacion>> findTablasAmortizacionByPrestamoId(HttpServletRequest request) {
         try {
-            List<TablaAmortizacion> tablas = tablaAmortizacionService.findTablasAmortizacionByPrestamoId(idPrestamo);
+            List<TablaAmortizacion> tablas = tablaAmortizacionService.findTablasAmortizacionByPrestamoId(request);
             return ResponseEntity.status(HttpStatus.OK).body(tablas);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

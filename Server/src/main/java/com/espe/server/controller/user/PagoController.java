@@ -14,6 +14,7 @@ import com.espe.server.utils.InfoCookie;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,6 +45,18 @@ public class PagoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    
+    @PostMapping("/solicitar")
+    public ResponseEntity<String> solicitarPago(@RequestParam Long prestamoId, @RequestParam BigDecimal montoPago) {
+        boolean exito = pagoService.registrarSolicitudPago(prestamoId, montoPago);
+        
+        if (exito) {
+            return ResponseEntity.status(HttpStatus.CREATED).body("Solicitud de pago registrada correctamente");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar la solicitud de pago");
+        }
+    }
+    
 
  // Obtener todos los pagos asociados a un préstamo
     @GetMapping("/prestamo")

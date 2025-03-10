@@ -26,7 +26,10 @@ public class Pago {
     private String metodoPago;
     
     @Column(name = "estado_pago", nullable = false)
-    private String estadoPago;
+    private String estadoPago = "PENDIENTE";
+    
+    @Column(name = "numero_pago", nullable = false)
+    private int numeroPago;
 
     // Getters y Setters
     public Long getPagoId() {
@@ -76,6 +79,15 @@ public class Pago {
 	public void setEstadoPago(String estadoPago) {
 		this.estadoPago = estadoPago;
 	}
+
+	public int getNumeroPago() {
+		return numeroPago;
+	}
+
+	public void setNumeroPago(int numeroPago) {
+		this.numeroPago = numeroPago;
+	}
     
+	
 
 }

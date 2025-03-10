@@ -7,6 +7,7 @@ const LogActividad = () => {
         loadingLogActividad } = useLogActividad();
     return (
         <>
+        <h1>Historial de Actividad</h1>
             <TablaLogsActividad data={listaLogActividad} error={errorLogActividad}/>
         </>
     );

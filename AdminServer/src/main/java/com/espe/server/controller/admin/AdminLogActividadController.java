@@ -5,11 +5,10 @@ import com.espe.server.service.LogActividadService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/logs-actividades")
+@RequestMapping("/admin/logs")
 public class AdminLogActividadController {
 
     private final LogActividadService logActividadService; 
@@ -20,24 +19,14 @@ public class AdminLogActividadController {
     
     
     @GetMapping
-    public ResponseEntity<List<LogActividad>> findAllLogs() {
+    public ResponseEntity<?> findAllLogs() {
         try {
             List<LogActividad> logs = logActividadService.findAllLogs();
-            return ResponseEntity.status(HttpStatus.OK).body(logs);
+            return ResponseEntity.ok(logs);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
 
-
-    @PostMapping
-    public ResponseEntity<LogActividad> createLog(@RequestBody LogActividad newLog) {
-        try {
-            LogActividad logCreado = logActividadService.createLog(newLog);
-            return ResponseEntity.status(HttpStatus.CREATED).body(logCreado);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
     
 }

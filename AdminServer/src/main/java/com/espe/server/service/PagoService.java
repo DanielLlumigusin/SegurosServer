@@ -73,6 +73,43 @@ public class PagoService {
 
         return true;
     }
+    
+    
+ // Método para aprobar un pago
+    public boolean aprobarPago(Long idPago) {
+        Optional<Pago> pagoOpt = pagoRepository.findById(idPago);
+        if (!pagoOpt.isPresent()) {
+            return false;  // Pago no encontrado
+        }
+
+        Pago pago = pagoOpt.get();
+
+        // Asegurarse de que el pago esté pendiente antes de aprobarlo
+        if (!pago.getEstadoPago().equals("PENDIENTE")) {
+            return false;  // Solo se puede aprobar pagos pendientes
+        }
+
+        // Cambiar estado del pago a aprobado
+        pago.setEstadoPago("APROBADO");
+        pagoRepository.save(pago);
+
+        // Ahora actualizar la tabla de amortización
+        Optional<TablaAmortizacion> cuotaOpt = tablaAmortizacionRepository.findByPrestamoPrestamoIdAndNumeroPago(pago.getPrestamo().getPrestamoId(), pago.getNumeroPago());
+        if (cuotaOpt.isPresent()) {
+            TablaAmortizacion cuota = cuotaOpt.get();
+
+            // Actualizar el saldo pendiente en la tabla de amortización
+            BigDecimal nuevoSaldo = cuota.getSaldoRestante();
+            cuota.setSaldoRestante(nuevoSaldo);
+
+            tablaAmortizacionRepository.save(cuota);
+            return true;
+        }
+
+        return false;
+    }
+
+    
 
  // Eliminar un pago por su ID
     public boolean deletePago(Long idPago, String username) {

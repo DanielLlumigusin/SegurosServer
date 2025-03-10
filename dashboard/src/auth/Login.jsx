@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import useAuth from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import "./Login.css";
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

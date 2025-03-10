@@ -1,7 +1,6 @@
 package com.espe.server.persistence.entity;
 
 import jakarta.persistence.*;
-import java.sql.Date;
 import java.time.LocalDate;
 
 @Entity
@@ -26,7 +25,9 @@ public class LogActividad {
     @Column(name = "detalles")
     private String detalles;
 
-    
+    public LogActividad() {
+
+    }
     
     public LogActividad(Usuario usuario, String accion, LocalDate fechaAccion, String detalles) {
 		super();

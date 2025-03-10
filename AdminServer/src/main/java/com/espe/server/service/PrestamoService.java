@@ -47,18 +47,22 @@ public class PrestamoService {
     
     //Aprobar el prestamo
     public boolean aprobarPrestamo(Prestamo prestamoByAprobar) {
-    	
-    	Optional<Prestamo> prestamoOpt = prestamoRepository.findById(prestamoByAprobar.getPrestamoId());
-    	
-    	if(prestamoOpt.isPresent()) {
-    		Prestamo prestamo = prestamoOpt.get();
-    		prestamo.setEstadoPrestamo(EstadoPrestamo.APROBADO);
-    		prestamoRepository.save(prestamo);
-    		return true;
-    	}else {
-    		return false;
-    	}
+        return prestamoRepository.findById(prestamoByAprobar.getPrestamoId())
+            .map(prestamo -> {
+                boolean tienePrestamoAprobado = prestamoRepository
+                    .findByUsuarioAndEstadoPrestamo(prestamo.getUsuario(), EstadoPrestamo.APROBADO)
+                    .isEmpty();
+                
+                if (tienePrestamoAprobado) {
+                    prestamo.setEstadoPrestamo(EstadoPrestamo.APROBADO);
+                    prestamoRepository.save(prestamo);
+                    return true;
+                }
+                return false;
+            })
+            .orElse(false);
     }
+
     
 
     public List<Prestamo> findPrestamoAprobadoByUsuarioId(Long usuarioId) {

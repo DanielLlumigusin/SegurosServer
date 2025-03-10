@@ -1,12 +1,18 @@
 package com.espe.server.controller.admin;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.espe.server.persistence.entity.EstadoPrestamo;
+import com.espe.server.persistence.entity.LogActividad;
 import com.espe.server.persistence.entity.Prestamo;
+import com.espe.server.service.LogActividadService;
 import com.espe.server.service.PrestamoService;
+import com.espe.server.service.TablaAmortizacionService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +21,15 @@ import java.util.Optional;
 public class AdminPrestamoController {
 
     private final PrestamoService prestamoService;
-
-    public AdminPrestamoController(PrestamoService prestamoService) {
+    private final LogActividadService logActividadService;
+    private final TablaAmortizacionService tablaAmortizacionService;
+    public AdminPrestamoController(
+    		PrestamoService prestamoService,
+    		LogActividadService logActividadService,
+            TablaAmortizacionService tablaAmortizacionService) {
     	this.prestamoService = prestamoService;
+    	this.logActividadService = logActividadService;
+        this.tablaAmortizacionService = tablaAmortizacionService;
     }
     
     // Obtener un préstamo por su ID
@@ -74,16 +86,63 @@ public class AdminPrestamoController {
         }
     }
     
-    //Aprobar un prestamo
     @PutMapping
-    public ResponseEntity<?> aprobarPrestamo(@RequestBody Prestamo prestamo){
-    	try {
-    		boolean respuesta = prestamoService.aprobarPrestamo(prestamo);
-			return ResponseEntity.status(HttpStatus.OK).body(respuesta);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+    public ResponseEntity<String> aprobarPrestamo(@RequestBody Prestamo prestamo) {
+        if (prestamo == null || prestamo.getPrestamoId() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Datos de préstamo inválidos");
+        }
+
+        Optional<Prestamo> prestamoOpt = prestamoService.findPrestamoById(prestamo.getPrestamoId());
+        if (prestamoOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Préstamo no encontrado");
+        }
+
+        Prestamo prestamoAux = prestamoOpt.get();
+
+        try {
+            boolean aprobado = prestamoService.aprobarPrestamo(prestamo);
+
+            String mensaje;
+            String tipoActividad;
+
+            if (aprobado) {
+                // Cambiar estado del préstamo
+                prestamoAux.setEstadoPrestamo(EstadoPrestamo.APROBADO);
+                prestamoService.updatePrestamo(prestamoAux); // Guardar los cambios
+
+                // Generar y guardar la tabla de amortización
+                tablaAmortizacionService.generarYGuardarTablaAmortizacion(prestamoAux);
+
+                mensaje = "Se aprobó un préstamo";
+                tipoActividad = "APROBAR PRESTAMO";
+            } else {
+                mensaje = "Se denegó la aprobación, ya tiene un préstamo APROBADO";
+                tipoActividad = "ERROR APROBAR PRESTAMO";
+            }
+
+            // Log de la actividad
+            LogActividad logActividad = new LogActividad(
+                prestamoAux.getUsuario(),
+                tipoActividad,
+                LocalDate.now(),
+                mensaje
+            );
+
+            logActividadService.createLog(logActividad);
+
+            return aprobado
+                ? ResponseEntity.ok("Préstamo aprobado")
+                : ResponseEntity.status(HttpStatus.CONFLICT).body("El cliente ya tiene un préstamo aprobado");
+
+        } catch (DataAccessException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en la base de datos");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado al aprobar préstamo");
+        }
     }
+
+
+
 
     // Actualizar un préstamo existente
     @PutMapping("/{idPrestamo}")

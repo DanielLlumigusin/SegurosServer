@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
-const FormularioPago = ({prestamo, onRealizarPago }) => {
+const FormularioPago = ({tablaAmortizacion, prestamo, onRealizarPago }) => {
+    console.log(tablaAmortizacion[0].montoPago)
+
     const [montoPago, setMontoPago] = useState(0);
     const [metodoPago, setMetodoPago] = useState("");
     const handleSubmit = (e) => {
@@ -12,7 +14,6 @@ const FormularioPago = ({prestamo, onRealizarPago }) => {
         onRealizarPago(montoPago, metodoPago);
     };
 
-    console.log(prestamo);
     return (
         <form className="formulario-pago" onSubmit={handleSubmit}>
             <div className="formulario-pago-group">
@@ -20,9 +21,8 @@ const FormularioPago = ({prestamo, onRealizarPago }) => {
                 <input
                     className="formulario-pago-input"
                     type="number"
-                    value={montoPago}
-                    onChange={(e) => setMontoPago(parseFloat(e.target.value))}
-                    required
+                    value={tablaAmortizacion[0].montoPago}
+                    readOnly
                 />
             </div>
 

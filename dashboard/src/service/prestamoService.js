@@ -16,13 +16,11 @@ export const getAllPrestamos = async () => {
 export const aprobarPrestamo = async (prestamo) => {
     try {
         const response = await ApiAxios.put('/admin/prestamos', {
-            prestamo: {
-                prestamoId: prestamo.prestamoId
-            }
+            prestamoId: prestamo.prestamoId 
         });
         return response.data;
     } catch (error) {
-        console.error("Error en aprobar el Prestamo: ", error);
+        console.error("Error en aprobar el préstamo: ", error.response?.data || error.message);
         throw error;
     }
-}
+};

@@ -18,7 +18,7 @@ const TablePrestamos = ({ data, error }) => {
     }
 
     return (
-        <table>
+        <table className="table-prestamos">
             <thead>
                 <tr>
                     <th>Id</th>
@@ -39,7 +39,7 @@ const TablePrestamos = ({ data, error }) => {
                             <td>{datas.prestamoId}</td>
                             <td>{datas.usuario.username}</td>
                             <td>{datas.montoSolicitado}</td>
-                            <td>{datas.plazoAmortizado}</td>
+                            <td>{datas.plazoAmortizacion}</td>
                             <td>{datas.tasaInteres}</td>
                             <td>{datas.tipoPago}</td>
                             <td>{datas.estadoPrestamo}</td>
