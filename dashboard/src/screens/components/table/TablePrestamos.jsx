@@ -1,8 +1,7 @@
 import { FaCheck } from "react-icons/fa";
 import usePrestamo from "../../../hooks/usePrestamo";
-
+import "./TablePrestamos.css";
 const TablePrestamos = ({ data, error }) => {
-
     const { aprobarPrestamoById } = usePrestamo();
 
     if (error) {
@@ -14,8 +13,13 @@ const TablePrestamos = ({ data, error }) => {
     }
 
     const handleEditPrestamo = async (prestamo) => {
-        await aprobarPrestamoById(prestamo);
-    }
+        try {
+            await aprobarPrestamoById(prestamo);
+            alert(`✅ Préstamo #${prestamo.prestamoId} aprobado correctamente.`);
+        } catch (err) {
+            alert(`❌ Error al aprobar préstamo #${prestamo.prestamoId}.`);
+        }
+    };
 
     return (
         <table className="table-prestamos">
@@ -25,29 +29,35 @@ const TablePrestamos = ({ data, error }) => {
                     <th>Usuario</th>
                     <th>Monto Solicitado</th>
                     <th>Plazo Amortizado (Meses)</th>
-                    <th>Taza Interes</th>
+                    <th>Tasa Interés</th>
                     <th>Tipo de pago</th>
-                    <th>Estado Prestamo</th>
+                    <th>Estado Préstamo</th>
                     <th>Fecha Solicitud</th>
                     <th>Aprobar</th>
                 </tr>
             </thead>
             <tbody>
-                {data.map((datas) => {
-                    return (
-                        <tr key={datas.prestamoId}>
-                            <td>{datas.prestamoId}</td>
-                            <td>{datas.usuario.username}</td>
-                            <td>{datas.montoSolicitado}</td>
-                            <td>{datas.plazoAmortizacion}</td>
-                            <td>{datas.tasaInteres}</td>
-                            <td>{datas.tipoPago}</td>
-                            <td>{datas.estadoPrestamo}</td>
-                            <td>{datas.fechaSolicitud}</td>
-                            <td><button onClick={(e) => handleEditPrestamo(datas)}><FaCheck /> Aprobar</button></td>
-                        </tr>
-                    );
-                })}
+                {data.map((prestamo) => (
+                    <tr key={prestamo.prestamoId}>
+                        <td>{prestamo.prestamoId}</td>
+                        <td>{prestamo.usuario.username}</td>
+                        <td>{prestamo.montoSolicitado}</td>
+                        <td>{prestamo.plazoAmortizacion}</td>
+                        <td>{prestamo.tasaInteres}</td>
+                        <td>{prestamo.tipoPago}</td>
+                        <td>{prestamo.estadoPrestamo}</td>
+                        <td>{prestamo.fechaSolicitud}</td>
+                        <td>
+                            <button 
+                                onClick={() => handleEditPrestamo(prestamo)} 
+                                disabled={prestamo.estadoPrestamo === "Aprobado"}
+                                className={prestamo.estadoPrestamo === "Aprobado" ? "disabled-button" : ""}
+                            >
+                                <FaCheck /> {prestamo.estadoPrestamo === "Aprobado" ? "Aprobado" : "Aprobar"}
+                            </button>
+                        </td>
+                    </tr>
+                ))}
             </tbody>
         </table>
     );

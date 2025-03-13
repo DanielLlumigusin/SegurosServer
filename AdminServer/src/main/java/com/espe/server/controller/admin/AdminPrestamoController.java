@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.espe.server.persistence.entity.EstadoPrestamo;
 import com.espe.server.persistence.entity.LogActividad;
 import com.espe.server.persistence.entity.Prestamo;
+import com.espe.server.persistence.entity.TablaAmortizacion;
 import com.espe.server.service.LogActividadService;
 import com.espe.server.service.PrestamoService;
 import com.espe.server.service.TablaAmortizacionService;
@@ -113,43 +114,38 @@ public class AdminPrestamoController {
         Prestamo prestamoAux = prestamoOpt.get();
 
         try {
+            // Verificar si el usuario ya tiene un préstamo aprobado
             boolean aprobado = prestamoService.aprobarPrestamo(prestamo);
 
-            String mensaje;
-            String tipoActividad;
-
-            if (aprobado) {
-                // Cambiar estado del préstamo
-                prestamoAux.setEstadoPrestamo(EstadoPrestamo.APROBADO);
-                prestamoService.updatePrestamo(prestamoAux); // Guardar los cambios
-
-                // Generar y guardar la tabla de amortización
-                tablaAmortizacionService.generarYGuardarTablaAmortizacion(prestamoAux);
-
-                mensaje = "Se aprobó un préstamo";
-                tipoActividad = "APROBAR PRESTAMO";
-            } else {
-                mensaje = "Se denegó la aprobación, ya tiene un préstamo APROBADO";
-                tipoActividad = "ERROR APROBAR PRESTAMO";
+            if (!aprobado) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("El cliente ya tiene un préstamo aprobado");
             }
 
-            // Log de la actividad
+            // Cambiar estado del préstamo
+            prestamoAux.setEstadoPrestamo(EstadoPrestamo.APROBADO);
+            prestamoService.updatePrestamo(prestamoAux); // Guardar los cambios
+            
+            System.out.print(prestamoAux);
+            
+            // Generar y guardar la tabla de amortización
+            tablaAmortizacionService.generarYGuardarTablaAmortizacion(prestamoAux);
+
+            // Registrar la actividad en logs
             LogActividad logActividad = new LogActividad(
                 prestamoAux.getUsuario(),
-                tipoActividad,
+                "APROBAR PRESTAMO",
                 LocalDate.now(),
-                mensaje
+                "Se aprobó un préstamo"
             );
-
             logActividadService.createLog(logActividad);
 
-            return aprobado
-                ? ResponseEntity.ok("Préstamo aprobado")
-                : ResponseEntity.status(HttpStatus.CONFLICT).body("El cliente ya tiene un préstamo aprobado");
+            return ResponseEntity.ok("Préstamo aprobado");
 
         } catch (DataAccessException e) {
+            e.printStackTrace(); // Log para depuración
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en la base de datos");
         } catch (Exception e) {
+            e.printStackTrace(); // Log para depuración
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado al aprobar préstamo");
         }
     }

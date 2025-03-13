@@ -7,14 +7,50 @@ import './Login.css';
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const { login, loading, error} = useAuth();
+    const [errors, setErrors] = useState({});
+    const { login, loading, error } = useAuth();
     const navigate = useNavigate();
+
+    const validateForm = () => {
+        const newErrors = {};
+
+        // Validación de correo electrónico
+        if (!username.trim()) {
+            newErrors.username = "El correo es obligatorio.";
+        } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(username)) {
+            newErrors.username = "El correo no es válido.";
+        }
+
+        // Validación de contraseña
+        if (!password) {
+            newErrors.password = "La contraseña es obligatoria.";
+        } else if (password.length < 8) {
+            newErrors.password = "Debe tener al menos 8 caracteres.";
+        } else if (!/[A-Z]/.test(password)) {
+            newErrors.password = "Debe incluir al menos una mayúscula.";
+        } else if (!/[a-z]/.test(password)) {
+            newErrors.password = "Debe incluir al menos una minúscula.";
+        } else if (!/[0-9]/.test(password)) {
+            newErrors.password = "Debe incluir al menos un número.";
+        } else if (!/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password)) {
+            newErrors.password = "Debe incluir al menos un carácter especial.";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleLogin = () => {
+        if (validateForm()) {
+            login(username, password);
+        }
+    };
 
     return (
         <div className="login-background">
             <div className="login-container">
                 <div className='login-title'>
-                    <img src={logo} className='login-img-form' />
+                    <img src={logo} className='login-img-form' alt="Logo" />
                     <h2>Iniciar Sesión</h2>
                 </div>
                 <div className="login-field">
@@ -22,11 +58,12 @@ const Login = () => {
                     <input
                         id="username"
                         type="email"
-                        placeholder="Username"
+                        placeholder="Correo electrónico"
                         value={username}
                         onChange={e => setUsername(e.target.value)}
                         className="login-input"
                     />
+                    {errors.username && <p className="error-message">{errors.username}</p>}
                 </div>
                 <div className="login-field">
                     <label htmlFor="password" className="login-label">Contraseña</label>
@@ -38,11 +75,12 @@ const Login = () => {
                         onChange={e => setPassword(e.target.value)}
                         className="login-input"
                     />
+                    {errors.password && <p className="error-message">{errors.password}</p>}
                 </div>
 
                 {error && <p className="error-message">{error}</p>}
 
-                <button onClick={() => login(username, password)} disabled={loading} className="login-button">
+                <button onClick={handleLogin} disabled={loading} className="login-button">
                     {loading ? 'Cargando...' : 'Ingresar'}
                 </button>
                 

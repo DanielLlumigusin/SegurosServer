@@ -37,7 +37,6 @@ public class TablaAmortizacion {
     private BigDecimal capital;
 
     @Column(name = "saldo_restante", nullable = false)
-    @Positive(message = "El saldo restante debe ser un valor positivo")
     private BigDecimal saldoRestante;
     
     public TablaAmortizacion(Prestamo prestamo, int numeroPago,

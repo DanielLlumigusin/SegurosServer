@@ -56,14 +56,6 @@ const Table = ({ data }) => {
               <td>{usuario.rol}</td>
               <td>{usuario.enabled ? "activo" : "inactivo"}</td>
               <td>
-                <button title="Editar usuario"><FaEdit /></button>
-                <button 
-                  onClick={() => handleOnDelete(usuario.usuarioId)} 
-                  disabled={loading} 
-                  title="Eliminar usuario"
-                >
-                  {loading ? <span className="loading-spinner">...</span> : <BsTrash />}
-                </button>
                 <button 
                   onClick={() => handlePrestamoByUsuarioId(usuario.usuarioId)}
                 >
