@@ -27,7 +27,6 @@ export const updateUser = async (nuevosDatos) => {
 
 //Crea un nuevo Usuario
 export const createUser = async (usuario) => {
-    console.log(usuario);
     try {
         await ApiAxios.post('/api/usuarios', {
             cedula:usuario.cedula,

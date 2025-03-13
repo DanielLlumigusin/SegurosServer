@@ -68,7 +68,7 @@ public class AuthController {
             String token = jwtService.generateToken(user);
 
             // Configuración segura de la cookie
-            Cookie cookie = new Cookie("token", token);
+            Cookie cookie = new Cookie("token-admin", token);
             cookie.setHttpOnly(true);
             cookie.setSecure(false); // Cambiar a true en producción con HTTPS
             cookie.setPath("/");
@@ -89,7 +89,7 @@ public class AuthController {
     public ResponseEntity<String> logout(HttpServletResponse response) {
 
         // Eliminar cookie del token
-        Cookie cookie = new Cookie("token", "");
+        Cookie cookie = new Cookie("token-admin", "");
         cookie.setHttpOnly(true);
         cookie.setSecure(false); 
         cookie.setPath("/");

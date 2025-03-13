@@ -96,7 +96,7 @@ public class AuthController {
         // Eliminar cookie del token
         Cookie cookie = new Cookie("token", "");
         cookie.setHttpOnly(true);
-        cookie.setSecure(true);
+        cookie.setSecure(false);
         cookie.setPath("/");
         cookie.setMaxAge(0);
         response.addCookie(cookie);
@@ -195,7 +195,7 @@ public class AuthController {
         }
 
         // Enviar correo con el enlace para la recuperación
-        String recoveryUrl = "http://localhost:3000/reset-password?token=" + token;
+        String recoveryUrl = "http://10.40.10.45:3000/reset-password?token=" + token;
         mailService.sendMessage(username, "Recuperación de contraseña: Usa este enlace para restablecer tu contraseña: " + recoveryUrl);
 
         return ResponseEntity.ok("Se ha enviado un enlace de recuperación a tu correo.");

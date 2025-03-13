@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         // Obtener la cookie "token" del request
-        Cookie cookie = WebUtils.getCookie(request, "token");
+        Cookie cookie = WebUtils.getCookie(request, "token-admin");
 
         // Verificar si la cookie existe
         if (cookie != null) {

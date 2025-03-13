@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  backend:
+    image: danielllumigusin/seguros-server:latest
+    container_name: seguros-backend
+    restart: always
+    environment:
+      - DB_HOST=seguros-mysql
+      - DB_PORT=3306
+      - DB_NAME=seguros
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - MAIL_HOST=smtp.gmail.com
+      - MAIL_PORT=587
+      - MAIL_USER=drekfrost88@gmail.com
+      - MAIL_PASSWORD=vjbmfxjwibaawqld
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mysql
+
+  frontend:
+    image: danielllumigusin/seguros-frontend:latest
+    container_name: seguros-frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  mysql:
+    image: mysql:8.0
+    container_name: seguros-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: seguros
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
