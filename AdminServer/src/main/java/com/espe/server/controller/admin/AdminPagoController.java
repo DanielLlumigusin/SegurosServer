@@ -70,10 +70,10 @@ public class AdminPagoController {
     }
 
     // Obtener todos los pagos asociados a un préstamo
-    @GetMapping("/prestamo/{idPrestamo}")
-    public ResponseEntity<List<Pago>> findPagosByPrestamoId(@PathVariable Long idPrestamo) {
+    @GetMapping("/prestamo")
+    public ResponseEntity<List<Pago>> findPagosByPrestamoId(@RequestParam Long prestamoId) {
         try {
-            List<Pago> pagos = pagoService.findPagosByPrestamoId(idPrestamo);
+            List<Pago> pagos = pagoService.findPagosByPrestamoId(prestamoId);
             return ResponseEntity.status(HttpStatus.OK).body(pagos);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

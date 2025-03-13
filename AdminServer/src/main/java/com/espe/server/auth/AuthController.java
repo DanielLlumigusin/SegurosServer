@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import com.espe.server.jwt.JwtService;
 import com.espe.server.persistence.entity.LogActividad;
+import com.espe.server.persistence.entity.TipoRol;
 import com.espe.server.persistence.entity.Usuario;
 import com.espe.server.service.LogActividadService;
 import com.espe.server.service.UsuarioService;
@@ -59,6 +60,11 @@ public class AuthController {
             }
 
             Usuario user = optionalUser.get();
+            
+            if(!user.getRol().equals(TipoRol.ADMIN)) {
+            	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autorizado");
+            }
+            
             String token = jwtService.generateToken(user);
 
             // Configuración segura de la cookie

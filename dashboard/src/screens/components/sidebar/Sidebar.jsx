@@ -9,9 +9,6 @@ import "./Sidebar.css"; // Importamos los estilos en un archivo separado
 const menuItems = [
   { to: "/usuarios", icon: <FaUsersCog className="icon" />, label: "Gestión de Usuarios" },
   { to: "/prestamos", icon: <AiFillCreditCard className="icon" />, label: "Gestión de Préstamos" },
-  { to: "/pagos", icon: <FaMoneyCheckAlt className="icon" />, label: "Gestión de Pagos" },
-  { to: "/amortizacion", icon: <GrTable className="icon" />, label: "Ver Tablas de Amortización" },
-  { to: "/historial", icon: <FaHistory className="icon" />, label: "Ver Historial de Acciones" },
 ];
 
 const Sidebar = () => {

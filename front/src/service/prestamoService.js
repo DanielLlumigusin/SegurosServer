@@ -19,7 +19,7 @@ export const solicitarPrestamo = async (monto, plazo, tasaInteres, tipoPago) => 
 };
 
 
-export const getPrestamoAprobado = async (usuarioId) =>{
+export const getPrestamoAprobado = async () =>{
     try {
         const response = (await ApiAxios.get(`/api/prestamos/aprobado`));
         return response.data;    

@@ -13,5 +13,5 @@ public interface IPrestamoRepository extends CrudRepository<Prestamo, Long>{
        
 	//Me devuelve el prestamo de acuerdo al Usuario con el estado Solicitado
     List<Prestamo> findByUsuarioAndEstadoPrestamo(Usuario usuario, EstadoPrestamo estadoPrestamo);
-
+    List<Prestamo> findByUsuarioUsuarioId(Long usuarioId);
 }

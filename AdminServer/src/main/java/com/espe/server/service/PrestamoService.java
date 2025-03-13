@@ -3,6 +3,7 @@ package com.espe.server.service;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -38,6 +39,12 @@ public class PrestamoService {
     // Obtener todos los préstamos
     public List<Prestamo> findAllPrestamos() {
         return (List<Prestamo>) prestamoRepository.findAll();
+    }
+    
+    public List<Prestamo> findAllPrestamosByUsuarioId(Long usuarioId) {
+        return usuarioRepository.findById(usuarioId)
+            .map(usuario -> prestamoRepository.findByUsuarioUsuarioId(usuario.getUsuarioId()))
+            .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado con ID: " + usuarioId));
     }
     
     // Obtener un préstamo por su ID

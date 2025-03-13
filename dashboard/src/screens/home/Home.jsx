@@ -4,7 +4,7 @@ const Home = () => {
     return (
         <div className="home-container">
             <header className="hero-section">
-                <h1>Bienvenido a Banco Seguro</h1>
+                <h1>Bienvenido a Seguros ESPE</h1>
                 <p>Tu seguridad y confianza son nuestra prioridad.</p>
                 <a href="/servicios" className="btn-primary">Ver Servicios</a>
             </header>

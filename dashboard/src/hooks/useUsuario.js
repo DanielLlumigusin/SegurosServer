@@ -42,6 +42,7 @@ const useUsuario = () => {
         fetchUsuarios();
     }, []); 
 
+
     const actualizarUsuario = async (nuevosDatos) => {
         try {
             const updatedUser = await updateUser(nuevosDatos);

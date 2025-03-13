@@ -16,7 +16,7 @@ const TablaAmortizacionPago = ({ tablaAmortizacion }) => {
             <tbody>
                 {tablaAmortizacion.map((fila, index) => (
                     <tr key={index} className="prestamo-table-row">
-                        <td className="prestamo-table-cell">{fila.numeroPago}</td>  {/* Número de pago corregido */}
+                        <td className="prestamo-table-cell">{fila.numeroPago}</td> 
                         <td className="prestamo-table-cell">{fila.fechaPago}</td>
                         <td className="prestamo-table-cell">${fila.montoPago}</td>
                         <td className="prestamo-table-cell">${fila.interes}</td>

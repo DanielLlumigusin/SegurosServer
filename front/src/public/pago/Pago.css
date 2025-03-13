@@ -10,7 +10,7 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.pago-seccion-container{
+.pago-seccion-container {
     display: grid;
     grid-template-columns: auto auto;
 }

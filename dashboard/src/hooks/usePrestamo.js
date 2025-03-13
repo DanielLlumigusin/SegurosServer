@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAllPrestamos, aprobarPrestamo } from "../service/prestamoService";
+import { getAllPrestamos, aprobarPrestamo, getPrestamoByUsuarioId } from "../service/prestamoService";
 
 const usePrestamo = () => {
     const [loadingPrestamo, setLoadingPrestamo] = useState(false);
@@ -20,6 +20,19 @@ const usePrestamo = () => {
         }
     };
 
+    const findPrestamobyUsuarioId = async (usuarioId) => {
+        try {
+            setLoadingPrestamo(true);
+            setMensajePrestamo('');
+            const response = await getPrestamoByUsuarioId(usuarioId);
+            return response;
+        } catch (error) {
+            setErrorPrestamo("Error al no se pudo obtener el o los prestamos.")
+        } finally {
+            setLoadingPrestamo(false);
+        }
+    }
+
 
     const aprobarPrestamoById = async (prestamo) => {
         try {
@@ -32,10 +45,10 @@ const usePrestamo = () => {
             setMensajePrestamo('Error al actualizar el prestamo');
             console.error("Error al actualizar el prestamo: ", error);
             throw error;
-        }finally{
+        } finally {
             setLoadingPrestamo(false);
         }
-    } 
+    }
 
     useEffect(() => {
         getPrestamos();
@@ -46,7 +59,8 @@ const usePrestamo = () => {
         errorPrestamo,
         loadingPrestamo,
         mensajePrestamo,
-        aprobarPrestamoById
+        aprobarPrestamoById,
+        findPrestamobyUsuarioId
     }
 }
 

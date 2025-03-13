@@ -9,7 +9,7 @@ const Home = () => {
             <header className="hero-section">
                 <h1>Bienvenido a Banco Seguro</h1>
                 <p>Tu seguridad y confianza son nuestra prioridad.</p>
-                <a href="/servicios" className="btn-primary">Ver Servicios</a>
+                <a href="/prestamo" className="btn-primary">Pide un Préstamo</a>
             </header>
 
             <section className="features">

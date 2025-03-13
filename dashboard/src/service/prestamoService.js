@@ -12,6 +12,17 @@ export const getAllPrestamos = async () => {
     }
 }
 
+//Obtener los prestamos por el usuario 
+export const getPrestamoByUsuarioId = async (usuarioId) => {
+    try {
+        const response = await ApiAxios.get(`/admin/prestamos/usuario`, {params:{usuarioId}});
+        return response.data;
+    } catch (error) {
+        console.error("No se pudo obtener los prestamos por el usuario", error);
+        throw error;
+    }
+}
+
 //Aprobar el prestamo
 export const aprobarPrestamo = async (prestamo) => {
     try {

@@ -30,6 +30,11 @@ public class Pago {
     
     @Column(name = "numero_pago", nullable = false)
     private int numeroPago;
+    
+    public Pago() {
+    	
+	}
+    
 
     // Getters y Setters
     public Long getPagoId() {

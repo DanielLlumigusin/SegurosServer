@@ -9,7 +9,8 @@ import NotFound from './screens/notFound/NotFound';
 import LogActividad from "./screens/logActividad/LogActividad";
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
-
+import TableUsuariosPrestamos from "./screens/components/table/TableUsuariosPrestamos";
+import TablePrestamosPago from "./screens/components/table/TablePrestamosPagos";
 function App() {
   return (
     <BrowserRouter>
@@ -25,6 +26,8 @@ function App() {
           <Route element={<Layout />}> 
             <Route path="/home" element={<Home />} />
             <Route path="/usuarios" element={<GestionUsuarios />} />
+            <Route path="/usuario/prestamo/:usuarioId" element={<TableUsuariosPrestamos />} />
+            <Route path="/usuario/prestamo/pagos/:prestamoId" element={<TablePrestamosPago />} />
             <Route path='/prestamos' element={<GestionPrestamos />} />
             <Route path='/historial' element={<LogActividad />} />
           </Route>

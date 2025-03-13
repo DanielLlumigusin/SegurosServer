@@ -1,17 +1,18 @@
 import React, { useState } from "react";
+import usePago from "../../hooks/usePago";
 
-const FormularioPago = ({tablaAmortizacion, prestamo, onRealizarPago }) => {
-    console.log(tablaAmortizacion[0].montoPago)
-
-    const [montoPago, setMontoPago] = useState(0);
+const FormularioPago = ({tablaAmortizacion}) => {
+    const {realizarPago} = usePago();
     const [metodoPago, setMetodoPago] = useState("");
+    
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!montoPago || !metodoPago) {
-            alert("Por favor, complete todos los campos.");
+        if (!metodoPago) {
+            alert("Elija un método de pago.");
             return;
         }
-        onRealizarPago(montoPago, metodoPago);
+        realizarPago(tablaAmortizacion[0].montoPago, metodoPago);
+        window.location.reload();
     };
 
     return (

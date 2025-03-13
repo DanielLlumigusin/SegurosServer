@@ -74,6 +74,7 @@ public class AdminPrestamoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    
 
     // Obtener todos los préstamos
     @GetMapping
@@ -85,6 +86,18 @@ public class AdminPrestamoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    
+    //Obtener todos los prestmos segun el usuario
+    @GetMapping("/usuario")
+    public ResponseEntity<List<Prestamo>> findAllPrestamosByUsuarioId(@RequestParam Long usuarioId) {
+        try {
+            List<Prestamo> prestamos = prestamoService.findAllPrestamosByUsuarioId(usuarioId);
+            return ResponseEntity.status(HttpStatus.OK).body(prestamos);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
     
     @PutMapping
     public ResponseEntity<String> aprobarPrestamo(@RequestBody Prestamo prestamo) {

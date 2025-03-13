@@ -7,11 +7,12 @@ const usePago = () => {
     const [loadingPagos, setLoadingPagos] = useState(false);
     const [mensaje, setMensaje] = useState("");
 
-    const realizarPago = async (prestamo, montoPago, metodoPago) => {
+    const realizarPago = async (montoPago, metodoPago) => {
         try {
+            console.log(metodoPago, montoPago);
             setErrorPagos('');
             setLoadingPagos(true);
-            await sendPago(prestamo, montoPago, metodoPago);
+            await sendPago( montoPago, metodoPago);
             setMensaje('Pago realizado espera la aprobacion');
         } catch (error) {
             setErrorPagos("Error al realizar el pago: " + error.message);

@@ -1,0 +1,11 @@
+html, body {
+    height: 100%; /* Asegura que tanto html como body cubran toda la altura */
+    margin: 0; /* Elimina el margen por defecto */
+    padding: 0; /* Elimina el padding por defecto */
+}
+
+body {
+    width: 100%; /* El ancho del cuerpo será siempre el 100% */
+    min-height: 100vh; /* La altura mínima es 100vh, cubriendo toda la pantalla */
+   
+}

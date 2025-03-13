@@ -1,19 +1,21 @@
 import ApiAxios from "../utils/axiosInterceptor";
 
-export const sendPago = async (prestamo, montoPago, metodoPago) => {
+//Solicitar un Pago
 
+export const sendPago = async (montoPago, metodoPago) => {
     try {
-        const response = await ApiAxios.post(`/api/pagos`, {    
-            prestamo: prestamo,
+        
+        const response = await ApiAxios.post(`/api/pagos/solicitar`, {    
             montoPago: montoPago,
             metodoPago: metodoPago
         });
         return response.data;
     } catch (error) {
-        console.error("Error al enviar el Pago");
+        console.error("Error al enviar el Pago:", error.response?.data || error.message);
         throw error;
     }
 };
+
 
 export const getPagos = async () => {
     try {

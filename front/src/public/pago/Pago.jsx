@@ -13,24 +13,10 @@ import "./Pago.css";
 const Pago = () => {
     const { usuario, error } = useUsuario();
     const { prestamoAprobado, loadingPrestamo, errorPrestamo } = usePrestamo();
-    const { mensaje, listaPagos, realizarPago } = usePago();
-    const {tablaAmortizacion , loading} = useTablaAmortizacion();
-    
+    const { mensaje, listaPagos } = usePago();
+    const {tablaAmortizacion , loading} = useTablaAmortizacion();    
     const prestamoApro = prestamoAprobado[0];
 
-    const handleRealizarPago = async (montoPago, metodoPago) => {
-        if (!prestamoApro || !prestamoApro.prestamoId) {
-            alert("No hay un préstamo activo para realizar el pago.");
-            return;
-        }
-        
-        if (montoPago <= 0) {
-            alert("El monto de pago debe ser mayor a 0.");
-            return;
-        }
-
-        await realizarPago(prestamoApro, montoPago, metodoPago);
-    };
     if(loading){
         return <Mensaje mensaje={"Cargando Tabla de Amortizacion"} />;
     }
@@ -66,7 +52,7 @@ const Pago = () => {
 
                 <section className="pago-seccion">
                     <h2 className="pago-subtitle">Realizar un Pago</h2>
-                    <FormularioPago tablaAmortizacion={tablaAmortizacion} prestamo={prestamoApro} onRealizarPago={handleRealizarPago} />
+                    <FormularioPago tablaAmortizacion={tablaAmortizacion} />
                 </section>
 
                 <section className="pago-seccion">

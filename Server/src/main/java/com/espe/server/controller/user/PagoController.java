@@ -47,8 +47,8 @@ public class PagoController {
     }
     
     @PostMapping("/solicitar")
-    public ResponseEntity<String> solicitarPago(@RequestParam Long prestamoId, @RequestParam BigDecimal montoPago) {
-        boolean exito = pagoService.registrarSolicitudPago(prestamoId, montoPago);
+    public ResponseEntity<String> solicitarPago(@RequestBody Pago pago, HttpServletRequest request) {
+        boolean exito = pagoService.registrarSolicitudPago(pago, request);
         
         if (exito) {
             return ResponseEntity.status(HttpStatus.CREATED).body("Solicitud de pago registrada correctamente");

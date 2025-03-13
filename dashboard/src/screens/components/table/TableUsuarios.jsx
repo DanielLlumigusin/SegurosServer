@@ -3,23 +3,23 @@ import { FaEdit } from "react-icons/fa";
 import { BsTrash } from "react-icons/bs";
 import { useState } from "react";
 import useUsuario from "../../../hooks/useUsuario";
-
+import {useNavigate} from "react-router-dom";
 const Table = ({ data }) => {
+  const navigate = useNavigate(); // Hook para la navegación
   const { eliminarUsuario } = useUsuario();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState(null);  // Para mostrar el mensaje de éxito
+  const [successMessage, setSuccessMessage] = useState(null);
 
   const handleOnDelete = async (usuarioId) => {
     const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este usuario?");
-    
     if (!confirmDelete) return;
 
     try {
       setLoading(true);
-      setError(null);  // Limpiar error previo
+      setError(null);
       await eliminarUsuario(usuarioId);
-      setSuccessMessage("Usuario eliminado con éxito.");  // Mensaje de éxito
+      setSuccessMessage("Usuario eliminado con éxito.");
     } catch (error) {
       setError("Error al eliminar el usuario. Por favor, intenta de nuevo.");
     } finally {
@@ -27,10 +27,14 @@ const Table = ({ data }) => {
     }
   };
 
+  const handlePrestamoByUsuarioId = (usuarioId) => {
+    navigate(`/usuario/prestamo/${usuarioId}`);
+  };  
+
   return (
     <div className="table-container">
       {error && <p className="error-message">{error}</p>}
-      {successMessage && <p className="success-message">{successMessage}</p>} {/* Mensaje de éxito */}
+      {successMessage && <p className="success-message">{successMessage}</p>}
 
       <table className="table">
         <thead>
@@ -60,6 +64,11 @@ const Table = ({ data }) => {
                 >
                   {loading ? <span className="loading-spinner">...</span> : <BsTrash />}
                 </button>
+                <button 
+                  onClick={() => handlePrestamoByUsuarioId(usuario.usuarioId)}
+                >
+                  Ver Préstamos
+                </button>
               </td>
             </tr>
           ))}
@@ -70,3 +79,4 @@ const Table = ({ data }) => {
 };
 
 export default Table;
+
